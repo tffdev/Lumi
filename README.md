@@ -1,5 +1,5 @@
-﻿<center>
-<img src="">
+<center>
+<img src="https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png">
 </center>
 
 # Luma Game Creator - version 0.0.1
