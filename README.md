@@ -1,16 +1,29 @@
-<center>
-<img src="https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png">
-</center>
+﻿![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
 
-# Luma Game Creator - version 0.0.1
+Luma Game Creator - version 0.0.1
+--------------------------------------------------------
+Luma Game Creator will be the fastest and easiest
+open-source solution for making 2D game prototypes.
 
 Report bugs and download new versions at https://github.com/tfcat/lumagamecreator
 
 Copyright (C) 2019-2019, by Daniel Brier-Allen (danbrierly@gmail.com)
 
-0.0.1 Roadmap
+Luma Game Creator is comprised of three main applications:
+* **Editor.** An editor that produces XML files containing all information about 
+  the code, assets, and entities that a game created in Luma is comprised of.
+
+* **Translator.** An executable that converts the editor's project files into a 
+  single custom filetype which contains everything needed to run your game.
+
+* **Core.** An executable that can read Luma's custom game filetypes. The 
+  custom filetype will be embedded alongside the core executable so that your game can
+  be easily distributed.
+
+
+0.0.1 Core Roadmap
 --------------------------------------------------------
-End result will:
+0.0.1 result will:
 * display a window adhering to settings in config.xml
 * have unique objects that run/can run Lua code on creation and on every frame
 * have a small API written in C++ which is accessible from Lua
@@ -18,28 +31,34 @@ End result will:
 * let objects draw sprite assets onto the screen
 
 Implement basic, unoptimised versions of all listed modules:
-- [x] FileSystem (Virtual file system)
-- [ ] XMLLoader
-- [ ] LuaManager
+- [x] FileSystem (Virtual file system) (merged XMLLoader)
+- [x] LuaManager
+- [ ] LuaLibrary
 - [ ] ObjectManager
 - [ ] ConfigManager
 - [ ] WindowManager
 - [ ] AssetManager
+- [ ] Engine
 
 Data Types:
-- [ ] ImageAsset
 - [x] ObjectAsset
+- [ ] ImageAsset
 
 Game folder structure (for now):
 ```
 📁
-┕━ game.exe
-┕━ data
+┕━ game.exe (our core executable)
+┕━ data (in future, will be a single custom file)
+	┕━ main.lua (all Lua logicstuffs. hard-coded in future?)
 	┕━ config.xml (window config, general game settings etc)
+	┕━ objects.xml
+	┕━ objects.lua
+	┕━ images.xml
+	┕━ rooms.xml
+	┕━ audio
+		┕━ audio.ogg
 	┕━ images
 		┕━ image.png
-	┕━ objects
-		┕━ objTest.xml
 	┕━ rooms
 		┕━ room0.xml
 ```
