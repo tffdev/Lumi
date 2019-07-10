@@ -2,7 +2,7 @@
 
 Luma Game Creator - version 0.0.1
 --------------------------------------------------------
-Luma Game Creator will be the fastest and easiest
+Luma Game Creator will a fast and easy
 open-source solution for making 2D game prototypes.
 
 Report bugs and download new versions at https://github.com/tfcat/lumagamecreator
