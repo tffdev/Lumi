@@ -6,10 +6,26 @@
   <name>objTest</name>
   <sprite></sprite>
   <persistent>0</persistent>
+  <code>x = math.random(356)
+    y = math.random(356)
+    
+    function init()
+        printf("init! x[%i] y[%i] (objTest)", x, y)
+    end
+    
+    function update()
+        printf("update! x[%i] y[%i]", x, y)
+    end
+    
+    function draw()
+        print("drawing!!")
+        -- draw_sprite(sprTest)
+    end</code>
 </object>
 <object>
   <id>2</id>
   <name>objTest2</name>
   <sprite></sprite>
   <persistent>0</persistent>
+  <code></code>
 </object>

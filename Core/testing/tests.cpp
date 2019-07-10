@@ -13,15 +13,19 @@ TEST_CASE("Sanity Check") {
 }
 
 TEST_CASE("ObjectAsset") {
-    ObjectAsset asset("objTest", "sprTest");
+    ObjectAsset asset("objTest", "sprTest", "x = 10");
     CHECK_EQ(asset.has_default_sprite(), true);
+    CHECK_EQ(asset.has_code(), true);
     CHECK_EQ(asset.get_name().compare("objTest"), 0);
     CHECK_EQ(asset.get_default_sprite().compare("sprTest"), 0);
+    CHECK_EQ(asset.get_code().compare("x = 10"), 0);
 
     ObjectAsset asset2("objTest2");
     CHECK_EQ(asset2.has_default_sprite(), false);
+    CHECK_EQ(asset2.has_code(), false);
     CHECK_EQ(asset2.get_name().compare("objTest2"), 0);
     CHECK_EQ(asset2.get_default_sprite().compare(""), 0);
+    CHECK_EQ(asset2.get_code().compare(""), 0);
 }
 
 TEST_CASE("ConfigAsset") {
