@@ -34,8 +34,10 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
 
     for(pugi::xml_node obj_xml : document.children("object")) {
         object_vector.push_back(new ObjectAsset(
+                                    obj_xml.child("id").text().as_int(),
                                     obj_xml.child("name").text().as_string(),
-                                    obj_xml.child("sprite").text().as_string()));
+                                    obj_xml.child("sprite").text().as_string(),
+                                    obj_xml.child("code").text().as_string()));
     }
     return object_vector;
 }

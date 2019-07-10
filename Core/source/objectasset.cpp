@@ -1,7 +1,8 @@
 #include "include/objectasset.h"
 
-ObjectAsset::ObjectAsset(std::string name, std::string default_sprite, std::string code)
-    : name(name),
+ObjectAsset::ObjectAsset(int id, std::string name, std::string default_sprite, std::string code)
+    : id(id),
+      name(name),
       default_sprite(default_sprite),
       code(code)
 {}
@@ -16,6 +17,10 @@ bool ObjectAsset::has_code() {
 
 std::string ObjectAsset::get_name() {
     return name;
+}
+
+int ObjectAsset::get_id() {
+    return id;
 }
 
 std::string ObjectAsset::get_default_sprite() {

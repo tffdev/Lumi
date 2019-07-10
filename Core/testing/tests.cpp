@@ -4,6 +4,7 @@
 #include <objectasset.h>
 #include <luamanager.h>
 #include <configasset.h>
+#include <objectdatabase.h>
 
 TEST_CASE("Sanity Check") {
     CHECK(1 == 1);
@@ -13,14 +14,14 @@ TEST_CASE("Sanity Check") {
 }
 
 TEST_CASE("ObjectAsset") {
-    ObjectAsset asset("objTest", "sprTest", "x = 10");
+    ObjectAsset asset(1, "objTest", "sprTest", "x = 10");
     CHECK_EQ(asset.has_default_sprite(), true);
     CHECK_EQ(asset.has_code(), true);
     CHECK_EQ(asset.get_name().compare("objTest"), 0);
     CHECK_EQ(asset.get_default_sprite().compare("sprTest"), 0);
     CHECK_EQ(asset.get_code().compare("x = 10"), 0);
 
-    ObjectAsset asset2("objTest2");
+    ObjectAsset asset2(2, "objTest2");
     CHECK_EQ(asset2.has_default_sprite(), false);
     CHECK_EQ(asset2.has_code(), false);
     CHECK_EQ(asset2.get_name().compare("objTest2"), 0);
@@ -69,10 +70,13 @@ TEST_CASE("FileSystem") {
         CHECK_EQ(asset.get_window_draw_color().g, 0);
         CHECK_EQ(asset.get_window_draw_color().b, 0);
     }
+    // Add checks for code etc
     SUBCASE("Load Objects from XML into vector of ObjectAssets") {
         std::vector<ObjectAsset*> objassets = FileSystem::load_objects();
         CHECK_EQ(objassets.at(0)->get_name().compare("objTest"), 0);
+        CHECK_EQ(objassets.at(0)->get_id(), 0);
         CHECK_EQ(objassets.at(1)->get_name().compare("objTest2"), 0);
+        CHECK_EQ(objassets.at(1)->get_id(), 1);
         CHECK_EQ(objassets.size(), 2);
     }
 }
@@ -80,6 +84,24 @@ TEST_CASE("FileSystem") {
 int func_reg_check(lua_State *L) {
     lua_pushnumber(L, 68923);
     return 1;
+}
+
+TEST_CASE("ObjectDatabase") {
+    ObjectDatabase objdatabase;
+    SUBCASE("Object id exists") {
+        CHECK_EQ(objdatabase.object_id_exists(0), true);
+        CHECK_EQ(objdatabase.object_id_exists(1), true);
+        CHECK_EQ(objdatabase.object_id_exists(2), false);
+    }
+    SUBCASE("Object id has code") {
+        CHECK_EQ(objdatabase.get_object_code(1).compare("x = 5"), 0);
+        CHECK_EQ(objdatabase.get_object_code(2).compare(""), 0);
+    }
+    SUBCASE("Get ID from object names") {
+        CHECK_EQ(objdatabase.get_id_from_name("objTest"), 0);
+        CHECK_EQ(objdatabase.get_id_from_name("objTest2"), 1);
+        CHECK_EQ(objdatabase.get_id_from_name("objDoesntExist"), -1);
+    }
 }
 
 TEST_CASE("LuaManager") {
