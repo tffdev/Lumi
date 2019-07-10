@@ -7,20 +7,26 @@ __luma_system = {}
 __luma_system.containers = {}
 __luma_system.containers.instances = {}
 __luma_system.containers.object_code = {}
-__luma_system.containers.asset_ids = {}
+__luma_system.containers.object_ids = {}
+__luma_system.containers.sprite_ids = {}
 __luma_system.containers.instances_buffer = {}
 
 -- prepare global scope.
 setmetatable(_G, {
     __index = function(table, key)
-        -- if the variable is an asset reference
-        if(table._G.__luma_system.containers.asset_ids[key] ~= nil) then
-            return table._G.__luma_system.containers.asset_ids[key]
+        -- if the variable is an object reference
+        if(table._G.__luma_system.containers.object_ids[key] ~= nil) then
+            return table._G.__luma_system.containers.object_ids[key]
+        end
+        -- if the variable is a sprite reference
+        if(table._G.__luma_system.containers.sprite_ids[key] ~= nil) then
+            return table._G.__luma_system.containers.sprite_ids[key]
         end
         return nil
     end,
     __newindex = function(table, key, value)
-        if(table._G.__luma_system.containers.asset_ids[key] ~= nil) then
+        if(table._G.__luma_system.containers.object_ids[key] ~= nil or 
+           table._G.__luma_system.containers.sprite_ids[key] ~= nil) then
             error("Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
@@ -63,7 +69,6 @@ function __luma_system:instance_create(id, x, y)
         return false
     end
 
-
     -- create instance
     local new_object = __luma_system:create_new_instance_environment()
     -- add all default attributes to object here! like x and y coords etc
@@ -88,21 +93,22 @@ function __luma_system:try_running(func)
 end
 
 function __luma_system:process_update()
+    __luma_system:push_instances()
     -- update loop!
     for j, v in ipairs(__luma_system.containers.instances) do
         __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
             __luma_system:try_running(update)
         end)
     end
+end
 
-    -- draw loop!
+function __luma_system:process_draw()
+     -- draw loop!
     for j, v in ipairs(__luma_system.containers.instances) do
         __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
             __luma_system:try_running(draw)
         end)
     end
-
-    __luma_system:push_instances()
 end
 
 -- PUBLIC standard library
@@ -114,4 +120,5 @@ function printf(str, ...)
     print(string.format(str, ...))
 end
 
+-- test data
 lua_main_check = 983652
