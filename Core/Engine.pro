@@ -10,17 +10,21 @@ LIBS += -L$$PWD/../../lib/ -llua53 -lsfml-graphics
 SOURCES += \
         external/pugixml.cpp \
         source/configasset.cpp \
+        source/lualibrary.cpp \
         source/main.cpp \
         source/filesystem.cpp \
         source/luamanager.cpp \
-        source/objectasset.cpp
+        source/objectasset.cpp \
+        source/objectdatabase.cpp
 
 HEADERS += \
     external/pugixml.hpp \
     include/configasset.h \
     include/filesystem.h \
+    include/lualibrary.h \
     include/luamanager.h \
-    include/objectasset.h
+    include/objectasset.h \
+    include/objectdatabase.h
 
 # Run as test config
 CONFIG += test

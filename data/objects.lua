@@ -11,4 +11,4 @@ __luma_system.containers.sprite_ids = {
 --------------------------------------------------------------------------
 
 -- test data
-lua_objects_check = 345897
+___lua_objects_check = 345897

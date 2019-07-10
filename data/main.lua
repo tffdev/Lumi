@@ -10,12 +10,17 @@ __luma_system.containers.object_ids = {}
 __luma_system.containers.sprite_ids = {}
 __luma_system.containers.instances_buffer = {}
 
+-- C function placeholders
+function __luma_system:run_object_code(id) end
+function __luma_system:get_object_id(name) end
+
 -- prepare global scope.
 setmetatable(_G, {
     __index = function(table, key)
         -- if the variable is an object reference
-        if(table._G.__luma_system.containers.object_ids[key] ~= nil) then
-            return table._G.__luma_system.containers.object_ids[key]
+        local objid = table._G.__luma_system:get_object_id(key)
+        if(objid ~= nil) then
+            return objid
         end
         -- if the variable is a sprite reference
         if(table._G.__luma_system.containers.sprite_ids[key] ~= nil) then
@@ -32,8 +37,6 @@ setmetatable(_G, {
     end
 })
 
--- C function placeholders
-function __luma_system:run_object_code() end
 
 function __luma_system:create_new_instance_environment(parent)
     new_env = parent or {}
@@ -74,9 +77,13 @@ function __luma_system:instance_create(id, x, y)
 
     -- create instance
     local new_object = __luma_system:create_new_instance_environment()
+    new_object.x = 0
+    new_object.y = 0
+    new_object.sprite_index = 0
+    
     -- add all default attributes to object here! like x and y coords etc
     __luma_system:process_in_environment(new_object, function()
-        __luma_system.containers.object_code[id]()
+        -- __luma_system:run_object_code(id)
         __luma_system:try_running(init)
     end)
     table.insert(__luma_system.containers.instances_buffer, new_object)
@@ -92,7 +99,11 @@ function __luma_system:push_instances()
 end
 
 function __luma_system:try_running(func)
-    if(func ~= nil and type(func) == "function") then func() end
+    if(func ~= nil and type(func) == "function") then 
+        func()
+        return true
+    end
+    return false
 end
 
 function __luma_system:process_update()
@@ -109,9 +120,15 @@ function __luma_system:process_draw()
      -- draw loop!
     for j, v in ipairs(__luma_system.containers.instances) do
         __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-            __luma_system:try_running(draw)
+            if(not __luma_system:try_running(draw)) then
+                draw_sprite(x, y, sprite_index)
+            end
         end)
     end
+end
+
+function draw_sprite( ... )
+    
 end
 
 -- PUBLIC standard library
@@ -124,4 +141,4 @@ function printf(str, ...)
 end
 
 -- test data
-lua_main_check = 983652
+___lua_main_check = 983652

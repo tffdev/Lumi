@@ -1,4 +1,4 @@
-#include "include/luamanager.h"
+#include "luamanager.h"
 
 LuaManager::LuaManager() {
     L = luaL_newstate();
@@ -37,4 +37,7 @@ int LuaManager::register_luma_system_function(lua_CFunction func, std::string na
     lua_pushcfunction(L, func);
     lua_settable(L, -3);
     return 0;
+}
+void LuaManager::pass_object_database_into_state(ObjectDatabase* objdatabase) {
+    L->object_database = objdatabase;
 }
