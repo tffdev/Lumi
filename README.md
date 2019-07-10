@@ -31,17 +31,18 @@ Luma Game Creator is comprised of three main applications:
 * let objects draw sprite assets onto the screen
 
 Implement basic, unoptimised versions of all listed modules:
-- [x] FileSystem (Virtual file system) (merged XMLLoader)
+- [x] FileSystem (to-be virtual file system)
 - [x] LuaManager
 - [ ] LuaLibrary
 - [ ] ObjectManager
 - [ ] ConfigManager
 - [ ] WindowManager
 - [ ] AssetManager
-- [ ] Engine
+- [ ] Engine (encapsulates all of the prior)
 
 Data Types:
 - [x] ObjectAsset
+- [ ] ConfigAsset
 - [ ] ImageAsset
 
 Game folder structure (for now):
