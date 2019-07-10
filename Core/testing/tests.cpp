@@ -5,6 +5,7 @@
 #include <luamanager.h>
 #include <configasset.h>
 #include <objectdatabase.h>
+#include <lualibrary.h>
 
 TEST_CASE("Sanity Check") {
     CHECK(1 == 1);
@@ -105,17 +106,19 @@ TEST_CASE("ObjectDatabase") {
 }
 
 TEST_CASE("LuaManager") {
+    ObjectDatabase obj_database;
     LuaManager lmanager;
+    LuaLibrary::load_library_into_manager(&lmanager, &obj_database);
     SUBCASE("Lua execution check") {
-        lmanager.execute("lua_execute_check = 370439");
-        CHECK_EQ(lmanager.get_global_int("lua_execute_check"), 370439);
+        lmanager.execute("___lua_execute_check = 370439");
+        CHECK_EQ(lmanager.get_global_int("___lua_execute_check"), 370439);
         CHECK_EQ(lmanager.get_global_int("nonexistant_variable_check"), 0);
     }
     SUBCASE("Load main and objects check"){
-        CHECK_EQ(lmanager.get_global_int("lua_main_check"), 983652);
-        CHECK_EQ(lmanager.get_global_int("lua_objects_check"), 345897);
-        CHECK_EQ(lmanager.get_global_int("objTest"), 1);
-        CHECK_EQ(lmanager.get_global_int("objTest2"), 2);
+        CHECK_EQ(lmanager.get_global_int("___lua_main_check"), 983652);
+        CHECK_EQ(lmanager.get_global_int("___lua_objects_check"), 345897);
+        CHECK_EQ(lmanager.get_global_int("objTest"), 0);
+        CHECK_EQ(lmanager.get_global_int("objTest2"), 1);
     }
     SUBCASE("Invalid code throw check"){
         bool error = false;
@@ -135,9 +138,10 @@ TEST_CASE("LuaManager") {
 }
 
 
-
-
-
-
-
-
+TEST_CASE("LuaLibrary") {
+    ObjectDatabase objdatabase;
+    LuaManager lmanager;
+    LuaLibrary::load_library_into_manager(&lmanager, &objdatabase);
+    lmanager.execute("__object_id_check = __luma_system:get_object_id('objTest2')");
+    CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
+}
