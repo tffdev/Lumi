@@ -6,7 +6,6 @@
 __luma_system = {}
 __luma_system.containers = {}
 __luma_system.containers.instances = {}
-__luma_system.containers.object_code = {}
 __luma_system.containers.object_ids = {}
 __luma_system.containers.sprite_ids = {}
 __luma_system.containers.instances_buffer = {}
@@ -33,11 +32,15 @@ setmetatable(_G, {
     end
 })
 
+-- C function placeholders
+function __luma_system:run_object_code() end
+
 function __luma_system:create_new_instance_environment(parent)
     new_env = parent or {}
     -- all properly created environments will have
     -- correct access to the original global environment
     new_env._G = _G
+
     return _G.setmetatable(new_env, {
         __index = function(table, key)
             -- if in the original global scope (functions like print etc)

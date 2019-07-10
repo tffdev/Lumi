@@ -94,8 +94,6 @@ TEST_CASE("LuaManager") {
         CHECK_EQ(lmanager.get_global_int("lua_objects_check"), 345897);
         CHECK_EQ(lmanager.get_global_int("objTest"), 1);
         CHECK_EQ(lmanager.get_global_int("objTest2"), 2);
-        lmanager.execute("instance_create(objTest)");
-        lmanager.update();
     }
     SUBCASE("Invalid code throw check"){
         bool error = false;
@@ -106,6 +104,11 @@ TEST_CASE("LuaManager") {
         lmanager.register_function(func_reg_check, "func_reg_check");
         lmanager.execute("func_reg_check_var = func_reg_check()");
         CHECK_EQ(lmanager.get_global_int("func_reg_check_var"), 68923);
+
+        // Register function to __luma_system table.
+        // If this doesn't work, it will throw an error upon trying to call a nil value.
+        lmanager.register_luma_system_function(func_reg_check, "system_func_reg_check");
+        lmanager.execute("__luma_system:system_func_reg_check()");
     }
 }
 

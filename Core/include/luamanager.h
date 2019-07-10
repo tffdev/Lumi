@@ -16,6 +16,7 @@ public:
     int get_global_int(std::string name);
     void update();
     int register_function(lua_CFunction fnc, std::string name);
+    int register_luma_system_function(lua_CFunction func, std::string name);
 private:
     lua_State* L;
 };

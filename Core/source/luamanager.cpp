@@ -30,3 +30,11 @@ int LuaManager::register_function(lua_CFunction func, std::string name) {
     lua_register(L, name.c_str(), func);
     return 0;
 }
+
+int LuaManager::register_luma_system_function(lua_CFunction func, std::string name) {
+    lua_getglobal(L, "__luma_system");
+    lua_pushstring(L, name.c_str());
+    lua_pushcfunction(L, func);
+    lua_settable(L, -3);
+    return 0;
+}
