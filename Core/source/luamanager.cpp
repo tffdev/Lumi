@@ -8,7 +8,9 @@ LuaManager::LuaManager() {
 }
 
 void LuaManager::execute(std::string str) {
-    luaL_dostring(L, str.c_str());
+    int err = luaL_dostring(L, str.c_str());
+    if(err == 1)
+        throw "Error executing Lua string:\n" + std::string(lua_tostring(L, -1));
 }
 
 int LuaManager::get_global_int(std::string name) {
