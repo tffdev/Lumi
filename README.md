@@ -42,7 +42,7 @@ Implement basic, unoptimised versions of all listed modules:
 
 Data Types:
 - [x] ObjectAsset
-- [ ] ConfigAsset
+- [x] ConfigAsset
 - [ ] ImageAsset
 
 Game folder structure (for now):
