@@ -73,6 +73,11 @@ TEST_CASE("FileSystem") {
     }
 }
 
+int func_reg_check(lua_State *L) {
+    lua_pushnumber(L, 68923);
+    return 1;
+}
+
 TEST_CASE("LuaManager") {
     LuaManager lmanager;
     SUBCASE("Lua execution check") {
@@ -83,11 +88,20 @@ TEST_CASE("LuaManager") {
     SUBCASE("Load main and objects check"){
         CHECK_EQ(lmanager.get_global_int("lua_main_check"), 983652);
         CHECK_EQ(lmanager.get_global_int("lua_objects_check"), 345897);
+        CHECK_EQ(lmanager.get_global_int("objTest"), 1);
+        CHECK_EQ(lmanager.get_global_int("objTest2"), 2);
+        lmanager.execute("instance_create(objTest)");
+        lmanager.update();
     }
     SUBCASE("Invalid code throw check"){
         bool error = false;
         try { lmanager.execute("lk hsd dglg"); } catch (...) { error = true; }
         CHECK_EQ(error, true);
+    }
+    SUBCASE("Lua Function Registration") {
+        lmanager.register_function(func_reg_check, "func_reg_check");
+        lmanager.execute("func_reg_check_var = func_reg_check()");
+        CHECK_EQ(lmanager.get_global_int("func_reg_check_var"), 68923);
     }
 }
 
