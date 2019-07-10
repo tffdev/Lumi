@@ -33,8 +33,8 @@ Luma Game Creator is comprised of three main applications:
 Implement basic, unoptimised versions of all listed modules:
 - [x] FileSystem (to-be virtual file system)
 - [x] LuaManager
-- [ ] ObjectDatabase
-- [ ] LuaLibrary
+- [x] ObjectDatabase
+- [x] LuaLibrary
 - [ ] ConfigManager
 - [ ] WindowManager
 - [ ] AssetDatabase

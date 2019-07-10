@@ -6,8 +6,6 @@ LuaManager::LuaManager() {
     int err;
     err = luaL_dostring(L, FileSystem::read_file("main.lua").c_str());
     if(err == 1) throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
-    err = luaL_dostring(L, FileSystem::read_file("objects.lua").c_str());
-    if(err == 1) throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
 }
 
 void LuaManager::execute(std::string str) {

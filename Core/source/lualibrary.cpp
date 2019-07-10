@@ -2,11 +2,14 @@
 
 // __luma_system:get_object_id("objTest") --> 1
 int luma_system_get_object_id(lua_State* L) {
+
     std::string name(lua_tostring(L, -1));
-    if(L->object_database == nullptr) throw "aaa";
+
+    if(L->object_database == nullptr)
+        throw "Database-dependant Lua library function called before initialisation.";
+
     if(L->object_database == nullptr || !L->object_database->object_name_exists(name)) {
-        lua_pushnumber(L, 0);
-        return 1;
+        return 0;
     }
     int id = L->object_database->get_id_from_name(name);
     lua_pushnumber(L, id);

@@ -116,7 +116,6 @@ TEST_CASE("LuaManager") {
     }
     SUBCASE("Load main and objects check"){
         CHECK_EQ(lmanager.get_global_int("___lua_main_check"), 983652);
-        CHECK_EQ(lmanager.get_global_int("___lua_objects_check"), 345897);
         CHECK_EQ(lmanager.get_global_int("objTest"), 0);
         CHECK_EQ(lmanager.get_global_int("objTest2"), 1);
     }

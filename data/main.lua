@@ -22,15 +22,10 @@ setmetatable(_G, {
         if(objid ~= nil) then
             return objid
         end
-        -- if the variable is a sprite reference
-        if(table._G.__luma_system.containers.sprite_ids[key] ~= nil) then
-            return table._G.__luma_system.containers.sprite_ids[key]
-        end
         return nil
     end,
     __newindex = function(table, key, value)
-        if(table._G.__luma_system.containers.object_ids[key] ~= nil or 
-           table._G.__luma_system.containers.sprite_ids[key] ~= nil) then
+        if(table._G.__luma_system:get_object_id(key) ~= nil) then
             error("Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
