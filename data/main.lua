@@ -5,13 +5,11 @@
 -- these functions resulting in incorrect game behaviour etc.
 __luma_system = {}
 __luma_system.containers = {}
+__luma_system.containers.object_code = {}
 __luma_system.containers.instances = {}
-__luma_system.containers.object_ids = {}
-__luma_system.containers.sprite_ids = {}
 __luma_system.containers.instances_buffer = {}
 
 -- C function placeholders
-function __luma_system:run_object_code(id) end
 function __luma_system:get_object_id(name) end
 
 -- prepare global scope.
@@ -32,13 +30,12 @@ setmetatable(_G, {
     end
 })
 
-
 function __luma_system:create_new_instance_environment(parent)
     new_env = parent or {}
     -- all properly created environments will have
     -- correct access to the original global environment
     new_env._G = _G
-
+    table.insert(__luma_system.containers.instances_buffer, new_env)
     return _G.setmetatable(new_env, {
         __index = function(table, key)
             -- if in the original global scope (functions like print etc)
@@ -58,32 +55,36 @@ function __luma_system:process_in_environment(env, func)
     _ENV = _G
 end
 
+
 -- create a new object environment
 -- run object's "init" function within environment
 -- push into instance buffer
-function __luma_system:instance_create(id, x, y)
-    local x = x or 0
-    local y = y or 0
-    -- error checking
-    if(id == nil) then
-        print("can't create instance")
-        return false
-    end
+-- function __luma_system:instance_create(id, x, y)
+--     local x = x or 0
+--     local y = y or 0
 
-    -- create instance
-    local new_object = __luma_system:create_new_instance_environment()
-    new_object.x = 0
-    new_object.y = 0
-    new_object.sprite_index = 0
+--     -- error checking
+--     if(id == nil) then
+--         print("can't create instance")
+--         return false
+--     end
+
+--     -- create instance
+--     local new_object = __luma_system:create_new_instance_environment()
+--     new_object.x = x
+--     new_object.y = y
+--     new_object.sprite_index = 0
+--     print("[LUA] Creating instance "..id.." with _ENV: ", new_object)
     
-    -- add all default attributes to object here! like x and y coords etc
-    __luma_system:process_in_environment(new_object, function()
-        -- __luma_system:run_object_code(id)
-        __luma_system:try_running(init)
-    end)
-    table.insert(__luma_system.containers.instances_buffer, new_object)
-    return true
-end
+--     -- add all default attributes to object here! like x and y coords etc
+--     __luma_system:process_in_environment(new_object, function()
+--         __luma_system:run_object_creation_code(id)
+--         __luma_system:try_running(init)
+--     end)
+
+--     table.insert(__luma_system.containers.instances_buffer, new_object)
+--     return true
+-- end
 
 function __luma_system:push_instances()
     -- v contains table of instances
@@ -127,8 +128,10 @@ function draw_sprite( ... )
 end
 
 -- PUBLIC standard library
-function instance_create(...)
-    return __luma_system:instance_create(...)
+function instance_create(id, x, y)
+    local x = x or 0
+    local y = y or 0
+    return __luma_system:instance_create(id, x, y)
 end
 
 function printf(str, ...)

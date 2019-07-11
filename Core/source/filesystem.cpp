@@ -32,12 +32,13 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
     std::vector<ObjectAsset*> object_vector;
     document.load_string(FileSystem::load_object_file().c_str());
 
+    int i = 0;
     for(pugi::xml_node obj_xml : document.children("object")) {
-        object_vector.push_back(new ObjectAsset(
-                                    obj_xml.child("id").text().as_int(),
+        object_vector.push_back(new ObjectAsset(i,
                                     obj_xml.child("name").text().as_string(),
                                     obj_xml.child("sprite").text().as_string(),
                                     obj_xml.child("code").text().as_string()));
+        i++;
     }
     return object_vector;
 }

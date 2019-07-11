@@ -78,7 +78,7 @@ TEST_CASE("FileSystem") {
         CHECK_EQ(objassets.at(0)->get_id(), 0);
         CHECK_EQ(objassets.at(1)->get_name().compare("objTest2"), 0);
         CHECK_EQ(objassets.at(1)->get_id(), 1);
-        CHECK_EQ(objassets.size(), 2);
+        CHECK_EQ(objassets.size(), 3);
     }
 }
 
@@ -92,23 +92,24 @@ TEST_CASE("ObjectDatabase") {
     SUBCASE("Object id exists") {
         CHECK_EQ(objdatabase.object_id_exists(0), true);
         CHECK_EQ(objdatabase.object_id_exists(1), true);
-        CHECK_EQ(objdatabase.object_id_exists(2), false);
+        CHECK_EQ(objdatabase.object_id_exists(2), true);
+        CHECK_EQ(objdatabase.object_id_exists(3), false);
     }
     SUBCASE("Object id has code") {
         CHECK_EQ(objdatabase.get_object_code(1).compare("x = 5"), 0);
-        CHECK_EQ(objdatabase.get_object_code(2).compare(""), 0);
+        CHECK_EQ(objdatabase.get_object_code(3).compare(""), 0);
     }
     SUBCASE("Get ID from object names") {
-        CHECK_EQ(objdatabase.get_id_from_name("objTest"), 0);
-        CHECK_EQ(objdatabase.get_id_from_name("objTest2"), 1);
-        CHECK_EQ(objdatabase.get_id_from_name("objDoesntExist"), -1);
+        CHECK_EQ(objdatabase.get_object_id("objTest"), 0);
+        CHECK_EQ(objdatabase.get_object_id("objTest2"), 1);
+        CHECK_EQ(objdatabase.get_object_id("objDoesntExist"), -1);
     }
 }
 
 TEST_CASE("LuaManager") {
     ObjectDatabase obj_database;
     LuaManager lmanager;
-    LuaLibrary::load_library_into_manager(&lmanager, &obj_database);
+    LuaLibrary::load_library(&lmanager, &obj_database);
     SUBCASE("Lua execution check") {
         lmanager.execute("___lua_execute_check = 370439");
         CHECK_EQ(lmanager.get_global_int("___lua_execute_check"), 370439);
@@ -140,7 +141,40 @@ TEST_CASE("LuaManager") {
 TEST_CASE("LuaLibrary") {
     ObjectDatabase objdatabase;
     LuaManager lmanager;
-    LuaLibrary::load_library_into_manager(&lmanager, &objdatabase);
-    lmanager.execute("__object_id_check = __luma_system:get_object_id('objTest2')");
-    CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
+    LuaLibrary::load_library(&lmanager, &objdatabase);
+
+    SUBCASE("Lua global library check"){
+        lmanager.execute("__lua_library_var_check = lua_library_test()");
+        CHECK_EQ(lmanager.get_global_int("__lua_library_var_check"), 42);
+    }
+
+    SUBCASE("Luma System library check"){
+        lmanager.execute("__luma_system_var_check = __luma_system:luma_system_test()");
+        CHECK_EQ(lmanager.get_global_int("__luma_system_var_check"), 65894);
+    }
+
+    SUBCASE("Database-dependant Luma System library check"){
+        lmanager.execute("__object_id_check = __luma_system:get_object_id('objTest2')");
+        CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
+    }
+
+    SUBCASE("Instance environment checks") {
+        int new_instance_index = LuaLibrary::create_new_instance_environment(lmanager.get_lua_state(), 42, 74);
+        CHECK_NE(new_instance_index, 0);
+        LuaLibrary::run_string_in_environment(lmanager.get_lua_state(), new_instance_index, "new_variable = 7530");
+        LuaLibrary::fetch_environment_from_registry(lmanager.get_lua_state(), new_instance_index);
+        lua_getfield(lmanager.get_lua_state(), -1, "new_variable");
+        CHECK_EQ(lua_tointeger(lmanager.get_lua_state(), -1), 7530);
+    }
+
+    SUBCASE("Instance creation check"){
+        lmanager.load_object_instantiation_code(&objdatabase);
+        lmanager.execute("instance_create(objTest)");
+        lmanager.execute("instance_create(objTest3)");
+        lmanager.execute("instance_create(objTest)");
+        lmanager.execute("instance_create(objTest2)");
+        CHECK_EQ(lmanager.get_lua_state()->object_database->instance_count(), 4);
+        lmanager.run_update_function();
+        lmanager.run_draw_function();
+    }
 }
