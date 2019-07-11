@@ -1,7 +1,9 @@
 #pragma once
 #include <objectasset.h>
+#include <instanceasset.h>
 #include <vector>
 #include <filesystem.h>
+#include <map>
 
 class ObjectDatabase
 {
@@ -10,10 +12,19 @@ public:
     std::string get_object_code(int id);
     std::string get_object_name(int id);
     std::string get_object_default_sprite(int id);
+    int         get_object_id(std::string str);
+
+    void add_instance(InstanceAsset* instance);
+    int instance_count();
+
+    std::vector<ObjectAsset*> get_all_object_assets();
+
     bool object_id_exists(int id);
     bool object_name_exists(std::string name);
-    int get_id_from_name(std::string str);
+
+
 private:
-    std::vector<ObjectAsset*> objects;
-    std::map<std::string, int> object_name_map;
+    std::vector<ObjectAsset*> object_assets;
+    std::vector<InstanceAsset*> instances;
+    std::map<std::string, int> object_name_id_map;
 };
