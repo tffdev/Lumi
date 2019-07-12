@@ -2,6 +2,7 @@
 #include <lua.hpp>
 #include <filesystem.h>
 #include <objectdatabase.h>
+#include <windowmanager.h>
 
 
 /**
@@ -11,6 +12,7 @@
  */
 struct lua_state_extension {
     ObjectDatabase* object_database;
+    WindowManager* window_manager;
 };
 
 typedef struct lua_State : lua_state_extension {} lua_State;
@@ -31,8 +33,8 @@ public:
     int get_global_int(std::string name);
     int register_function(lua_CFunction fnc, std::string name);
     int register_luma_system_function(lua_CFunction func, std::string name);
-    void assign_state_containers(ObjectDatabase* obj_database);
-    void load_library(ObjectDatabase* object_database);
+    void assign_state_containers(ObjectDatabase*, WindowManager*);
+    void load_library(ObjectDatabase*, WindowManager*);
 private:
     lua_State* L;
 };
