@@ -54,3 +54,7 @@ bool ObjectDatabase::object_id_exists(int id) {
 std::vector<ObjectAsset*> ObjectDatabase::get_all_object_assets() {
     return object_assets;
 }
+
+std::vector<InstanceAsset*> ObjectDatabase::get_all_instances() {
+    return instances;
+}

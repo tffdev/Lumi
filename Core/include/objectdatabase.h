@@ -18,6 +18,7 @@ public:
     int instance_count();
 
     std::vector<ObjectAsset*> get_all_object_assets();
+    std::vector<InstanceAsset*> get_all_instances();
 
     bool object_id_exists(int id);
     bool object_name_exists(std::string name);
