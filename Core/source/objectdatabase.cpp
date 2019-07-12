@@ -7,14 +7,6 @@ ObjectDatabase::ObjectDatabase() {
     }
 }
 
-void ObjectDatabase::add_instance(InstanceAsset* instance) {
-    instances.push_back(instance);
-}
-
-int ObjectDatabase::instance_count() {
-    return static_cast<int>(instances.size());
-}
-
 std::string ObjectDatabase::get_object_name(int id) {
     try {
         return object_assets.at(static_cast<unsigned long long>(id))->get_name();
@@ -53,8 +45,4 @@ bool ObjectDatabase::object_id_exists(int id) {
 
 std::vector<ObjectAsset*> ObjectDatabase::get_all_object_assets() {
     return object_assets;
-}
-
-std::vector<InstanceAsset*> ObjectDatabase::get_all_instances() {
-    return instances;
 }

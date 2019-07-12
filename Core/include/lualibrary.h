@@ -13,4 +13,5 @@ namespace LuaLibrary {
     int luma_system_test(lua_State* L);
     int luma_system_get_object_id(lua_State* L);
     int luma_system_instance_create(lua_State* L);
+    int lua_draw_square(lua_State*);
 };

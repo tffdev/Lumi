@@ -10,6 +10,8 @@ void WindowManager::create_window_using_config() {
     sf::VideoMode mode(config.get_window_size().x,
                        config.get_window_size().y);
 
+    clear_color = config.get_window_draw_color();
+
     auto style = sf::Style::Default;
     if(config.get_fullscreen()) style = sf::Style::Fullscreen;
     if(!shown) style = sf::Style::None;
@@ -17,7 +19,7 @@ void WindowManager::create_window_using_config() {
     window.create(mode, config.get_window_title(), style);
 
     window.setVisible(shown);
-    //window.setFramerateLimit(60);
+    window.setFramerateLimit(60);
 }
 
 bool WindowManager::is_open() {

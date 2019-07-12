@@ -120,7 +120,7 @@ TEST_CASE("WindowManager") {
 TEST_CASE("LuaManager") {
     ObjectDatabase obj_database;
     LuaManager lmanager;
-    WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000), false);
+    WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff), true);
     lmanager.load_library(&obj_database, &window_manager);
 
     SUBCASE("Lua execution check") {
@@ -148,6 +148,14 @@ TEST_CASE("LuaManager") {
         lmanager.register_luma_system_function(func_reg_check, "system_func_reg_check");
         lmanager.execute("__luma_system:system_func_reg_check()");
     }
+}
+
+TEST_CASE("LuaLibrary") {
+    ObjectDatabase obj_database;
+    LuaManager lmanager;
+    ConfigManager conf = FileSystem::load_config();
+    WindowManager window_manager(&conf, true);
+    lmanager.load_library(&obj_database, &window_manager);
 
     SUBCASE("Lua global library check"){
         lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -164,22 +172,28 @@ TEST_CASE("LuaManager") {
         CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
     }
 
-    SUBCASE("Instance environment checks") {
-        int new_instance_index = LuaLibrary::create_new_instance_environment(lmanager.get_lua_state(), 42, 74);
-        CHECK_NE(new_instance_index, 0);
-        LuaLibrary::run_string_in_environment(lmanager.get_lua_state(), new_instance_index, "new_variable = 7530");
-        LuaLibrary::fetch_environment_from_registry(lmanager.get_lua_state(), new_instance_index);
-        lua_getfield(lmanager.get_lua_state(), -1, "new_variable");
-        CHECK_EQ(lua_tointeger(lmanager.get_lua_state(), -1), 7530);
-    }
-
     SUBCASE("Instance creation check"){
+        CHECK_EQ(lmanager.object_code_length(), 3);
         lmanager.execute("instance_create(objTest)");
         lmanager.execute("instance_create(objTest3)");
         lmanager.execute("instance_create(objTest)");
         lmanager.execute("instance_create(objTest2)");
-        CHECK_EQ(lmanager.get_lua_state()->object_database->instance_count(), 4);
+        lmanager.execute("__luma_system:push_instances()");
+
+        CHECK_EQ(lmanager.get_instance_count(), 4);
         lmanager.run_update_function();
         lmanager.run_draw_function();
+
+        while(window_manager.is_open()) {
+            sf::Event e;
+            while(window_manager.poll_events(e)){
+                if(e.type == sf::Event::Closed) window_manager.close();
+            }
+            window_manager.clear();
+
+            lmanager.run_draw_function();
+
+            window_manager.display();
+        }
     }
 }

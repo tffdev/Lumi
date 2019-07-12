@@ -20,9 +20,10 @@ public:
     bool is_fullscreen();
     void set_fullscreen(bool);
     void toggle_fullscreen();
-    sf::RenderWindow window;
 private:
-    sf::Color clear_color;
     ConfigManager config;
     bool shown;
+    sf::RenderWindow window;
+    sf::Color clear_color;
+    sf::View view;
 };
