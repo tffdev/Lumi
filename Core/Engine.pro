@@ -9,7 +9,7 @@ LIBS += -L$$PWD/../../lib/ -llua53 -lsfml-graphics
 
 SOURCES += \
         external/pugixml.cpp \
-        source/configasset.cpp \
+        source/configmanager.cpp \
         source/instanceasset.cpp \
         source/lualibrary.cpp \
         source/main.cpp \
@@ -20,7 +20,7 @@ SOURCES += \
 
 HEADERS += \
     external/pugixml.hpp \
-    include/configasset.h \
+    include/configmanager.h \
     include/filesystem.h \
     include/instanceasset.h \
     include/lualibrary.h \

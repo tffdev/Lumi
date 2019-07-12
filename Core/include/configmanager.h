@@ -2,9 +2,9 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
-class ConfigAsset {
+class ConfigManager {
 public:
-    ConfigAsset(std::string window_title, int windowsize_x, int windowsize_y, unsigned int window_draw_color);
+    ConfigManager(std::string window_title, int windowsize_x, int windowsize_y, unsigned int window_draw_color);
     std::string get_window_title();
     sf::Vector2<int> get_window_size();
     sf::Color get_window_draw_color();

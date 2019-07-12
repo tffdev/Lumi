@@ -3,7 +3,7 @@
 #include <filesystem.h>
 #include <objectasset.h>
 #include <luamanager.h>
-#include <configasset.h>
+#include <configmanager.h>
 #include <objectdatabase.h>
 #include <lualibrary.h>
 
@@ -30,15 +30,15 @@ TEST_CASE("ObjectAsset") {
     CHECK_EQ(asset2.get_code().compare(""), 0);
 }
 
-TEST_CASE("ConfigAsset") {
-    ConfigAsset asset("Hello", 320, 240, 0x32d61cff);
-    CHECK_EQ(asset.get_window_size().x, 320);
-    CHECK_EQ(asset.get_window_size().y, 240);
-    CHECK_EQ(asset.get_window_title().compare("Hello"), 0);
-    CHECK_EQ(asset.get_window_draw_color().r, 50);
-    CHECK_EQ(asset.get_window_draw_color().g, 214);
-    CHECK_EQ(asset.get_window_draw_color().b, 28);
-    CHECK_EQ(asset.get_window_draw_color().a, 255);
+TEST_CASE("ConfigManager") {
+    ConfigManager conf_manager("Hello", 320, 240, 0x32d61cff);
+    CHECK_EQ(conf_manager.get_window_size().x, 320);
+    CHECK_EQ(conf_manager.get_window_size().y, 240);
+    CHECK_EQ(conf_manager.get_window_title().compare("Hello"), 0);
+    CHECK_EQ(conf_manager.get_window_draw_color().r, 50);
+    CHECK_EQ(conf_manager.get_window_draw_color().g, 214);
+    CHECK_EQ(conf_manager.get_window_draw_color().b, 28);
+    CHECK_EQ(conf_manager.get_window_draw_color().a, 255);
 }
 
 TEST_CASE("FileSystem") {
@@ -63,13 +63,13 @@ TEST_CASE("FileSystem") {
         CHECK_EQ(FileSystem::load_object_file().compare(FileSystem::read_file("objects.xml")), 0);
     }
     SUBCASE("Load window configuration file into window config object.") {
-        ConfigAsset asset = FileSystem::load_config();
-        CHECK_EQ(asset.get_window_size().x, 320);
-        CHECK_EQ(asset.get_window_size().y, 240);
-        CHECK_EQ(asset.get_window_title().compare("Hello World!"), 0);
-        CHECK_EQ(asset.get_window_draw_color().r, 255);
-        CHECK_EQ(asset.get_window_draw_color().g, 0);
-        CHECK_EQ(asset.get_window_draw_color().b, 0);
+        ConfigManager conf_manager = FileSystem::load_config();
+        CHECK_EQ(conf_manager.get_window_size().x, 320);
+        CHECK_EQ(conf_manager.get_window_size().y, 240);
+        CHECK_EQ(conf_manager.get_window_title().compare("Hello World!"), 0);
+        CHECK_EQ(conf_manager.get_window_draw_color().r, 255);
+        CHECK_EQ(conf_manager.get_window_draw_color().g, 0);
+        CHECK_EQ(conf_manager.get_window_draw_color().b, 0);
     }
     // Add checks for code etc
     SUBCASE("Load Objects from XML into vector of ObjectAssets") {

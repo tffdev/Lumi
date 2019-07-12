@@ -51,11 +51,11 @@ unsigned int FileSystem::hex_string_to_uint(std::string str) {
     return static_cast<unsigned int>(x);
 }
 
-ConfigAsset FileSystem::load_config() {
+ConfigManager FileSystem::load_config() {
     pugi::xml_document document;
     document.load_string(FileSystem::load_config_file().c_str());
 
-    ConfigAsset config_asset(
+    ConfigManager config_asset(
                 document.child("window").child("windowtitle").text().as_string(),
                 document.child("window").child("windowsize").child("width").text().as_int(),
                 document.child("window").child("windowsize").child("height").text().as_int(),
