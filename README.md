@@ -1,4 +1,4 @@
-﻿![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
+![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
 
 Luma Game Creator - version 0.0.1
 --------------------------------------------------------
@@ -46,7 +46,7 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] ObjectDatabase
 - [x] LuaLibrary
 - [x] ConfigManager
-- [ ] WindowManager
+- [x] WindowManager
 - [ ] ImageDatabase
 - [ ] Engine (encapsulates all of the prior)
 

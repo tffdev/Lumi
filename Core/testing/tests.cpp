@@ -6,6 +6,7 @@
 #include <configmanager.h>
 #include <objectdatabase.h>
 #include <lualibrary.h>
+#include <windowmanager.h>
 
 TEST_CASE("Sanity Check") {
     CHECK(1 == 1);
@@ -106,10 +107,21 @@ TEST_CASE("ObjectDatabase") {
     }
 }
 
+TEST_CASE("WindowManager") {
+    ConfigManager config("hi", 320, 240, 0xff0000);
+    WindowManager window_manager(&config);
+    CHECK_EQ(window_manager.is_open(), true);
+    CHECK_EQ(window_manager.get_size().x, 320);
+    CHECK_EQ(window_manager.get_size().y, 240);
+    window_manager.close();
+    CHECK_EQ(window_manager.is_open(), false);
+}
+
 TEST_CASE("LuaManager") {
     ObjectDatabase obj_database;
     LuaManager lmanager;
-    lmanager.load_library(&obj_database);
+    WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000), false);
+    lmanager.load_library(&obj_database, &window_manager);
 
     SUBCASE("Lua execution check") {
         lmanager.execute("___lua_execute_check = 370439");

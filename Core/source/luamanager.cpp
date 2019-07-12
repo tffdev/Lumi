@@ -48,13 +48,14 @@ lua_State* LuaManager::get_lua_state() {
     return L;
 }
 
-void LuaManager::assign_state_containers(ObjectDatabase* objdatabase) {
+void LuaManager::assign_state_containers(ObjectDatabase* objdatabase, WindowManager* window_manager) {
     L->object_database = objdatabase;
+    L->window_manager = window_manager;
 }
 
-void LuaManager::load_library(ObjectDatabase* object_database) {
+void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* window_manager) {
     // Register Lua state variablse
-    assign_state_containers(object_database);
+    assign_state_containers(object_database, window_manager);
 
     // Register global functions
     register_function(LuaLibrary::lua_library_test, "lua_library_test");

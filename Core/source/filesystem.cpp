@@ -57,8 +57,8 @@ ConfigManager FileSystem::load_config() {
 
     ConfigManager config_asset(
                 document.child("window").child("windowtitle").text().as_string(),
-                document.child("window").child("windowsize").child("width").text().as_int(),
-                document.child("window").child("windowsize").child("height").text().as_int(),
+                document.child("window").child("windowsize").child("width").text().as_uint(),
+                document.child("window").child("windowsize").child("height").text().as_uint(),
                 hex_string_to_uint(std::string(document.child("window").child("windowdrawcolor").text().as_string()) + "ff")
                 );
 
