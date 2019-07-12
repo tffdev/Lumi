@@ -109,7 +109,8 @@ TEST_CASE("ObjectDatabase") {
 TEST_CASE("LuaManager") {
     ObjectDatabase obj_database;
     LuaManager lmanager;
-    LuaLibrary::load_library(&lmanager, &obj_database);
+    lmanager.load_library(&obj_database);
+
     SUBCASE("Lua execution check") {
         lmanager.execute("___lua_execute_check = 370439");
         CHECK_EQ(lmanager.get_global_int("___lua_execute_check"), 370439);
@@ -135,13 +136,6 @@ TEST_CASE("LuaManager") {
         lmanager.register_luma_system_function(func_reg_check, "system_func_reg_check");
         lmanager.execute("__luma_system:system_func_reg_check()");
     }
-}
-
-
-TEST_CASE("LuaLibrary") {
-    ObjectDatabase objdatabase;
-    LuaManager lmanager;
-    LuaLibrary::load_library(&lmanager, &objdatabase);
 
     SUBCASE("Lua global library check"){
         lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -168,7 +162,6 @@ TEST_CASE("LuaLibrary") {
     }
 
     SUBCASE("Instance creation check"){
-        lmanager.load_object_instantiation_code(&objdatabase);
         lmanager.execute("instance_create(objTest)");
         lmanager.execute("instance_create(objTest3)");
         lmanager.execute("instance_create(objTest)");

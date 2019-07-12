@@ -31,8 +31,8 @@ public:
     int get_global_int(std::string name);
     int register_function(lua_CFunction fnc, std::string name);
     int register_luma_system_function(lua_CFunction func, std::string name);
-    void pass_object_database_into_state(ObjectDatabase* obj_database);
-    void load_object_instantiation_code(ObjectDatabase* obj_database);
+    void assign_state_containers(ObjectDatabase* obj_database);
+    void load_library(ObjectDatabase* object_database);
 private:
     lua_State* L;
 };

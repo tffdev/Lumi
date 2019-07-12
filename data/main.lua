@@ -55,37 +55,6 @@ function __luma_system:process_in_environment(env, func)
     _ENV = _G
 end
 
-
--- create a new object environment
--- run object's "init" function within environment
--- push into instance buffer
--- function __luma_system:instance_create(id, x, y)
---     local x = x or 0
---     local y = y or 0
-
---     -- error checking
---     if(id == nil) then
---         print("can't create instance")
---         return false
---     end
-
---     -- create instance
---     local new_object = __luma_system:create_new_instance_environment()
---     new_object.x = x
---     new_object.y = y
---     new_object.sprite_index = 0
---     print("[LUA] Creating instance "..id.." with _ENV: ", new_object)
-    
---     -- add all default attributes to object here! like x and y coords etc
---     __luma_system:process_in_environment(new_object, function()
---         __luma_system:run_object_creation_code(id)
---         __luma_system:try_running(init)
---     end)
-
---     table.insert(__luma_system.containers.instances_buffer, new_object)
---     return true
--- end
-
 function __luma_system:push_instances()
     -- v contains table of instances
     for i, v in ipairs(__luma_system.containers.instances_buffer) do
@@ -102,22 +71,12 @@ function __luma_system:try_running(func)
     return false
 end
 
-function __luma_system:process_update()
-    __luma_system:push_instances()
-    -- update loop!
-    for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-            __luma_system:try_running(update)
-        end)
-    end
-end
-
 function __luma_system:process_draw()
-     -- draw loop!
+    -- draw loop!
     for j, v in ipairs(__luma_system.containers.instances) do
         __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
             if(not __luma_system:try_running(draw)) then
-                draw_sprite(x, y, sprite_index)
+                draw_sprite(x, y, current_sprite)
             end
         end)
     end

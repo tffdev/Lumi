@@ -35,14 +35,13 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] LuaManager
 - [x] ObjectDatabase
 - [x] LuaLibrary
-- [ ] ConfigManager
+- [x] ConfigManager
 - [ ] WindowManager
 - [ ] ImageDatabase
 - [ ] Engine (encapsulates all of the prior)
 
 Data Types:
 - [x] ObjectAsset
-- [x] ConfigAsset
 - [ ] ImageAsset
 - [x] InstanceAsset
 

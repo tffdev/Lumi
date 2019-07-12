@@ -1,4 +1,5 @@
 #include "luamanager.h"
+#include <lualibrary.h>
 
 LuaManager::LuaManager() {
     L = luaL_newstate();
@@ -20,7 +21,10 @@ int LuaManager::get_global_int(std::string name) {
 }
 
 void LuaManager::run_update_function() {
-    this->execute("__luma_system:process_update()");
+    this->execute("__luma_system:push_instances()");
+    for(InstanceAsset* instance : L->object_database->get_all_instances()) {
+        LuaLibrary::run_string_in_environment(L, instance->get_id(), "__luma_system:try_running(update)");
+    }
 }
 
 void LuaManager::run_draw_function() {
@@ -44,31 +48,19 @@ lua_State* LuaManager::get_lua_state() {
     return L;
 }
 
-void LuaManager::pass_object_database_into_state(ObjectDatabase* objdatabase) {
+void LuaManager::assign_state_containers(ObjectDatabase* objdatabase) {
     L->object_database = objdatabase;
 }
 
-/**
- * @brief Loads all object code into a table of functions.
- * An object's associated code-instantiation function should be ran every time a new object is created.
- * @param obj_database
- */
+void LuaManager::load_library(ObjectDatabase* object_database) {
+    // Register Lua state variablse
+    assign_state_containers(object_database);
 
-/**
- * __luma_system.containers.object_code[<object_id>] = function()
- * //////////// code ///////////////
- * end
- * ... repeat for all code
- */
-void LuaManager::load_object_instantiation_code(ObjectDatabase* obj_database) {
-    for(ObjectAsset* obj : obj_database->get_all_object_assets()) {
+    // Register global functions
+    register_function(LuaLibrary::lua_library_test, "lua_library_test");
 
-        std::string command("\n__luma_system.containers.object_code[" +
-                            std::to_string(obj->get_id() + 1) +
-                            "] = function()\n" +
-                            obj->get_code() +
-                            "\nend\n");
-
-        this->execute(command);
-    }
+    // Register __luma_system functions
+    register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
+    register_luma_system_function(LuaLibrary::luma_system_instance_create, "instance_create");
+    register_luma_system_function(LuaLibrary::luma_system_get_object_id, "get_object_id");
 }
