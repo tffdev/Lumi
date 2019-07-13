@@ -1,11 +1,20 @@
 #include "luamanager.h"
+#include <lualibrary.h>
 
 LuaManager::LuaManager() {
     L = luaL_newstate();
     luaL_openlibs(L);
-    int err;
-    err = luaL_dostring(L, FileSystem::read_file("main.lua").c_str());
-    if(err == 1) throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
+
+    if(luaL_dostring(L, FileSystem::read_file("main.lua").c_str()) != 0)
+        throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
+
+    if(luaL_dostring(L, FileSystem::read_file("objects.lua").c_str()) != 0)
+        throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
+
+    /*lua_getglobal(L, "init");
+    if(lua_isnil(L, -1) != 0)
+        throw "init is nil";
+    lua_pcall(L,0,0,0);*/
 }
 
 void LuaManager::execute(std::string str) {
@@ -20,11 +29,26 @@ int LuaManager::get_global_int(std::string name) {
 }
 
 void LuaManager::run_update_function() {
-    this->execute("__luma_system:process_update()");
+    lua_getglobal(L, "__luma_system");
+    lua_getfield(L, -1, "process_update");
+    lua_pcall(L, 0, 0, 0);
 }
 
 void LuaManager::run_draw_function() {
-    this->execute("__luma_system:process_draw()");
+    int top = lua_gettop(L);
+    lua_getglobal(L, "__luma_system");
+    lua_getfield(L, -1, "process_draw");
+    lua_pcall(L, 0, 0, 0);
+    lua_settop(L, top);
+}
+
+int LuaManager::get_instance_count() {
+    lua_getglobal(L, "__luma_system");
+    lua_getfield(L, -1, "containers");
+    lua_getfield(L, -1, "instances");
+    lua_len(L, -1);
+    int len = static_cast<int>(lua_tointeger(L, -1));
+    return len;
 }
 
 int LuaManager::register_function(lua_CFunction func, std::string name) {
@@ -44,31 +68,36 @@ lua_State* LuaManager::get_lua_state() {
     return L;
 }
 
-void LuaManager::pass_object_database_into_state(ObjectDatabase* objdatabase) {
-    L->object_database = objdatabase;
+void LuaManager::assign_state_containers(ObjectDatabase* objdatabase, WindowManager* window_manager) {
+
+    lua_pushstring(L, "object_database");  /* push value */
+    lua_pushlightuserdata(L, objdatabase);  /* push address */
+    /* registry.object_database = pointer*/
+    lua_settable(L, LUA_REGISTRYINDEX);
+
+    lua_pushstring(L, "window_manager");
+    lua_pushlightuserdata(L, window_manager);
+    lua_settable(L, LUA_REGISTRYINDEX);
 }
 
-/**
- * @brief Loads all object code into a table of functions.
- * An object's associated code-instantiation function should be ran every time a new object is created.
- * @param obj_database
- */
+void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* window_manager) {
+    // Register Lua state variablse
+    assign_state_containers(object_database, window_manager);
 
-/**
- * __luma_system.containers.object_code[<object_id>] = function()
- * //////////// code ///////////////
- * end
- * ... repeat for all code
- */
-void LuaManager::load_object_instantiation_code(ObjectDatabase* obj_database) {
-    for(ObjectAsset* obj : obj_database->get_all_object_assets()) {
+    // Register global functions
+    register_function(LuaLibrary::lua_library_test, "lua_library_test");
+    register_function(LuaLibrary::lua_draw_square, "draw_square");
 
-        std::string command("\n__luma_system.containers.object_code[" +
-                            std::to_string(obj->get_id() + 1) +
-                            "] = function()\n" +
-                            obj->get_code() +
-                            "\nend\n");
+    // Register __luma_system functions
+    register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
+    register_luma_system_function(LuaLibrary::luma_system_get_object_id, "get_object_id");
+    register_luma_system_function(LuaLibrary::luma_system_process_in_environment, "process_in_environment");
+}
 
-        this->execute(command);
-    }
+int LuaManager::object_code_length() {
+    lua_getglobal(L, "__luma_system");
+    lua_getfield(L, -1, "containers");
+    lua_getfield(L, -1, "object_code");
+    lua_len(L, -1);
+    return static_cast<int>(lua_tointeger(L, -1));
 }

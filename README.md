@@ -1,4 +1,4 @@
-﻿![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
+![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
 
 Luma Game Creator - version 0.0.1
 --------------------------------------------------------
@@ -20,6 +20,16 @@ Luma Game Creator is comprised of three main applications:
   custom filetype will be embedded alongside the core executable so that your game can
   be easily distributed.
 
+Compiling Core
+--------------------------------------------------------
+
+This project is built using the QtCreator IDE and qmake build system!
+
+* Download the `SFML` and `lua5.3` development libraries.
+* Edit Core/engine.pro so that INCLUDEPATH/DEPENDPATH and LIBS point to your own include/lib directories.
+* Open `Core.pro` in QtCreator with any valid configuration and Build!
+* (Windows) Copy the SFML and Lua5.3 .dll files into the build directory.
+* Run from QtCreator
 
 0.0.1 Core Roadmap
 --------------------------------------------------------
@@ -35,14 +45,13 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] LuaManager
 - [x] ObjectDatabase
 - [x] LuaLibrary
-- [ ] ConfigManager
-- [ ] WindowManager
+- [x] ConfigManager
+- [x] WindowManager
 - [ ] ImageDatabase
 - [ ] Engine (encapsulates all of the prior)
 
 Data Types:
 - [x] ObjectAsset
-- [x] ConfigAsset
 - [ ] ImageAsset
 - [x] InstanceAsset
 

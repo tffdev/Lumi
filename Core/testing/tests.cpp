@@ -3,9 +3,10 @@
 #include <filesystem.h>
 #include <objectasset.h>
 #include <luamanager.h>
-#include <configasset.h>
+#include <configmanager.h>
 #include <objectdatabase.h>
 #include <lualibrary.h>
+#include <windowmanager.h>
 
 TEST_CASE("Sanity Check") {
     CHECK(1 == 1);
@@ -30,15 +31,15 @@ TEST_CASE("ObjectAsset") {
     CHECK_EQ(asset2.get_code().compare(""), 0);
 }
 
-TEST_CASE("ConfigAsset") {
-    ConfigAsset asset("Hello", 320, 240, 0x32d61cff);
-    CHECK_EQ(asset.get_window_size().x, 320);
-    CHECK_EQ(asset.get_window_size().y, 240);
-    CHECK_EQ(asset.get_window_title().compare("Hello"), 0);
-    CHECK_EQ(asset.get_window_draw_color().r, 50);
-    CHECK_EQ(asset.get_window_draw_color().g, 214);
-    CHECK_EQ(asset.get_window_draw_color().b, 28);
-    CHECK_EQ(asset.get_window_draw_color().a, 255);
+TEST_CASE("ConfigManager") {
+    ConfigManager conf_manager("Hello", 320, 240, 0x32d61cff);
+    CHECK_EQ(conf_manager.get_window_size().x, 320);
+    CHECK_EQ(conf_manager.get_window_size().y, 240);
+    CHECK_EQ(conf_manager.get_window_title().compare("Hello"), 0);
+    CHECK_EQ(conf_manager.get_window_draw_color().r, 50);
+    CHECK_EQ(conf_manager.get_window_draw_color().g, 214);
+    CHECK_EQ(conf_manager.get_window_draw_color().b, 28);
+    CHECK_EQ(conf_manager.get_window_draw_color().a, 255);
 }
 
 TEST_CASE("FileSystem") {
@@ -52,25 +53,29 @@ TEST_CASE("FileSystem") {
         try { FileSystem::read_file("goodbye.txt"); } catch (...) { error = true; }
         CHECK_EQ(error, true);
     }
+
     SUBCASE("Utilities") {
         CHECK_EQ(FileSystem::hex_string_to_uint("0"), 0);
         CHECK_EQ(FileSystem::hex_string_to_uint("ff0000"), 16711680);
         CHECK_EQ(FileSystem::hex_string_to_uint("FA842A"), 16417834);
     }
+
     SUBCASE("Read object file.") {
         CHECK_NE(FileSystem::load_object_file().compare(""), 0);
         CHECK_NE(FileSystem::read_file("objects.xml").compare(""), 0);
         CHECK_EQ(FileSystem::load_object_file().compare(FileSystem::read_file("objects.xml")), 0);
     }
+
     SUBCASE("Load window configuration file into window config object.") {
-        ConfigAsset asset = FileSystem::load_config();
-        CHECK_EQ(asset.get_window_size().x, 320);
-        CHECK_EQ(asset.get_window_size().y, 240);
-        CHECK_EQ(asset.get_window_title().compare("Hello World!"), 0);
-        CHECK_EQ(asset.get_window_draw_color().r, 255);
-        CHECK_EQ(asset.get_window_draw_color().g, 0);
-        CHECK_EQ(asset.get_window_draw_color().b, 0);
+        ConfigManager conf_manager = FileSystem::load_config();
+        CHECK_EQ(conf_manager.get_window_size().x, 800);
+        CHECK_EQ(conf_manager.get_window_size().y, 600);
+        CHECK_EQ(conf_manager.get_window_title().compare("Hello World!"), 0);
+        CHECK_EQ(conf_manager.get_window_draw_color().r, 255);
+        CHECK_EQ(conf_manager.get_window_draw_color().g, 0);
+        CHECK_EQ(conf_manager.get_window_draw_color().b, 0);
     }
+
     // Add checks for code etc
     SUBCASE("Load Objects from XML into vector of ObjectAssets") {
         std::vector<ObjectAsset*> objassets = FileSystem::load_objects();
@@ -82,10 +87,7 @@ TEST_CASE("FileSystem") {
     }
 }
 
-int func_reg_check(lua_State *L) {
-    lua_pushnumber(L, 68923);
-    return 1;
-}
+
 
 TEST_CASE("ObjectDatabase") {
     ObjectDatabase objdatabase;
@@ -106,10 +108,28 @@ TEST_CASE("ObjectDatabase") {
     }
 }
 
+TEST_CASE("WindowManager") {
+    ConfigManager config("hi", 320, 240, 0xff0000);
+    WindowManager window_manager(&config);
+    CHECK_EQ(window_manager.is_open(), true);
+    CHECK_EQ(window_manager.get_size().x, 320);
+    CHECK_EQ(window_manager.get_size().y, 240);
+    window_manager.close();
+    CHECK_EQ(window_manager.is_open(), false);
+}
+
+
+int func_reg_check(lua_State *L) {
+    lua_pushnumber(L, 68923);
+    return 1;
+}
+
 TEST_CASE("LuaManager") {
     ObjectDatabase obj_database;
     LuaManager lmanager;
-    LuaLibrary::load_library(&lmanager, &obj_database);
+    WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff), true);
+    lmanager.load_library(&obj_database, &window_manager);
+
     SUBCASE("Lua execution check") {
         lmanager.execute("___lua_execute_check = 370439");
         CHECK_EQ(lmanager.get_global_int("___lua_execute_check"), 370439);
@@ -137,11 +157,12 @@ TEST_CASE("LuaManager") {
     }
 }
 
-
 TEST_CASE("LuaLibrary") {
-    ObjectDatabase objdatabase;
+    ObjectDatabase obj_database;
     LuaManager lmanager;
-    LuaLibrary::load_library(&lmanager, &objdatabase);
+    ConfigManager conf = FileSystem::load_config();
+    WindowManager window_manager(&conf, true);
+    lmanager.load_library(&obj_database, &window_manager);
 
     SUBCASE("Lua global library check"){
         lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -158,23 +179,29 @@ TEST_CASE("LuaLibrary") {
         CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
     }
 
-    SUBCASE("Instance environment checks") {
-        int new_instance_index = LuaLibrary::create_new_instance_environment(lmanager.get_lua_state(), 42, 74);
-        CHECK_NE(new_instance_index, 0);
-        LuaLibrary::run_string_in_environment(lmanager.get_lua_state(), new_instance_index, "new_variable = 7530");
-        LuaLibrary::fetch_environment_from_registry(lmanager.get_lua_state(), new_instance_index);
-        lua_getfield(lmanager.get_lua_state(), -1, "new_variable");
-        CHECK_EQ(lua_tointeger(lmanager.get_lua_state(), -1), 7530);
-    }
-
     SUBCASE("Instance creation check"){
-        lmanager.load_object_instantiation_code(&objdatabase);
+        CHECK_EQ(lmanager.object_code_length(), 3);
         lmanager.execute("instance_create(objTest)");
         lmanager.execute("instance_create(objTest3)");
         lmanager.execute("instance_create(objTest)");
         lmanager.execute("instance_create(objTest2)");
-        CHECK_EQ(lmanager.get_lua_state()->object_database->instance_count(), 4);
+        lmanager.execute("__luma_system:push_instances()");
+
+        CHECK_EQ(lmanager.get_instance_count(), 4);
         lmanager.run_update_function();
         lmanager.run_draw_function();
+
+        while(window_manager.is_open()) {
+            sf::Event e;
+            while(window_manager.poll_events(e)){
+                if(e.type == sf::Event::Closed) window_manager.close();
+            }
+            window_manager.clear();
+
+            lmanager.run_update_function();
+            lmanager.run_draw_function();
+
+            window_manager.display();
+        }
     }
 }

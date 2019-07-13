@@ -4,8 +4,8 @@
 <window>
   <windowtitle>Hello World!</windowtitle>
   <windowsize>
-    <width>320</width>
-    <height>240</height>
+    <width>800</width>
+    <height>600</height>
   </windowsize>
   <windowdrawcolor>ff0000</windowdrawcolor>
 </window>

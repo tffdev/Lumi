@@ -5,7 +5,6 @@
 -- these functions resulting in incorrect game behaviour etc.
 __luma_system = {}
 __luma_system.containers = {}
-__luma_system.containers.object_code = {}
 __luma_system.containers.instances = {}
 __luma_system.containers.instances_buffer = {}
 
@@ -24,18 +23,17 @@ setmetatable(_G, {
     end,
     __newindex = function(table, key, value)
         if(table._G.__luma_system:get_object_id(key) ~= nil) then
-            error("Cannot overwrite constant \"" .. tostring(key) .. "\".")
+            error("[LUMA] Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
     end
 })
 
 function __luma_system:create_new_instance_environment(parent)
-    new_env = parent or {}
+    local new_env = parent or {}
     -- all properly created environments will have
     -- correct access to the original global environment
     new_env._G = _G
-    table.insert(__luma_system.containers.instances_buffer, new_env)
     return _G.setmetatable(new_env, {
         __index = function(table, key)
             -- if in the original global scope (functions like print etc)
@@ -48,43 +46,15 @@ function __luma_system:create_new_instance_environment(parent)
     })
 end
 
--- do something in a temporary first-class environment
-function __luma_system:process_in_environment(env, func)
-    _ENV = env
-    func()
-    _ENV = _G
+function __luma_system:instance_create(id, x, y)
+    local instance = __luma_system:create_new_instance_environment()
+    instance.id = id
+    instance.x = x
+    instance.y = y
+    __luma_system:process_in_environment(__luma_system.containers.object_code[id+1], instance)
+    __luma_system:process_in_environment(instance.init, instance)
+    table.insert(__luma_system.containers.instances_buffer, instance)
 end
-
-
--- create a new object environment
--- run object's "init" function within environment
--- push into instance buffer
--- function __luma_system:instance_create(id, x, y)
---     local x = x or 0
---     local y = y or 0
-
---     -- error checking
---     if(id == nil) then
---         print("can't create instance")
---         return false
---     end
-
---     -- create instance
---     local new_object = __luma_system:create_new_instance_environment()
---     new_object.x = x
---     new_object.y = y
---     new_object.sprite_index = 0
---     print("[LUA] Creating instance "..id.." with _ENV: ", new_object)
-    
---     -- add all default attributes to object here! like x and y coords etc
---     __luma_system:process_in_environment(new_object, function()
---         __luma_system:run_object_creation_code(id)
---         __luma_system:try_running(init)
---     end)
-
---     table.insert(__luma_system.containers.instances_buffer, new_object)
---     return true
--- end
 
 function __luma_system:push_instances()
     -- v contains table of instances
@@ -102,24 +72,18 @@ function __luma_system:try_running(func)
     return false
 end
 
+function __luma_system:process_draw()
+    -- draw loop!
+    for j, v in ipairs(__luma_system.containers.instances) do
+        __luma_system:process_in_environment(__luma_system.containers.instances[j].draw, __luma_system.containers.instances[j])
+    end
+end
+
 function __luma_system:process_update()
     __luma_system:push_instances()
     -- update loop!
     for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-            __luma_system:try_running(update)
-        end)
-    end
-end
-
-function __luma_system:process_draw()
-     -- draw loop!
-    for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-            if(not __luma_system:try_running(draw)) then
-                draw_sprite(x, y, sprite_index)
-            end
-        end)
+        __luma_system:process_in_environment(__luma_system.containers.instances[j].update, __luma_system.containers.instances[j])
     end
 end
 

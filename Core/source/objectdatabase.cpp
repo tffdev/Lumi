@@ -7,14 +7,6 @@ ObjectDatabase::ObjectDatabase() {
     }
 }
 
-void ObjectDatabase::add_instance(InstanceAsset* instance) {
-    instances.push_back(instance);
-}
-
-int ObjectDatabase::instance_count() {
-    return static_cast<int>(instances.size());
-}
-
 std::string ObjectDatabase::get_object_name(int id) {
     try {
         return object_assets.at(static_cast<unsigned long long>(id))->get_name();

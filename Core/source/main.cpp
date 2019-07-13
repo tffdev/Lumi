@@ -1,5 +1,11 @@
 #include <stdio.h>
-
+#include <filesystem.h>
+#include <objectasset.h>
+#include <luamanager.h>
+#include <configmanager.h>
+#include <objectdatabase.h>
+#include <lualibrary.h>
+#include <windowmanager.h>
 /**
  * Luma Game Creator - version 0.0.1
  * --------------------------------------------------------
@@ -32,9 +38,27 @@
  */
 
 int main(int, char*[]) {
-    printf("Production main file!\n");
-    Engine::LoadGame()
-    Engine::Run()
-    return 0;
+    ObjectDatabase obj_database;
+    LuaManager lmanager;
+    ConfigManager conf = FileSystem::load_config();
+    WindowManager window_manager(&conf, true);
+    lmanager.load_library(&obj_database, &window_manager);
+
+    lmanager.execute("instance_create(objTest)");
+    lmanager.execute("instance_create(objTest3)");
+    lmanager.execute("instance_create(objTest)");
+    lmanager.execute("instance_create(objTest2)");
+
+    while(window_manager.is_open()) {
+        sf::Event e;
+        while(window_manager.poll_events(e)){
+            if(e.type == sf::Event::Closed) window_manager.close();
+        }
+        lmanager.run_update_function();
+
+        window_manager.clear();
+        lmanager.run_draw_function();
+        window_manager.display();
+    }
 }
 

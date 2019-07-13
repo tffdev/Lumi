@@ -4,7 +4,7 @@
 #include <pugixml.hpp>
 #include <vector>
 #include <objectasset.h>
-#include <configasset.h>
+#include <configmanager.h>
 #include <sstream>
 
 #define DATA_PATH "../data/"
@@ -26,7 +26,7 @@ namespace FileSystem {
     bool file_exists(std::string filename);
     std::string read_file(std::string filename);
 
-    ConfigAsset load_config();
+    ConfigManager load_config();
     std::vector<ObjectAsset*> load_objects();
     std::vector<int> load_sprites();
     std::vector<int> load_backgrounds();
