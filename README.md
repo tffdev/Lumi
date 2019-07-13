@@ -1,13 +1,9 @@
-![Luma WIP Logo](https://raw.githubusercontent.com/tfcat/LumaGameCreator/master/promotional/Logo.png)
-
 Luma Game Creator - version 0.0.1
 --------------------------------------------------------
-Luma Game Creator will a fast and easy
+Luma Game Creator will a fast, cross-platform
 open-source solution for making 2D game prototypes.
 
-Report bugs and download new versions at https://github.com/tfcat/lumagamecreator
-
-Copyright (C) 2019-2019, by Daniel Brier-Allen (danbrierly@gmail.com)
+Feel free to report bugs or ideas in issues!
 
 Luma Game Creator is comprised of three main applications:
 * **Editor.** An editor that produces XML files containing all information about 
@@ -18,7 +14,7 @@ Luma Game Creator is comprised of three main applications:
 
 * **Core.** An executable that can read Luma's custom game filetypes. The 
   custom filetype will be embedded alongside the core executable so that your game can
-  be easily distributed.
+  be easily distributed and ran on **any machine**.
 
 Compiling Core
 --------------------------------------------------------
