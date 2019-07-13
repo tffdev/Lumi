@@ -7,6 +7,14 @@ LuaManager::LuaManager() {
 
     if(luaL_dostring(L, FileSystem::read_file("main.lua").c_str()) != 0)
         throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
+
+    if(luaL_dostring(L, FileSystem::read_file("objects.lua").c_str()) != 0)
+        throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
+
+    /*lua_getglobal(L, "init");
+    if(lua_isnil(L, -1) != 0)
+        throw "init is nil";
+    lua_pcall(L,0,0,0);*/
 }
 
 void LuaManager::execute(std::string str) {
@@ -83,6 +91,7 @@ void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* wi
     // Register __luma_system functions
     register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
     register_luma_system_function(LuaLibrary::luma_system_get_object_id, "get_object_id");
+    register_luma_system_function(LuaLibrary::luma_system_process_in_environment, "process_in_environment");
 }
 
 int LuaManager::object_code_length() {

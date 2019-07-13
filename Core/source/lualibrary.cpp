@@ -44,8 +44,8 @@ namespace LuaLibrary {
     }
 
     int lua_draw_square(lua_State* L) {
-        int x = static_cast<int>(lua_tointeger(L, -2));
-        int y = static_cast<int>(lua_tointeger(L, -1));
+        float x = static_cast<float>(lua_tonumber(L, -2));
+        float y = static_cast<float>(lua_tonumber(L, -1));
 
         sf::RectangleShape rect;
         rect.setSize(sf::Vector2f(20, 20));
@@ -57,6 +57,14 @@ namespace LuaLibrary {
         WindowManager* window_manager = static_cast<WindowManager*>(lua_touserdata(L, -1));
         window_manager->draw(rect);
 
+        return 0;
+    }
+
+    int luma_system_process_in_environment(lua_State* L) {
+        if(lua_isnil(L, -2) == 1) return 0;
+        lua_setupvalue(L, -2, 1);
+        if(lua_pcall(L, 0, 0, 0) != 0)
+            throw "Error processing in environment: " + std::string(lua_tostring(L, -1));
         return 0;
     }
 };

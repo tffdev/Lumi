@@ -23,7 +23,7 @@ setmetatable(_G, {
     end,
     __newindex = function(table, key, value)
         if(table._G.__luma_system:get_object_id(key) ~= nil) then
-            error("[Lua] Cannot overwrite constant \"" .. tostring(key) .. "\".")
+            error("[LUMA] Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
     end
@@ -46,26 +46,14 @@ function __luma_system:create_new_instance_environment(parent)
     })
 end
 
-
 function __luma_system:instance_create(id, x, y)
     local instance = __luma_system:create_new_instance_environment()
     instance.id = id
-    print("creating id ", id)
-    __luma_system:process_in_environment(instance, function()
-        printf("Running obj code in ENV:%s", _ENV)
-        __luma_system:try_running(__luma_system.containers.object_code[id+1])
-        __luma_system:try_running(init)
-    end)
+    instance.x = x
+    instance.y = y
+    __luma_system:process_in_environment(__luma_system.containers.object_code[id+1], instance)
+    __luma_system:process_in_environment(instance.init, instance)
     table.insert(__luma_system.containers.instances_buffer, instance)
-end
-
-
-
--- do something in a temporary first-class environment
-function __luma_system:process_in_environment(env, func)
-    _ENV = env
-    func()
-    _ENV = _G
 end
 
 function __luma_system:push_instances()
@@ -87,11 +75,7 @@ end
 function __luma_system:process_draw()
     -- draw loop!
     for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-            if(not __luma_system:try_running(draw)) then
-                draw_sprite(x, y, current_sprite)
-            end
-        end)
+        __luma_system:process_in_environment(__luma_system.containers.instances[j].draw, __luma_system.containers.instances[j])
     end
 end
 
@@ -99,9 +83,7 @@ function __luma_system:process_update()
     __luma_system:push_instances()
     -- update loop!
     for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j], function()
-             __luma_system:try_running(update)
-        end)
+        __luma_system:process_in_environment(__luma_system.containers.instances[j].update, __luma_system.containers.instances[j])
     end
 end
 
@@ -122,33 +104,3 @@ end
 
 -- test data
 ___lua_main_check = 983652
-
-
-
--- LUMA GENERATED CODE -------------------------------------
-__luma_system.containers.object_code = {}
-__luma_system.containers.object_code[1] = function()
-    x = math.random(356)
-    y = math.random(356)
-    
-    function init()
-        printf("init!!!!!!!!!!!!!!!!! x[%i] y[%i] (objTest) _ENV [%s]", x, y, _ENV)
-    end
-    
-    function update()
-        x = x + 1
-    end
-    
-    function draw()
-        draw_square(x, y)
-    end
-end
-__luma_system.containers.object_code[2] = function()
-    x = 5
-end
-__luma_system.containers.object_code[3] = function()
-    function init()
-        print("Hello, this is init from objTest3")
-    end
-end
--- END LUMA GENERATED CODE ---------------------------------

@@ -53,25 +53,29 @@ TEST_CASE("FileSystem") {
         try { FileSystem::read_file("goodbye.txt"); } catch (...) { error = true; }
         CHECK_EQ(error, true);
     }
+
     SUBCASE("Utilities") {
         CHECK_EQ(FileSystem::hex_string_to_uint("0"), 0);
         CHECK_EQ(FileSystem::hex_string_to_uint("ff0000"), 16711680);
         CHECK_EQ(FileSystem::hex_string_to_uint("FA842A"), 16417834);
     }
+
     SUBCASE("Read object file.") {
         CHECK_NE(FileSystem::load_object_file().compare(""), 0);
         CHECK_NE(FileSystem::read_file("objects.xml").compare(""), 0);
         CHECK_EQ(FileSystem::load_object_file().compare(FileSystem::read_file("objects.xml")), 0);
     }
+
     SUBCASE("Load window configuration file into window config object.") {
         ConfigManager conf_manager = FileSystem::load_config();
-        CHECK_EQ(conf_manager.get_window_size().x, 320);
-        CHECK_EQ(conf_manager.get_window_size().y, 240);
+        CHECK_EQ(conf_manager.get_window_size().x, 800);
+        CHECK_EQ(conf_manager.get_window_size().y, 600);
         CHECK_EQ(conf_manager.get_window_title().compare("Hello World!"), 0);
         CHECK_EQ(conf_manager.get_window_draw_color().r, 255);
         CHECK_EQ(conf_manager.get_window_draw_color().g, 0);
         CHECK_EQ(conf_manager.get_window_draw_color().b, 0);
     }
+
     // Add checks for code etc
     SUBCASE("Load Objects from XML into vector of ObjectAssets") {
         std::vector<ObjectAsset*> objassets = FileSystem::load_objects();
@@ -83,10 +87,7 @@ TEST_CASE("FileSystem") {
     }
 }
 
-int func_reg_check(lua_State *L) {
-    lua_pushnumber(L, 68923);
-    return 1;
-}
+
 
 TEST_CASE("ObjectDatabase") {
     ObjectDatabase objdatabase;
@@ -115,6 +116,12 @@ TEST_CASE("WindowManager") {
     CHECK_EQ(window_manager.get_size().y, 240);
     window_manager.close();
     CHECK_EQ(window_manager.is_open(), false);
+}
+
+
+int func_reg_check(lua_State *L) {
+    lua_pushnumber(L, 68923);
+    return 1;
 }
 
 TEST_CASE("LuaManager") {
@@ -191,6 +198,7 @@ TEST_CASE("LuaLibrary") {
             }
             window_manager.clear();
 
+            lmanager.run_update_function();
             lmanager.run_draw_function();
 
             window_manager.display();

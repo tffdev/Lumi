@@ -31,7 +31,7 @@ HEADERS += \
     include/windowmanager.h
 
 # Run as test config
-CONFIG -= test
+CONFIG += test
 
 test {
     SOURCES -= source/main.cpp
