@@ -43,8 +43,9 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] LuaLibrary
 - [x] ConfigManager
 - [x] WindowManager
-- [ ] TextureManager
-- [ ] SpriteDatabase
+- [x] TextureManager
+- [x] SpriteDatabase
+- [ ] InputManager
 - [ ] Engine (encapsulates all of the prior)
 
 Data Types:
