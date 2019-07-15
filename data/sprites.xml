@@ -7,8 +7,7 @@
     <name>playerRun</name>
     <width>80</width>
     <height>80</height>
-    <texture_id>0</texture_id>
-    <texture_path>images/playerRunSheet.png</texture_path>
+    <path>images/playerRunSheet.png</path>
     <hitbox>
       <shape>0</shape>
       <offset><x>30</x><y>0</y></offset>
@@ -22,15 +21,50 @@
       <subimage>
         <x>0</x>
         <y>0</y>
+        <width>80</width>
+        <height>80</height>
+      </subimage>
+      <subimage>
+        <x>80</x>
+        <y>0</y>
+        <width>80</width>
+        <height>80</height>
+      </subimage>
+      <subimage>
+        <x>160</x>
+        <y>0</y>
+        <width>80</width>
+        <height>80</height>
+      </subimage>
+      <subimage>
+        <x>240</x>
+        <y>0</y>
+        <width>80</width>
+        <height>80</height>
+      </subimage>
+    </subimages>
+  </sprite>
+  <sprite>
+    <name>sprCat</name>
+    <width>283</width>
+    <height>340</height>
+    <path>images/image.jpg</path>
+    <hitbox>
+      <shape>0</shape>
+      <offset><x>0</x><y>0</y></offset>
+      <size><x>283</x><y>340</y></size>
+    </hitbox>
+    <origin>
+      <x>0</x>
+      <y>0</y>
+    </origin>
+    <subimages>
+      <subimage>
+        <x>0</x>
+        <y>0</y>
+        <width>283</width>
+        <height>340</height>
       </subimage>
     </subimages>
   </sprite>
 </sprites>
-<textures>
-  <texture>
-    <id>0</id>
-    <path>images/playerRunSheet.png</path>
-    <width>320</width>
-    <height>80</height>
-  </texture>
-</textures>

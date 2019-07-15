@@ -15,10 +15,10 @@ function __luma_system:get_object_id(name) end
 setmetatable(_G, {
     __index = function(table, key)
         -- if the variable is an object reference
-        local objid = table._G.__luma_system:get_object_id(key)
-        if(objid ~= nil) then
-            return objid
-        end
+        local id = table._G.__luma_system:get_object_id(key)
+        if(id ~= nil) then return id end
+        id = table._G.__luma_system:get_sprite_id(key)
+        if(id ~= nil) then return id end
         return nil
     end,
     __newindex = function(table, key, value)

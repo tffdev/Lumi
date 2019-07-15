@@ -63,10 +63,14 @@ lua_State* LuaManager::get_lua_state() {
   return L;
 }
 
-void LuaManager::assign_state_containers(ObjectDatabase* objdatabase, WindowManager* window_manager) {
+void LuaManager::assign_state_containers(ObjectDatabase* objdatabase, WindowManager* window_manager, SpriteDatabase* sprite_database) {
   lua_pushstring(L, "object_database");  /* push value */
   lua_pushlightuserdata(L, objdatabase);  /* push address */
   /* registry.object_database = pointer*/
+  lua_settable(L, LUA_REGISTRYINDEX);
+
+  lua_pushstring(L, "sprite_database");
+  lua_pushlightuserdata(L, sprite_database);
   lua_settable(L, LUA_REGISTRYINDEX);
 
   lua_pushstring(L, "window_manager");
@@ -74,17 +78,19 @@ void LuaManager::assign_state_containers(ObjectDatabase* objdatabase, WindowMana
   lua_settable(L, LUA_REGISTRYINDEX);
 }
 
-void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* window_manager) {
+void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* window_manager, SpriteDatabase* sprite_database) {
   // Register Lua state variablse
-  assign_state_containers(object_database, window_manager);
+  assign_state_containers(object_database, window_manager, sprite_database);
 
   // Register global functions
   register_function(LuaLibrary::lua_library_test, "lua_library_test");
   register_function(LuaLibrary::lua_draw_square, "draw_square");
+  register_function(LuaLibrary::lua_draw_sprite, "draw_sprite");
 
   // Register __luma_system functions
   register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
   register_luma_system_function(LuaLibrary::luma_system_get_object_id, "get_object_id");
+  register_luma_system_function(LuaLibrary::luma_system_get_sprite_id, "get_sprite_id");
   register_luma_system_function(LuaLibrary::luma_system_process_in_environment, "process_in_environment");
 }
 

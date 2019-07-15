@@ -25,5 +25,9 @@ __luma_system.containers.object_code[3] = function()
     function init()
         print("[LUA] Hello, this is init from objTest3")
     end
+
+    function draw()
+        draw_sprite(sprCat, 0, 10, 10)
+    end
 end
 -- END LUMA GENERATED CODE ---------------------------------

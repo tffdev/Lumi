@@ -7,6 +7,7 @@
 #include <configmanager.h>
 #include <sstream>
 #include <spriteasset.h>
+#include <texturemanager.h>
 
 #define DATA_PATH "../data/"
 
@@ -24,12 +25,15 @@ namespace FileSystem {
     std::string load_object_file();
     std::string load_sprite_file();
     std::string load_config_file();
+    std::string load_texture_file();
+
+    ConfigManager              load_config();
+    std::vector<ObjectAsset*>  load_objects();
+    std::vector<SpriteAsset>  load_sprites(TextureManager& texture_manager);
+    std::vector<TextureAsset*> load_textures();
+    std::vector<int>           load_backgrounds();
+
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);
     std::string read_file(std::string filename, bool binary = false);
-
-    ConfigManager load_config();
-    std::vector<ObjectAsset*> load_objects();
-    std::vector<SpriteAsset*> load_sprites();
-    std::vector<int> load_backgrounds();
 }

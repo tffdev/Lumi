@@ -8,6 +8,7 @@
 #include <lualibrary.h>
 #include <windowmanager.h>
 #include <textureasset.h>
+#include <spritedatabase.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -86,16 +87,23 @@ TEST_CASE("SpriteAsset") {
   rects.push_back(new SubimageRect(80, 0, 80, 80));
   rects.push_back(new SubimageRect(160, 0, 80, 80));
   rects.push_back(new SubimageRect(240, 0, 80, 80));
-  SpriteAsset sprite(texture, rects, hitbox);
+
+  std::string name("mySprite");
+  SpriteAsset sprite(name, texture, rects, hitbox);
 
   CHECK_EQ(sprite.get_subimage_size().x, 80);
   CHECK_EQ(sprite.get_subimage_size().y, 80);
-  CHECK_EQ(sprite.get_sprite(0).getTexture()->getSize().x, 320);
-  CHECK_EQ(sprite.get_sprite(0).getTexture()->getSize().y, 80);
+  CHECK_EQ(sprite.get_subimage(0).getTexture()->getSize().x, 320);
+  CHECK_EQ(sprite.get_subimage(0).getTexture()->getSize().y, 80);
+  CHECK_EQ(sprite.get_name().compare("mySprite"), 0);
 }
 
 TEST_CASE("SpriteDatabase") {
-  //TODO
+  SpriteDatabase sprite_db;
+  CHECK_EQ(sprite_db.get_sprite_id("playerRun"),0);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0).getScale().x, 1);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0).getTexture()->getSize().x, 320);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0).getTexture()->getSize().y, 80);
 }
 
 /**
@@ -122,6 +130,17 @@ TEST_CASE("WindowManager") {
   CHECK_EQ(window_manager.is_open(), false);
 }
 
+TEST_CASE("TextureManager") {
+  TextureManager texture_manager;
+  std::string path = "images/playerRunSheet.png";
+  TextureAsset texture(path);
+  CHECK_EQ(texture_manager.has_texture(path), false);
+  texture_manager.insert(path, texture);
+  CHECK_EQ(texture_manager.has_texture(path), true);
+  CHECK_EQ(texture_manager.get_texture(path).get_size().x, texture.get_size().x);
+  CHECK_EQ(texture_manager.get_texture(path).get_size().y, texture.get_size().y);
+}
+
 int func_reg_check(lua_State *L) {
   lua_pushnumber(L, 68923);
   return 1;
@@ -130,8 +149,9 @@ int func_reg_check(lua_State *L) {
 TEST_CASE("LuaManager") {
   ObjectDatabase obj_database;
   LuaManager lmanager;
+  SpriteDatabase spr_database;
   WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff), true);
-  lmanager.load_library(&obj_database, &window_manager);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database);
 
   SUBCASE("Lua execution check") {
     lmanager.execute("___lua_execute_check = 370439");
@@ -142,6 +162,8 @@ TEST_CASE("LuaManager") {
     CHECK_EQ(lmanager.get_global_int("___lua_main_check"), 983652);
     CHECK_EQ(lmanager.get_global_int("objTest"), 0);
     CHECK_EQ(lmanager.get_global_int("objTest2"), 1);
+    CHECK_EQ(lmanager.get_global_int("playerRun"), 0);
+    CHECK_EQ(lmanager.get_global_int("sprCat"), 1);
   }
   SUBCASE("Invalid code throw check"){
     bool error = false;
@@ -221,7 +243,13 @@ TEST_CASE("FileSystem") {
   }
 
   SUBCASE("Load sprite database") {
-    //TODO
+    TextureManager texture_manager;
+    std::vector<SpriteAsset> sprites = FileSystem::load_sprites(texture_manager);
+    CHECK_EQ(sprites.size(), 2);
+    CHECK_EQ(sprites.at(0).get_subimage_size().x, 80);
+    CHECK_EQ(sprites.at(0).get_subimage_size().y, 80);
+    CHECK_EQ(sprites.at(0).get_subimage(0).getTexture()->getSize().x, 320);
+    CHECK_EQ(sprites.at(0).get_subimage(0).getTexture()->getSize().y, 80);
   }
 
   // Add checks for code etc
@@ -239,9 +267,10 @@ TEST_CASE("FileSystem") {
 TEST_CASE("LuaLibrary") {
   ObjectDatabase obj_database;
   LuaManager lmanager;
+  SpriteDatabase spr_database;
   ConfigManager conf = FileSystem::load_config();
   WindowManager window_manager(&conf, true);
-  lmanager.load_library(&obj_database, &window_manager);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database);
 
   SUBCASE("Lua global library check"){
     lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -278,10 +307,14 @@ TEST_CASE("LuaLibrary") {
 TEST_CASE("Visual test") {
   ObjectDatabase obj_database;
   LuaManager lmanager;
+  SpriteDatabase spr_database;
   ConfigManager conf = FileSystem::load_config();
   WindowManager window_manager(&conf, true);
-  lmanager.load_library(&obj_database, &window_manager);
 
+  lmanager.load_library(&obj_database, &window_manager, &spr_database);
+
+
+  lmanager.execute("instance_create(objTest3)");
   lmanager.execute("instance_create(objTest)");
   lmanager.execute("instance_create(objTest)");
 
@@ -289,8 +322,8 @@ TEST_CASE("Visual test") {
   while(window_manager.is_open()) {
       sf::Event e;
       while(window_manager.poll_events(e)){
-          if(e.type == sf::Event::Closed) window_manager.close();
-        }
+        if(e.type == sf::Event::Closed) window_manager.close();
+      }
       window_manager.clear();
 
       lmanager.run_update_function();

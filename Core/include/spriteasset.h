@@ -13,11 +13,13 @@
 class SpriteAsset
 {
 public:
-    SpriteAsset(TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox);
+    SpriteAsset(std::string& name, TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox);
     sf::Vector2i get_subimage_size();
-    sf::Sprite get_sprite(double subimage);
+    sf::Sprite get_subimage(double subimage);
+    std::string get_name();
 private:
     int textureid;
+    std::string name;
     TextureAsset& texture;
     sf::Vector2i size;
     std::vector<sf::Sprite> subimages;
