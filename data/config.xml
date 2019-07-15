@@ -8,4 +8,5 @@
     <height>600</height>
   </windowsize>
   <windowdrawcolor>ff0000</windowdrawcolor>
+  <fps>60</fps>
 </window>

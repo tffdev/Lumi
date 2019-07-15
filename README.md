@@ -43,12 +43,15 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] LuaLibrary
 - [x] ConfigManager
 - [x] WindowManager
-- [ ] ImageDatabase
+- [ ] TextureManager
+- [ ] SpriteDatabase
 - [ ] Engine (encapsulates all of the prior)
 
 Data Types:
 - [x] ObjectAsset
-- [ ] ImageAsset
+- [x] SpriteAsset
+- [x] TextureAsset
+- [x] HitboxAsset
 - [x] InstanceAsset
 
 Game folder structure (for now):
