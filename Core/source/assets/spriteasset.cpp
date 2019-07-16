@@ -1,9 +1,9 @@
 #include "include/spriteasset.h"
 
 SpriteAsset::SpriteAsset(std::string& name, TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox):
-  name(name),
   texture(texture),
-  hitbox(hitbox) {
+  hitbox(hitbox),
+  name(name) {
   // TODO: Better way of managing the subimage size?
   size.x = rects[0]->get_rect().width;
   size.y = rects[0]->get_rect().height;
@@ -18,7 +18,7 @@ SpriteAsset::SpriteAsset(std::string& name, TextureAsset& texture, std::vector<S
     }
 }
 
-sf::Vector2i SpriteAsset::get_subimage_size() {
+Vector2<int> SpriteAsset::get_subimage_size() {
   return size;
 }
 

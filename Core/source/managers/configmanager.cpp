@@ -3,10 +3,10 @@
 ConfigManager::ConfigManager(std::string window_title, unsigned int windowsize_x, unsigned int windowsize_y, unsigned int window_drawcolor)
   : window_title(window_title),
     window_draw_color(sf::Color(window_drawcolor)),
-    window_size(sf::Vector2u(windowsize_x, windowsize_y)),
+    window_size(windowsize_x, windowsize_y),
     fullscreen(false){}
 
-sf::Vector2<unsigned int> ConfigManager::get_window_size() {
+Vector2<unsigned int> ConfigManager::get_window_size() {
   return window_size;
 }
 

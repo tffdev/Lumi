@@ -17,7 +17,7 @@ sf::Texture* TextureAsset::get_texture_data() {
   return &texture;
 }
 
-sf::Vector2u TextureAsset::get_size() {
+Vector2<unsigned int> TextureAsset::get_size() {
   sf::Texture* tex = get_texture_data();
-  return tex->getSize();
+  return Vector2<unsigned int>(tex->getSize().x, tex->getSize().y);
 }

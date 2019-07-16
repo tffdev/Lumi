@@ -9,6 +9,7 @@
 #include <windowmanager.h>
 #include <textureasset.h>
 #include <spritedatabase.h>
+#include <inputmanager.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -139,6 +140,10 @@ TEST_CASE("TextureManager") {
   CHECK_EQ(texture_manager.has_texture(path), true);
   CHECK_EQ(texture_manager.get_texture(path).get_size().x, texture.get_size().x);
   CHECK_EQ(texture_manager.get_texture(path).get_size().y, texture.get_size().y);
+}
+
+TEST_CASE("InputManager") {
+
 }
 
 int func_reg_check(lua_State *L) {
@@ -312,7 +317,6 @@ TEST_CASE("Visual test") {
   WindowManager window_manager(&conf, true);
 
   lmanager.load_library(&obj_database, &window_manager, &spr_database);
-
 
   lmanager.execute("instance_create(objTest3)");
   lmanager.execute("instance_create(objTest)");

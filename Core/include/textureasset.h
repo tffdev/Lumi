@@ -1,12 +1,13 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <mathlibrary.h>
 
 class TextureAsset
 {
 public:
     TextureAsset(std::string path);
     sf::Texture* get_texture_data();
-    sf::Vector2u get_size();
+    Vector2<unsigned int> get_size();
 private:
     sf::Texture texture;
     std::string path;

@@ -1,14 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <mathlibrary.h>
 
 class HitboxAsset
 {
 public:
     HitboxAsset(int shape, int offsetx, int offsety, int sizex, int sizey);
-    sf::Vector2i get_size();
-    sf::Vector2i get_offset();
+    Vector2<int> get_size();
+    Vector2<int> get_offset();
 private:
     int shape;
-    sf::Vector2i offset;
-    sf::Vector2i size;
+    Vector2<int> offset;
+    Vector2<int> size;
 };

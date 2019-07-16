@@ -19,6 +19,7 @@ SOURCES += \
         source/main.cpp \
         source/filesystem.cpp \
         source/managers/configmanager.cpp \
+        source/managers/inputmanager.cpp \
         source/managers/luamanager.cpp \
         source/managers/texturemanager.cpp \
         source/managers/windowmanager.cpp \
@@ -30,9 +31,11 @@ HEADERS += \
     include/configmanager.h \
     include/filesystem.h \
     include/hitboxasset.h \
+    include/inputmanager.h \
     include/instanceasset.h \
     include/lualibrary.h \
     include/luamanager.h \
+    include/mathlibrary.h \
     include/objectasset.h \
     include/objectdatabase.h \
     include/spriteasset.h \

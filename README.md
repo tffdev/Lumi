@@ -31,10 +31,9 @@ This project is built using the QtCreator IDE and qmake build system!
 --------------------------------------------------------
 0.0.1 result will:
 * display a window adhering to settings in config.xml
-* have unique objects that run/can run Lua code on creation and on every frame
-* have a small API written in C++ which is accessible from Lua
-* let objects draw shapes onto the screen
-* let objects draw sprite assets onto the screen
+* have unique objects that run/can run predefined Lua code on every frame
+* let objects detect user input
+* let objects draw sprites onto the screen
 
 Implement basic, unoptimised versions of all listed modules:
 - [x] FileSystem (to-be virtual file system)
