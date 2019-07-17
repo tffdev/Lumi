@@ -1,10 +1,10 @@
 #pragma once
-#include <SFML/Graphics.hpp>
 #include <hitboxasset.h>
 #include <vector>
 #include <textureasset.h>
 #include <subimagerect.h>
 #include <mathlibrary.h>
+#include <SDL2/SDL.h>
 
 /**
  * SpriteAsset is referrable by a single ID and contains
@@ -16,13 +16,14 @@ class SpriteAsset
 public:
     SpriteAsset(std::string& name, TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox);
     Vector2<int> get_subimage_size();
-    sf::Sprite get_subimage(double subimage);
+    SubimageRect* get_subimage(double subimage);
     std::string get_name();
+    GLuint get_texture_id();
+    Vector2<unsigned int> get_texture_size();
 private:
-    int textureid;
+    std::vector<SubimageRect*> subimages;
     TextureAsset& texture;
     HitboxAsset hitbox;
     std::string name;
     Vector2<int> size;
-    std::vector<sf::Sprite> subimages;
 };

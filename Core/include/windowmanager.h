@@ -1,29 +1,40 @@
 #pragma once
-#include <SFML/Graphics.hpp>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_opengl.h>
 #include <configmanager.h>
+#include <spriteasset.h>
+#include <GL/gl.h>
+#include <GL/wglext.h>
+
+struct Color {
+  float r;
+  float g;
+  float b;
+  float a;
+};
 
 class WindowManager
 {
 public:
-    WindowManager(ConfigManager* config_manager, bool shown = true);
-
+    WindowManager(ConfigManager* config_manager);
+    ~WindowManager();
     void create_window_using_config();
 
     void clear();
-    void draw(const sf::Drawable&);
+    void draw(SpriteAsset* sprite, double subimage, int x, int y);
     void display();
-    bool poll_events(sf::Event&);
+    bool poll_events(SDL_Event* e);
     bool is_open();
     void close();
-    sf::Vector2u get_size();
+    Vector2<int> get_size();
 
     bool is_fullscreen();
     void set_fullscreen(bool);
     void toggle_fullscreen();
 private:
     ConfigManager config;
-    bool shown;
-    sf::RenderWindow window;
-    sf::Color clear_color;
-    sf::View view;
+    bool open = true;
+    SDL_Window* window;
+    SDL_GLContext context;
+    Color clear_color;
 };

@@ -49,22 +49,6 @@ TEST_CASE("TextureAsset") {
   TextureAsset texture("images/playerRunSheet.png");
   CHECK_EQ(texture.get_size().x, 320);
   CHECK_EQ(texture.get_size().y, 80);
-  CHECK_EQ(texture.get_texture_data()->getSize().x, 320);
-  CHECK_EQ(texture.get_texture_data()->getSize().y, 80);
-
-  sf::Image img = texture.get_texture_data()->copyToImage();
-
-  // Check clear pixel
-  CHECK_EQ(img.getPixel(0, 0).a, 0);
-  CHECK_EQ(img.getPixel(0, 0).r, 255);
-  CHECK_EQ(img.getPixel(0, 0).g, 255);
-  CHECK_EQ(img.getPixel(0, 0).b, 255);
-
-  // Check coloured (armour pink) pixel
-  CHECK_EQ(img.getPixel(36, 39).a, 255);
-  CHECK_EQ(img.getPixel(36, 39).r, 204);
-  CHECK_EQ(img.getPixel(36, 39).g, 36);
-  CHECK_EQ(img.getPixel(36, 39).b, 133);
 }
 
 TEST_CASE("SubimageRect") {
@@ -94,17 +78,7 @@ TEST_CASE("SpriteAsset") {
 
   CHECK_EQ(sprite.get_subimage_size().x, 80);
   CHECK_EQ(sprite.get_subimage_size().y, 80);
-  CHECK_EQ(sprite.get_subimage(0).getTexture()->getSize().x, 320);
-  CHECK_EQ(sprite.get_subimage(0).getTexture()->getSize().y, 80);
   CHECK_EQ(sprite.get_name().compare("mySprite"), 0);
-}
-
-TEST_CASE("SpriteDatabase") {
-  SpriteDatabase sprite_db;
-  CHECK_EQ(sprite_db.get_sprite_id("playerRun"),0);
-  CHECK_EQ(sprite_db.get_sprite_by_id(0).getScale().x, 1);
-  CHECK_EQ(sprite_db.get_sprite_by_id(0).getTexture()->getSize().x, 320);
-  CHECK_EQ(sprite_db.get_sprite_by_id(0).getTexture()->getSize().y, 80);
 }
 
 /**
@@ -133,13 +107,20 @@ TEST_CASE("WindowManager") {
 
 TEST_CASE("TextureManager") {
   TextureManager texture_manager;
+
   std::string path = "images/playerRunSheet.png";
-  TextureAsset texture(path);
   CHECK_EQ(texture_manager.has_texture(path), false);
-  texture_manager.insert(path, texture);
+
+  texture_manager.insert(path);
   CHECK_EQ(texture_manager.has_texture(path), true);
+  CHECK_EQ(texture_manager.get_textures_size(), 1);
+
+  TextureAsset texture(path);
   CHECK_EQ(texture_manager.get_texture(path).get_size().x, texture.get_size().x);
   CHECK_EQ(texture_manager.get_texture(path).get_size().y, texture.get_size().y);
+
+  texture_manager.destroy_all();
+  CHECK_EQ(texture_manager.get_textures_size(), 0);
 }
 
 TEST_CASE("InputManager") {
@@ -152,10 +133,10 @@ int func_reg_check(lua_State *L) {
 }
 
 TEST_CASE("LuaManager") {
+  WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff));
   ObjectDatabase obj_database;
-  LuaManager lmanager;
   SpriteDatabase spr_database;
-  WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff), true);
+  LuaManager lmanager;
   lmanager.load_library(&obj_database, &window_manager, &spr_database);
 
   SUBCASE("Lua execution check") {
@@ -210,6 +191,18 @@ TEST_CASE("ObjectDatabase") {
   }
 }
 
+TEST_CASE("SpriteDatabase") {
+  SpriteDatabase sprite_db;
+  CHECK_EQ(sprite_db.sprite_exists("playerRun"), true);
+  CHECK_EQ(sprite_db.sprite_exists("playerWalk"), false);
+  CHECK_EQ(sprite_db.get_texture_manager().get_textures_size(), 2);
+  CHECK_EQ(sprite_db.get_sprite_id("sprCat"), 1);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_texture_size().x, 320);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_texture_size().y, 80);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_subimage(1)->get_rect().left, 80);
+  CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_subimage(1)->get_rect().top, 0);
+}
+
 /**
  * UTILITY
  */
@@ -253,8 +246,6 @@ TEST_CASE("FileSystem") {
     CHECK_EQ(sprites.size(), 2);
     CHECK_EQ(sprites.at(0).get_subimage_size().x, 80);
     CHECK_EQ(sprites.at(0).get_subimage_size().y, 80);
-    CHECK_EQ(sprites.at(0).get_subimage(0).getTexture()->getSize().x, 320);
-    CHECK_EQ(sprites.at(0).get_subimage(0).getTexture()->getSize().y, 80);
   }
 
   // Add checks for code etc
@@ -270,11 +261,11 @@ TEST_CASE("FileSystem") {
 
 
 TEST_CASE("LuaLibrary") {
-  ObjectDatabase obj_database;
-  LuaManager lmanager;
-  SpriteDatabase spr_database;
   ConfigManager conf = FileSystem::load_config();
-  WindowManager window_manager(&conf, true);
+  WindowManager window_manager(&conf);
+  ObjectDatabase obj_database;
+  SpriteDatabase spr_database;
+  LuaManager lmanager;
   lmanager.load_library(&obj_database, &window_manager, &spr_database);
 
   SUBCASE("Lua global library check"){
@@ -310,30 +301,36 @@ TEST_CASE("LuaLibrary") {
  * Visual / Realtime test
  */
 TEST_CASE("Visual test") {
-  ObjectDatabase obj_database;
-  LuaManager lmanager;
-  SpriteDatabase spr_database;
+  printf("=============================================== Visual test.\n");
   ConfigManager conf = FileSystem::load_config();
-  WindowManager window_manager(&conf, true);
+  WindowManager window_manager(&conf);
+  ObjectDatabase obj_database;
+  SpriteDatabase spr_database;
+  LuaManager lmanager;
+
+  CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
 
   lmanager.load_library(&obj_database, &window_manager, &spr_database);
-
   lmanager.execute("instance_create(objTest3)");
-  lmanager.execute("instance_create(objTest)");
-  lmanager.execute("instance_create(objTest)");
 
-  double i = 0.0;
+  SDL_Event e;
   while(window_manager.is_open()) {
-      sf::Event e;
-      while(window_manager.poll_events(e)){
-        if(e.type == sf::Event::Closed) window_manager.close();
+      Uint32 ticks = SDL_GetTicks();
+      while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) window_manager.close();
       }
-      window_manager.clear();
 
+      // process stuff
       lmanager.run_update_function();
+      window_manager.clear();
       lmanager.run_draw_function();
 
+      // vsync
+      // TODO: replace "60" with FPS.
+      Uint32 delay = (1000/60) - (SDL_GetTicks() - ticks);
+      if(delay > (1000/60)) delay = (1000/60);
+      SDL_Delay(delay);
+
       window_manager.display();
-      i += 0.05;
-    }
+  }
 }

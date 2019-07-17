@@ -5,7 +5,7 @@ CONFIG -= qt
 
 INCLUDEPATH += $$PWD/../../include include external
 DEPENDPATH += $$PWD/../../include include external
-LIBS += -L$$PWD/../../lib/ -llua53 -lsfml-graphics -lsfml-window -lsfml-system
+LIBS += -L$$PWD/../../lib/ -llua53 -lsfml-graphics -lsfml-window -lsfml-system -lsdl2 -lopengl32 -lsdl2_image
 
 SOURCES += \
         external/pugixml.cpp \

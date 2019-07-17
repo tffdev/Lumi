@@ -65,11 +65,6 @@ std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manage
       spr_xml.child("hitbox").child("size").child("x").text().as_int(),
       spr_xml.child("hitbox").child("size").child("y").text().as_int());
 
-    // texture assignment
-    std::string texture_path = spr_xml.child("path").text().as_string();
-    if (!texture_manager.has_texture(texture_path))
-      texture_manager.insert(texture_path, TextureAsset(texture_path));
-
     // rect generation
     std::vector<SubimageRect*> rects;
     for (pugi::xml_node subimage: spr_xml.child("subimages").children("subimage")) {
@@ -80,6 +75,14 @@ std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manage
         subimage.child("height").text().as_int());
       rects.push_back(rect);
     }
+
+
+    // texture creation and population of texture_manager
+    std::string texture_path = spr_xml.child("path").text().as_string();
+    if (!texture_manager.has_texture(texture_path)) {
+      texture_manager.insert(texture_path);
+    }
+
 
     SpriteAsset spr(name, texture_manager.get_texture(texture_path), rects, hitbox);
     sprite_vector.push_back(spr);

@@ -16,16 +16,22 @@ Luma Game Creator is comprised of three main applications:
   custom filetype will be embedded alongside the core executable so that your game can
   be easily distributed and ran on **any machine**.
 
-Compiling Core
+Dependancies:
+--------------------------------------------------------
+* SDL2
+* Lua5.3
+
+Compiling Core Engine
 --------------------------------------------------------
 
 This project is built using the QtCreator IDE and qmake build system!
 
-* Download the `SFML` and `lua5.3` development libraries.
+* Download the `SDL2` and `lua5.3` development libraries.
 * Edit Core/engine.pro so that INCLUDEPATH/DEPENDPATH and LIBS point to your own include/lib directories.
 * Open `Core.pro` in QtCreator with any valid configuration and Build!
-* (Windows) Copy the SFML and Lua5.3 .dll files into the build directory.
+* (Windows) Copy the SDL2.dll and Lua5.3.dll files into the build directory.
 * Run from QtCreator
+
 
 0.0.1 Core Roadmap
 --------------------------------------------------------

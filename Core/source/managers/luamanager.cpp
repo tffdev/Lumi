@@ -84,7 +84,6 @@ void LuaManager::load_library(ObjectDatabase* object_database, WindowManager* wi
 
   // Register global functions
   register_function(LuaLibrary::lua_library_test, "lua_library_test");
-  register_function(LuaLibrary::lua_draw_square, "draw_square");
   register_function(LuaLibrary::lua_draw_sprite, "draw_sprite");
 
   // Register __luma_system functions

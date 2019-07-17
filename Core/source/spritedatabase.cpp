@@ -9,9 +9,9 @@ SpriteDatabase::SpriteDatabase() {
     }
 }
 
-sf::Sprite SpriteDatabase::get_sprite_by_id(unsigned long long id, int subimage) {
+SpriteAsset* SpriteDatabase::get_sprite_by_id(unsigned long long id) {
   try {
-    return sprites.at(id).get_subimage(subimage);
+    return &sprites.at(id);
   } catch (...) {
     throw "Can't find sprite id " + std::to_string(id);
   }
@@ -28,4 +28,8 @@ bool SpriteDatabase::sprite_exists(std::string name) {
 int SpriteDatabase::get_sprite_id(std::string name) {
   if(!sprite_exists(name)) throw "Sprite " + name + " does not exist.";
   return id_map.at(name);
+}
+
+TextureManager& SpriteDatabase::get_texture_manager() {
+  return texture_manager;
 }
