@@ -1,6 +1,5 @@
 #pragma once
 #include <objectasset.h>
-#include <instanceasset.h>
 #include <vector>
 #include <filesystem.h>
 #include <map>

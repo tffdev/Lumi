@@ -6,13 +6,6 @@
 #include <GL/gl.h>
 #include <GL/wglext.h>
 
-struct Color {
-  float r;
-  float g;
-  float b;
-  float a;
-};
-
 class WindowManager
 {
 public:
