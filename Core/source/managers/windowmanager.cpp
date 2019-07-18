@@ -1,7 +1,8 @@
 #include "windowmanager.h"
 
 WindowManager::WindowManager(ConfigManager* config_manager)
-  : config(*config_manager) {
+  : config(*config_manager),
+  clear_color(config_manager->get_window_draw_color()) {
   create_window_using_config();
 }
 
@@ -13,13 +14,6 @@ WindowManager::~WindowManager() {
 void WindowManager::create_window_using_config() {
   size = Vector2<unsigned int>(config.get_window_size().x, config.get_window_size().y);
   scale = config.get_scale();
-
-  clear_color = {
-    static_cast<float>(config.get_window_draw_color().r)/255,
-    static_cast<float>(config.get_window_draw_color().g)/255,
-    static_cast<float>(config.get_window_draw_color().b)/255,
-    static_cast<float>(config.get_window_draw_color().a)/255
-  };
 
   window = SDL_CreateWindow(config.get_window_title().c_str(),
                             SDL_WINDOWPOS_CENTERED,
