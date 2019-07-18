@@ -1,5 +1,4 @@
 #pragma once
-#include <SFML/Window.hpp>
 #include <map>
 #include <stdio.h>
 
@@ -13,7 +12,4 @@ class InputManager
 {
 public:
   InputManager();
-  void pass_event(sf::Event&);
-private:
-  std::map<std::string, keystate> pressed_map;
 };
