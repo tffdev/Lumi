@@ -10,7 +10,6 @@ LIBS += -L$$PWD/../../lib/ -llua53 -lsfml-graphics -lsfml-window -lsfml-system -
 SOURCES += \
         external/pugixml.cpp \
         source/assets/hitboxasset.cpp \
-        source/assets/instanceasset.cpp \
         source/assets/objectasset.cpp \
         source/assets/spriteasset.cpp \
         source/assets/subimagerect.cpp \
@@ -32,7 +31,6 @@ HEADERS += \
     include/filesystem.h \
     include/hitboxasset.h \
     include/inputmanager.h \
-    include/instanceasset.h \
     include/lualibrary.h \
     include/luamanager.h \
     include/mathlibrary.h \
