@@ -7,14 +7,11 @@
     <sprite></sprite>
     <persistent>0</persistent>
     <code>
+a = math.random(574)
 x = math.random(356)
 y = math.random(357)
 yspd = math.random(357)/90
 xspd = math.random(357)/90
-
-function init()
-    printf("init! x[%f] y[%f] yspd[%f] (objTest) _ENV [%s]", x, y, yspd, _ENV)
-end
 
 function update()
     y = y + yspd

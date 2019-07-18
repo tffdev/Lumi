@@ -1,9 +1,10 @@
 #include "include/configmanager.h"
 
-ConfigManager::ConfigManager(std::string window_title, unsigned int windowsize_x, unsigned int windowsize_y, unsigned int window_drawcolor)
+ConfigManager::ConfigManager(std::string window_title, unsigned int windowsize_x, unsigned int windowsize_y, unsigned int window_drawcolor, double scale)
   : window_title(window_title),
     window_draw_color(sf::Color(window_drawcolor)),
     window_size(windowsize_x, windowsize_y),
+    scale(scale),
     fullscreen(false){}
 
 Vector2<unsigned int> ConfigManager::get_window_size() {
@@ -23,4 +24,8 @@ bool ConfigManager::get_fullscreen() {
 }
 void ConfigManager::set_fullscreen(bool set) {
   fullscreen = set;
+}
+
+double ConfigManager::get_scale() {
+  return scale;
 }

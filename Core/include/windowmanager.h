@@ -26,7 +26,8 @@ public:
     bool poll_events(SDL_Event* e);
     bool is_open();
     void close();
-    Vector2<int> get_size();
+    Vector2<unsigned int> get_size();
+    Vector2<unsigned int> get_real_size();
 
     bool is_fullscreen();
     void set_fullscreen(bool);
@@ -37,4 +38,6 @@ private:
     SDL_Window* window;
     SDL_GLContext context;
     Color clear_color;
+    Vector2<unsigned int> size;
+    double scale;
 };

@@ -96,11 +96,13 @@ TEST_CASE("ConfigManager") {
 }
 
 TEST_CASE("WindowManager") {
-  ConfigManager config("hi", 320, 240, 0xff0000);
+  ConfigManager config("hi", 320, 240, 0xff0000, 2.0);
   WindowManager window_manager(&config);
   CHECK_EQ(window_manager.is_open(), true);
   CHECK_EQ(window_manager.get_size().x, 320);
   CHECK_EQ(window_manager.get_size().y, 240);
+  CHECK_EQ(window_manager.get_real_size().x, 640);
+  CHECK_EQ(window_manager.get_real_size().y, 480);
   window_manager.close();
   CHECK_EQ(window_manager.is_open(), false);
 }
@@ -232,8 +234,8 @@ TEST_CASE("FileSystem") {
 
   SUBCASE("Load window configuration file into window config object.") {
     ConfigManager conf_manager = FileSystem::load_config();
-    CHECK_EQ(conf_manager.get_window_size().x, 800);
-    CHECK_EQ(conf_manager.get_window_size().y, 600);
+    CHECK_EQ(conf_manager.get_window_size().x, 320);
+    CHECK_EQ(conf_manager.get_window_size().y, 240);
     CHECK_EQ(conf_manager.get_window_title().compare("Hello World!"), 0);
     CHECK_EQ(conf_manager.get_window_draw_color().r, 255);
     CHECK_EQ(conf_manager.get_window_draw_color().g, 0);
@@ -311,7 +313,7 @@ TEST_CASE("Visual test") {
   CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
 
   lmanager.load_library(&obj_database, &window_manager, &spr_database);
-  lmanager.execute("instance_create(objTest3)");
+  lmanager.execute("instance_create(objTest)");
 
   SDL_Event e;
   while(window_manager.is_open()) {

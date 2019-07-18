@@ -11,6 +11,9 @@ WindowManager::~WindowManager() {
 }
 
 void WindowManager::create_window_using_config() {
+  size = Vector2<unsigned int>(config.get_window_size().x, config.get_window_size().y);
+  scale = config.get_scale();
+
   clear_color = {
     static_cast<float>(config.get_window_draw_color().r)/255,
     static_cast<float>(config.get_window_draw_color().g)/255,
@@ -21,8 +24,8 @@ void WindowManager::create_window_using_config() {
   window = SDL_CreateWindow(config.get_window_title().c_str(),
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
-                            static_cast<int>(config.get_window_size().x),
-                            static_cast<int>(config.get_window_size().y),
+                            static_cast<int>(size.x * scale),
+                            static_cast<int>(size.y * scale),
                             SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
   SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 3 );
@@ -34,7 +37,7 @@ void WindowManager::create_window_using_config() {
 
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-  glOrtho(0, get_size().x, get_size().y, 0, 0, 1.0);
+  glOrtho(0, size.x, size.y, 0, 0, 1.0);
 
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
@@ -105,10 +108,14 @@ bool WindowManager::poll_events(SDL_Event* e) {
   return SDL_PollEvent(e);
 }
 
-Vector2<int> WindowManager::get_size() {
+Vector2<unsigned int> WindowManager::get_size() {
+  return size;
+}
+
+Vector2<unsigned int> WindowManager::get_real_size() {
   int x, y;
   SDL_GetWindowSize(window, &x, &y);
-  return Vector2<int>(x, y);
+  return Vector2<unsigned int>(static_cast<unsigned int>(x), static_cast<unsigned int>(y));
 }
 
 void WindowManager::toggle_fullscreen() {

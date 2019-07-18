@@ -4,9 +4,10 @@
 <window>
   <windowtitle>Hello World!</windowtitle>
   <windowsize>
-    <width>800</width>
-    <height>600</height>
+    <width>320</width>
+    <height>240</height>
   </windowsize>
+  <scale>2.0</scale>
   <windowdrawcolor>ff0000</windowdrawcolor>
   <fps>60</fps>
 </window>

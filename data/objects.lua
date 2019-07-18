@@ -2,10 +2,10 @@
 __luma_system.containers.object_code = {}
 __luma_system.containers.object_code[1] = function()
     a = math.random(574)
-    x = math.random(356)
-    y = math.random(357)
-    yspd = math.random(357)/90
-    xspd = math.random(357)/90
+    x = math.random(10)
+    y = math.random(10)
+    yspd = math.random(357)/300
+    xspd = math.random(357)/300
     
     function update()
         y = y + yspd
@@ -13,7 +13,7 @@ __luma_system.containers.object_code[1] = function()
     end
 
     function draw()
-        draw_square(x, y)
+        draw_sprite(playerRun, 0, x, y)
     end
 end
 
