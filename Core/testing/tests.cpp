@@ -136,10 +136,11 @@ int func_reg_check(lua_State *L) {
 
 TEST_CASE("LuaManager") {
   WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff));
+  InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
   LuaManager lmanager;
-  lmanager.load_library(&obj_database, &window_manager, &spr_database);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
 
   SUBCASE("Lua execution check") {
     lmanager.execute("___lua_execute_check = 370439");
@@ -265,10 +266,11 @@ TEST_CASE("FileSystem") {
 TEST_CASE("LuaLibrary") {
   ConfigManager conf = FileSystem::load_config();
   WindowManager window_manager(&conf);
+  InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
   LuaManager lmanager;
-  lmanager.load_library(&obj_database, &window_manager, &spr_database);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
 
   SUBCASE("Lua global library check"){
     lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -306,13 +308,14 @@ TEST_CASE("Visual test") {
   printf("=============================================== Visual test.\n");
   ConfigManager conf = FileSystem::load_config();
   WindowManager window_manager(&conf);
+  InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
   LuaManager lmanager;
 
   CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
 
-  lmanager.load_library(&obj_database, &window_manager, &spr_database);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
   lmanager.execute("instance_create(objTest)");
 
   SDL_Event e;
@@ -320,6 +323,7 @@ TEST_CASE("Visual test") {
       Uint32 ticks = SDL_GetTicks();
       while (SDL_PollEvent(&e)) {
         if (e.type == SDL_QUIT) window_manager.close();
+        input_manager.process_events(&e);
       }
 
       // process stuff
@@ -334,5 +338,6 @@ TEST_CASE("Visual test") {
       SDL_Delay(delay);
 
       window_manager.display();
+      input_manager.clear_pressed_keys();
   }
 }

@@ -49,6 +49,7 @@ namespace LuaLibrary {
     return 1;
   }
 
+
   /**
    * @brief Gets the ID of a sprite given the name of the sprite. `__luma_system:get_sprite_id("sprTest")`
    * @param L The passed Lua state
@@ -71,6 +72,25 @@ namespace LuaLibrary {
     lua_pushnumber(L, id);
     return 1;
   }
+
+  /**
+   * @brief Process a Lua closure using a given table as a
+   * first-class environment. `__luma_system:process_in_environment(function, environment)`
+   *
+   * @param L The passed Lua state
+   * @return Nil
+   */
+  int luma_system_process_in_environment(lua_State* L) {
+    if(lua_isnil(L, -2) == 1) return 0;
+    lua_setupvalue(L, -2, 1);
+    if(lua_pcall(L, 0, 0, 0) != 0)
+      throw "Error processing in environment: " + std::string(lua_tostring(L, -1));
+    return 0;
+  }
+
+  /**
+   * Lua global library
+   */
 
   /**
    * @brief Draws a subimage of a sprite at given coordinates onto the window held in the
@@ -97,18 +117,48 @@ namespace LuaLibrary {
     return 0;
   }
 
-  /**
-   * @brief Process a Lua closure using a given table as a
-   * first-class environment. `__luma_system:process_in_environment(function, environment)`
-   *
-   * @param L The passed Lua state
-   * @return Nil
-   */
-  int luma_system_process_in_environment(lua_State* L) {
-    if(lua_isnil(L, -2) == 1) return 0;
-    lua_setupvalue(L, -2, 1);
-    if(lua_pcall(L, 0, 0, 0) != 0)
-      throw "Error processing in environment: " + std::string(lua_tostring(L, -1));
+  int lua_key_pressed(lua_State* L) {
+    std::string keycode = std::string(lua_tostring(L, -1));
+
+    lua_pushstring(L, "input_manager");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    InputManager* input_manager = static_cast<InputManager*>(lua_touserdata(L, -1));
+
+    if(input_manager->has_key(keycode)) {
+      lua_pushboolean(L, input_manager->get_key_state(keycode).pressed);
+      return 1;
+    }
+
+    return 0;
+  }
+
+  int lua_key_down(lua_State* L) {
+    std::string keycode = std::string(lua_tostring(L, -1));
+
+    lua_pushstring(L, "input_manager");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    InputManager* input_manager = static_cast<InputManager*>(lua_touserdata(L, -1));
+
+    if(input_manager->has_key(keycode)) {
+      lua_pushboolean(L, input_manager->get_key_state(keycode).down);
+      return 1;
+    }
+
+    return 0;
+  }
+
+  int lua_key_released(lua_State* L) {
+    std::string keycode = std::string(lua_tostring(L, -1));
+
+    lua_pushstring(L, "input_manager");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    InputManager* input_manager = static_cast<InputManager*>(lua_touserdata(L, -1));
+
+    if(input_manager->has_key(keycode)) {
+      lua_pushboolean(L, input_manager->get_key_state(keycode).released);
+      return 1;
+    }
+
     return 0;
   }
 };

@@ -1,15 +1,14 @@
 -- LUMA GENERATED CODE -------------------------------------
 __luma_system.containers.object_code = {}
 __luma_system.containers.object_code[1] = function()
-    a = math.random(574)
     x = math.random(10)
     y = math.random(10)
-    yspd = math.random(357)/300
-    xspd = math.random(357)/300
     
     function update()
-        y = y + yspd
-        x = x + xspd
+        if(key_down("up")) then y = y - 1 end
+        if(key_down("down")) then y = y + 1  end
+        if(key_down("left")) then x = x - 1  end
+        if(key_down("right")) then x = x + 1  end
     end
 
     function draw()

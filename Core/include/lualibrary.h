@@ -12,4 +12,7 @@ namespace LuaLibrary {
     int luma_system_process_in_environment(lua_State*);
 
     int lua_draw_sprite(lua_State*);
+    int lua_key_down(lua_State*);
+    int lua_key_released(lua_State*);
+    int lua_key_pressed(lua_State*);
 };

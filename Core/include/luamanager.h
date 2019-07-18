@@ -4,6 +4,7 @@
 #include <objectdatabase.h>
 #include <windowmanager.h>
 #include <spritedatabase.h>
+#include <inputmanager.h>
 
 class LuaManager
 {
@@ -19,8 +20,8 @@ public:
     int get_global_int(std::string name);
     int register_function(lua_CFunction fnc, std::string name);
     int register_luma_system_function(lua_CFunction func, std::string name);
-    void assign_state_containers(ObjectDatabase*, WindowManager*, SpriteDatabase*);
-    void load_library(ObjectDatabase*, WindowManager*, SpriteDatabase*);
+    void assign_state_containers(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*);
+    void load_library(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*);
 
     int get_instance_count();
     int object_code_length();
