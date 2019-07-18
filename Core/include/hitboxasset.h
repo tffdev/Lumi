@@ -2,6 +2,12 @@
 #include <SFML/Graphics.hpp>
 #include <mathlibrary.h>
 
+enum HITBOX_SHAPE {
+  RECTANGLE
+};
+
+
+
 class HitboxAsset
 {
 public:
