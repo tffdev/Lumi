@@ -114,11 +114,10 @@ Vector2<unsigned int> WindowManager::get_real_size() {
 
 void WindowManager::toggle_fullscreen() {
   config.set_fullscreen(!config.get_fullscreen());
-  create_window_using_config();
+  SDL_SetWindowFullscreen(window, (config.get_fullscreen()) ? SDL_WINDOW_FULLSCREEN : 0);
 }
 
 void WindowManager::set_fullscreen(bool set) {
   config.set_fullscreen(set);
-  close();
-  create_window_using_config();
+  SDL_SetWindowFullscreen(window, (set) ? SDL_WINDOW_FULLSCREEN : 0);
 }
