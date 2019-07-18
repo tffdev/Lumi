@@ -1,16 +1,26 @@
 #include "windowmanager.h"
 
+/**
+ * @brief Create an instance of WindowManager.
+ * @param config_manager The configuration object to refer to when building the window.
+ */
 WindowManager::WindowManager(ConfigManager* config_manager)
   : config(*config_manager),
   clear_color(config_manager->get_window_draw_color()) {
   create_window_using_config();
 }
 
+/**
+ * @brief Deletes the OpenGL context and attached window.
+ */
 WindowManager::~WindowManager() {
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
 }
 
+/**
+ * @brief Creates a window using the ConfigManager object attributes given on construction. (attributes such as size, scale, and title.)
+ */
 void WindowManager::create_window_using_config() {
   size = Vector2<unsigned int>(config.get_window_size().x, config.get_window_size().y);
   scale = config.get_scale();
@@ -45,23 +55,37 @@ void WindowManager::create_window_using_config() {
   if(err != 0) throw "Window creation error";
 }
 
+/**
+ * @brief Check if the window currently exists and hasn't been closed.
+ * @return True if the window is open, false otherwise.
+ */
 bool WindowManager::is_open() {
   return open;
 }
 
+/**
+ * @brief Close the attached window.
+ */
 void WindowManager::close() {
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
   open = false;
 }
 
+/**
+ * @brief Clear the window with the attached background color.
+ */
 void WindowManager::clear() {
   glClear(GL_COLOR_BUFFER_BIT);
 }
 
-
-
-
+/**
+ * @brief Draw a sprite onto the canvas.
+ * @param sprite The sprite asset to draw.
+ * @param subimage The sprite subimage to draw.
+ * @param x The X position in which to draw the sprite.
+ * @param y The Y position in which to draw the sprite.
+ */
 void WindowManager::draw(SpriteAsset* sprite, double subimage, int x, int y) {
   SubimageRect* rect = sprite->get_subimage(subimage);
   rect->get_rect();
@@ -91,32 +115,51 @@ void WindowManager::draw(SpriteAsset* sprite, double subimage, int x, int y) {
   glDisable(GL_TEXTURE_2D);
 }
 
-
-
-
+/**
+ * @brief Swap the window buffers, displaying all drawn assets to the user.
+ */
 void WindowManager::display() {
   SDL_GL_SwapWindow(window);
 }
 
+/**
+ * @brief Poll SDL events.
+ * @param e The SDL_Event object to push the event into.
+ * @return True if there are more SDL events to poll, false otherwise.
+ */
 bool WindowManager::poll_events(SDL_Event* e) {
   return SDL_PollEvent(e);
 }
 
+/**
+ * @brief Get the canvas size.
+ * @return 2D vector containing the size of the canvas.
+ */
 Vector2<unsigned int> WindowManager::get_size() {
   return size;
 }
 
+/**
+ * @brief Get the real current size of the window.
+ * @return 2D vector containing the size of the window.
+ */
 Vector2<unsigned int> WindowManager::get_real_size() {
   int x, y;
   SDL_GetWindowSize(window, &x, &y);
   return Vector2<unsigned int>(static_cast<unsigned int>(x), static_cast<unsigned int>(y));
 }
 
+/**
+ * @brief Switches the fullscreen mode of this window.
+ */
 void WindowManager::toggle_fullscreen() {
   config.set_fullscreen(!config.get_fullscreen());
   SDL_SetWindowFullscreen(window, (config.get_fullscreen()) ? SDL_WINDOW_FULLSCREEN : 0);
 }
-
+/**
+ * @brief Sets the fullscreen mode of this window.
+ * @param set True for fullscreen, false for windowed.
+ */
 void WindowManager::set_fullscreen(bool set) {
   config.set_fullscreen(set);
   SDL_SetWindowFullscreen(window, (set) ? SDL_WINDOW_FULLSCREEN : 0);

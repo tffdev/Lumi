@@ -2,15 +2,15 @@
 
 namespace LuaLibrary {
   /**
-     * Error functions
-     */
+   * Error functions
+   */
   [[ noreturn ]] void throw_db_error() {
     throw "Database-dependant Lua library function called when database has not been initialised.";
   }
 
   /**
-     * Testing functions
-     */
+   * Testing functions
+   */
   int lua_library_test(lua_State* L) {
     lua_pushnumber(L, 42);
     return 1;
@@ -21,6 +21,15 @@ namespace LuaLibrary {
     return 1;
   }
 
+  /**
+   * Luma Library
+   */
+
+  /**
+   * @brief Gets the ID of an object given the name of the object. `__luma_system:get_object_id("objTest")`
+   * @param L The passed Lua state
+   * @return [Integer] The ID of the object.
+   */
   int luma_system_get_object_id(lua_State* L) {
     std::string name(lua_tostring(L, -1));
 
@@ -40,6 +49,11 @@ namespace LuaLibrary {
     return 1;
   }
 
+  /**
+   * @brief Gets the ID of a sprite given the name of the sprite. `__luma_system:get_sprite_id("sprTest")`
+   * @param L The passed Lua state
+   * @return [Integer] The ID of the sprite.
+   */
   int luma_system_get_sprite_id(lua_State* L) {
     std::string name(lua_tostring(L, -1));
 
@@ -58,6 +72,12 @@ namespace LuaLibrary {
     return 1;
   }
 
+  /**
+   * @brief Draws a subimage of a sprite at given coordinates onto the window held in the
+   * Luastate's WindowManager registry slot. `draw_sprite(sprite_index, sprite_subimage, x, y)`
+   * @param L The passed Lua state
+   * @return Nil
+   */
   int lua_draw_sprite(lua_State* L) {
     unsigned long long sprite_id = static_cast<unsigned long long>(lua_tonumber(L, -4));
     int subimage = static_cast<int>(lua_tonumber(L, -3));
@@ -77,6 +97,13 @@ namespace LuaLibrary {
     return 0;
   }
 
+  /**
+   * @brief Process a Lua closure using a given table as a
+   * first-class environment. `__luma_system:process_in_environment(function, environment)`
+   *
+   * @param L The passed Lua state
+   * @return Nil
+   */
   int luma_system_process_in_environment(lua_State* L) {
     if(lua_isnil(L, -2) == 1) return 0;
     lua_setupvalue(L, -2, 1);

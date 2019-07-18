@@ -1,5 +1,10 @@
 #include "filesystem.h"
 
+/**
+ * @brief Check if a file exists within the virutal filesystem given a filepath.
+ * @param filename The path of the file.
+ * @return True if the file exists, false if not.
+ */
 bool FileSystem::file_exists(std::string filename) {
   if (FILE * file = fopen((DATA_PATH + filename).c_str(), "r")) {
     fclose(file);
@@ -9,6 +14,12 @@ bool FileSystem::file_exists(std::string filename) {
   }
 }
 
+/**
+ * @brief Read the contents of a file into a string.
+ * @param filename The path of the file.
+ * @param binary Whether the file is a binary asset or not.
+ * @return The file's contents as a string.
+ */
 std::string FileSystem::read_file(std::string filename, bool binary) {
   if (!file_exists(DATA_PATH + filename)) throw "File " + filename + " doesn't exist!";
   std::ifstream stream(DATA_PATH + filename, (binary) ? std::ifstream::binary : std::ifstream:: in );
@@ -17,21 +28,37 @@ std::string FileSystem::read_file(std::string filename, bool binary) {
   return str;
 }
 
+/**
+ * @brief Load the contents of the default object file as a string.
+ * @return The default object file's contents as a string.
+ */
 std::string FileSystem::load_object_file() {
   if (!file_exists(OBJECT_PATH)) throw "Cannot load Object XML file.";
   return read_file(OBJECT_PATH);
 }
 
+/**
+ * @brief Load the contents of the default sprite file as a string.
+ * @return The default sprite file's contents as a string.
+ */
 std::string FileSystem::load_sprite_file() {
   if (!file_exists(SPRITE_PATH)) throw "Cannot load Sprite XML file.";
   return read_file(SPRITE_PATH);
 }
 
+/**
+ * @brief Load the contents of the default config file as a string.
+ * @return The default config file's contents as a string.
+ */
 std::string FileSystem::load_config_file() {
   if (!file_exists(CONFIG_PATH)) throw "Cannot load Config XML file.";
   return read_file(CONFIG_PATH);
 }
 
+/**
+ * @brief Using the default object xml file, create a vector of ObjectAssets.
+ * @return A vector of ObjectAssets as per the objects.xml file.
+ */
 std::vector<ObjectAsset*> FileSystem::load_objects() {
   pugi::xml_document document;
   std::vector<ObjectAsset*> object_vector;
@@ -48,6 +75,11 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
   return object_vector;
 }
 
+/**
+ * @brief Using the default sprite xml file, create a vector of SpriteAssets. Loads all required textures into the given TextureManager.
+ * @param texture_manager The manager which to store all the required textures in.
+ * @return A vector of SpriteAssets as per the sprites.xml file.
+ */
 std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manager) {
   pugi::xml_document document;
   std::vector<SpriteAsset> sprite_vector;
@@ -91,6 +123,11 @@ std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manage
   return sprite_vector;
 }
 
+/**
+ * @brief Convert a hexadecimal string to an unsigned int. Used for colors.
+ * @param str The hexadecimal as a string.
+ * @return The hexadecimal as a real integer value.
+ */
 unsigned int FileSystem::hex_string_to_uint(std::string str) {
   unsigned int x;
   std::stringstream ss;
@@ -99,6 +136,10 @@ unsigned int FileSystem::hex_string_to_uint(std::string str) {
   return static_cast<unsigned int>(x);
 }
 
+/**
+ * @brief Create a ConfigManager object given the values within the default config.xml file.
+ * @return An instance of ConfigManager.
+ */
 ConfigManager FileSystem::load_config() {
   pugi::xml_document document;
   document.load_string(FileSystem::load_config_file().c_str());
