@@ -41,6 +41,9 @@ void WindowManager::create_window_using_config() {
 
   glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
 
+  glEnable(GL_BLEND);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
   GLuint err = glGetError();
   if(err != 0) throw "Window creation error";
 }
