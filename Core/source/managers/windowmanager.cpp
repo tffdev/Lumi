@@ -7,6 +7,11 @@
 WindowManager::WindowManager(ConfigManager* config_manager)
   : config(*config_manager),
   clear_color(config_manager->get_window_draw_color()) {
+
+  // Initialise everything for the window
+  SDL_Init(SDL_INIT_EVERYTHING);
+  Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, AUDIO_U8);
+
   create_window_using_config();
 }
 

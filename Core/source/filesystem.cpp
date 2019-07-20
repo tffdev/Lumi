@@ -56,6 +56,15 @@ std::string FileSystem::load_config_file() {
 }
 
 /**
+ * @brief Load the contents of the default config file as a string.
+ * @return The default config file's contents as a string.
+ */
+std::string FileSystem::load_sounds_file() {
+  if (!file_exists(AUDIO_PATH)) throw "Cannot load Sounds XML file.";
+  return read_file(AUDIO_PATH);
+}
+
+/**
  * @brief Using the default object xml file, create a vector of ObjectAssets.
  * @return A vector of ObjectAssets as per the objects.xml file.
  */
@@ -152,4 +161,23 @@ ConfigManager FileSystem::load_config() {
     document.child("window").child("scale").text().as_double());
 
   return config_asset;
+}
+
+/**
+ * @brief Load a vector of AudioAssets referring to definitions in the sounds.xml file.
+ * @return A vectof of AudioAsset pointers.
+ */
+std::vector<AudioAsset*> FileSystem::load_sounds() {
+  pugi::xml_document document;
+  document.load_string(FileSystem::load_sounds_file().c_str());
+
+  std::vector<AudioAsset*> audio_assets;
+  unsigned long long i = 0;
+  for(pugi::xml_node node : document.child("sounds").children("sound")) {
+    std::string data = FileSystem::read_file(node.child("path").text().as_string(), true);
+    audio_assets.push_back(new AudioAsset(i, node.child("name").text().as_string(), data));
+    i++;
+  }
+
+  return audio_assets;
 }

@@ -74,6 +74,29 @@ namespace LuaLibrary {
   }
 
   /**
+   * @brief Gets the ID of a sprite given the name of the sprite. `__luma_system:get_sprite_id("sprTest")`
+   * @param L The passed Lua state
+   * @return [Integer] The ID of the sprite.
+   */
+  int luma_system_get_audio_id(lua_State* L) {
+    std::string name(lua_tostring(L, -1));
+
+    lua_pushstring(L, "audio_database");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    AudioDatabase* audio_database = static_cast<AudioDatabase*>(lua_touserdata(L, -1));
+
+    if(audio_database == nullptr) throw_db_error();
+
+    if(!audio_database->audio_exists(name)) {
+      return 0; // return 0 results == nil
+    }
+
+    unsigned long long id = audio_database->get_audio_id(name);
+    lua_pushnumber(L, id);
+    return 1;
+  }
+
+  /**
    * @brief Process a Lua closure using a given table as a
    * first-class environment. `__luma_system:process_in_environment(function, environment)`
    *
@@ -159,6 +182,37 @@ namespace LuaLibrary {
       return 1;
     }
 
+    return 0;
+  }
+
+  int lua_audio_play(lua_State* L) {
+    if (lua_gettop(L) != 2) {
+      return luaL_error(L, "audio_play expcts 2 arguments. (int, bool)");
+    }
+    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -2));
+    bool loop = lua_toboolean(L, -1);
+
+    lua_pushstring(L, "audio_database");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    AudioDatabase* audio_database = static_cast<AudioDatabase*>(lua_touserdata(L, -1));
+
+    printf("playing audio id %llu\n", id);
+    audio_database->play_audio(id, loop);
+    return 0;
+  }
+
+  int lua_audio_stop(lua_State* L) {
+    if (lua_gettop(L) != 1) {
+      return luaL_error(L, "audio_play expcts 1 arguments. (int)");
+    }
+    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -1));
+
+    lua_pushstring(L, "audio_database");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    AudioDatabase* audio_database = static_cast<AudioDatabase*>(lua_touserdata(L, -1));
+
+    printf("stopping audio id %llu\n", id);
+    audio_database->stop_audio(id);
     return 0;
   }
 };

@@ -32,7 +32,6 @@ This project is built using the QtCreator IDE and qmake build system!
 * (Windows) Copy the SDL2.dll and Lua5.3.dll files into the build directory.
 * Run from QtCreator
 
-
 0.0.1 Core Roadmap
 --------------------------------------------------------
 0.0.1 result will:
@@ -43,22 +42,23 @@ This project is built using the QtCreator IDE and qmake build system!
 
 Implement basic, unoptimised versions of all listed modules:
 - [x] FileSystem (to-be virtual file system)
-- [x] LuaManager
-- [x] ObjectDatabase
 - [x] LuaLibrary
+
+- [x] LuaManager
 - [x] ConfigManager
 - [x] WindowManager
 - [x] TextureManager
-- [x] SpriteDatabase
-- [ ] InputManager
-- [ ] Engine (encapsulates all of the prior)
+- [x] InputManager
 
-Data Types:
+- [x] ObjectDatabase
+- [x] SpriteDatabase
+- [x] AudioDatabase
+
 - [x] ObjectAsset
 - [x] SpriteAsset
 - [x] TextureAsset
 - [x] HitboxAsset
-- [x] InstanceAsset
+- [x] AudioAsset
 
 Game folder structure (for now):
 ```

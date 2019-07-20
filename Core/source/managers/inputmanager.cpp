@@ -9,7 +9,6 @@ std::string string_to_lower(std::string data) {
       return in - ('Z' - 'z');
     return in;
   });
-
   return data;
 }
 
@@ -21,7 +20,6 @@ void InputManager::process_events(SDL_Event *e) {
   if(e->type == SDL_KEYDOWN && e->key.repeat == 0) {
     std::string keycode(string_to_lower(SDL_GetKeyName(e->key.keysym.sym)));
     insert_keyref_if_nonexistent(keycode);
-    printf("Key %s pressed.\n", keycode.c_str());
     keystate_map.at(keycode).pressed = true;
     keystate_map.at(keycode).down = true;
     keystate_map.at(keycode).released = false;
@@ -30,7 +28,6 @@ void InputManager::process_events(SDL_Event *e) {
   if(e->type == SDL_KEYUP) {
     std::string keycode(string_to_lower(SDL_GetKeyName(e->key.keysym.sym)));
     insert_keyref_if_nonexistent(keycode);
-    printf("Key %s released.\n", keycode.c_str());
     keystate_map.at(keycode).pressed = false;
     keystate_map.at(keycode).down = false;
     keystate_map.at(keycode).released = true;

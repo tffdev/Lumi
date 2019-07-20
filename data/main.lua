@@ -19,6 +19,8 @@ setmetatable(_G, {
         if(id ~= nil) then return id end
         id = table._G.__luma_system:get_sprite_id(key)
         if(id ~= nil) then return id end
+        id = table._G.__luma_system:get_audio_id(key)
+        if(id ~= nil) then return id end
         return nil
     end,
     __newindex = function(table, key, value)
@@ -85,10 +87,6 @@ function __luma_system:process_update()
     for j, v in ipairs(__luma_system.containers.instances) do
         __luma_system:process_in_environment(__luma_system.containers.instances[j].update, __luma_system.containers.instances[j])
     end
-end
-
-function draw_sprite( ... )
-    
 end
 
 -- PUBLIC standard library

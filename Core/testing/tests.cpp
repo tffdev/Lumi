@@ -10,6 +10,7 @@
 #include <textureasset.h>
 #include <spritedatabase.h>
 #include <inputmanager.h>
+#include <audiodatabase.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -139,8 +140,9 @@ TEST_CASE("LuaManager") {
   InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
+  AudioDatabase audio_database;
   LuaManager lmanager;
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
 
   SUBCASE("Lua execution check") {
     lmanager.execute("___lua_execute_check = 370439");
@@ -206,14 +208,21 @@ TEST_CASE("SpriteDatabase") {
   CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_subimage(1)->get_rect().top, 0);
 }
 
+TEST_CASE("AudioDatabase") {
+  AudioDatabase audio_db;
+  CHECK_EQ(audio_db.get_assets_size(), 2);
+  CHECK_EQ(audio_db.get_audio_id("musicWater"), 0);
+  CHECK_EQ(audio_db.get_audio_id("sfxCoin"), 1);
+}
+
 /**
  * UTILITY
  */
 TEST_CASE("FileSystem") {
   SUBCASE("Existence check, basic file reading.") {
-    CHECK_EQ(FileSystem::file_exists("hello.txt"), true);
-    CHECK_EQ(FileSystem::file_exists("goodbye.txt"), false);
-    CHECK_EQ(FileSystem::read_file("hello.txt").compare("hello\nworld"), 0);
+    CHECK_EQ(FileSystem::file_exists("test_data/hello.txt"), true);
+    CHECK_EQ(FileSystem::file_exists("test_data/goodbye.txt"), false);
+    CHECK_EQ(FileSystem::read_file("test_data/hello.txt").compare("hello\nworld"), 0);
 
     // Make sure reading a file that doesn't exist results in a thrown error
     bool error = false;
@@ -251,6 +260,16 @@ TEST_CASE("FileSystem") {
     CHECK_EQ(sprites.at(0).get_subimage_size().y, 80);
   }
 
+  SUBCASE("Load sounds database") {
+    std::vector<AudioAsset*> audio_assets = FileSystem::load_sounds();
+    CHECK_EQ(audio_assets.size(), 2);
+    CHECK_EQ(audio_assets[0]->get_name().compare("musicWater"), 0);
+    CHECK_EQ(audio_assets[1]->get_name().compare("sfxCoin"), 0);
+    for (AudioAsset* asset : audio_assets) {
+      delete asset;
+    }
+  }
+
   // Add checks for code etc
   SUBCASE("Load Objects from XML into vector of ObjectAssets") {
     std::vector<ObjectAsset*> objassets = FileSystem::load_objects();
@@ -259,6 +278,9 @@ TEST_CASE("FileSystem") {
     CHECK_EQ(objassets.at(1)->get_name().compare("objTest2"), 0);
     CHECK_EQ(objassets.at(1)->get_id(), 1);
     CHECK_EQ(objassets.size(), 3);
+    for (ObjectAsset* asset : objassets) {
+      delete asset;
+    }
   }
 }
 
@@ -269,8 +291,9 @@ TEST_CASE("LuaLibrary") {
   InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
+  AudioDatabase audio_database;
   LuaManager lmanager;
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
 
   SUBCASE("Lua global library check"){
     lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -311,13 +334,15 @@ TEST_CASE("Visual test") {
   InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
+  AudioDatabase audio_database;
   LuaManager lmanager;
 
   CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
 
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
   lmanager.execute("instance_create(objTest)");
 
+  audio_database.play_audio(0);
   SDL_Event e;
   while(window_manager.is_open()) {
       Uint32 ticks = SDL_GetTicks();
