@@ -142,6 +142,7 @@ TEST_CASE("LuaManager") {
   SpriteDatabase spr_database;
   AudioDatabase audio_database;
   LuaManager lmanager;
+  lmanager.load_object_code(&obj_database);
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
 
   SUBCASE("Lua execution check") {
@@ -293,6 +294,7 @@ TEST_CASE("LuaLibrary") {
   SpriteDatabase spr_database;
   AudioDatabase audio_database;
   LuaManager lmanager;
+  lmanager.load_object_code(&obj_database);
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
 
   SUBCASE("Lua global library check"){
@@ -339,10 +341,10 @@ TEST_CASE("Visual test") {
 
   CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
 
+  lmanager.load_object_code(&obj_database);
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
   lmanager.execute("instance_create(objTest)");
 
-  audio_database.play_audio(0);
   SDL_Event e;
   while(window_manager.is_open()) {
       Uint32 ticks = SDL_GetTicks();

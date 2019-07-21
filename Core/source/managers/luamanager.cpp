@@ -11,8 +11,8 @@ LuaManager::LuaManager() {
   if(luaL_dostring(L, FileSystem::read_file("main.lua").c_str()) != 0)
     throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
 
-  if(luaL_dostring(L, FileSystem::read_file("objects.lua").c_str()) != 0)
-    throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
+  //if(luaL_dostring(L, FileSystem::read_file("objects.lua").c_str()) != 0)
+  //  throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
 }
 
 /**
@@ -23,6 +23,13 @@ void LuaManager::execute(std::string str) {
   int err = luaL_dostring(L, str.c_str());
   if(err == 1)
     throw "Error executing Lua string:\n" + std::string(lua_tostring(L, -1));
+}
+
+void LuaManager::load_object_code(ObjectDatabase *database) {
+  execute("__luma_system.containers.object_code = {}");
+  for(ObjectAsset* object : database->get_all_object_assets()){
+    execute("__luma_system.containers.object_code["+std::to_string(object->get_id()+1)+"] = function()\n" + object->get_code() + "\nend");
+  }
 }
 
 /**

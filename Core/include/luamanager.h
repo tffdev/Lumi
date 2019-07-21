@@ -26,6 +26,7 @@ public:
 
     int get_instance_count();
     int object_code_length();
+    void load_object_code(ObjectDatabase* database);
 private:
     lua_State* L;
 };
