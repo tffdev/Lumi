@@ -7,7 +7,7 @@
 #include <configmanager.h>
 #include <sstream>
 #include <spriteasset.h>
-#include <texturemanager.h>
+#include <texturedatabase.h>
 #include <audioasset.h>
 
 #define DATA_PATH "../data/"
@@ -33,7 +33,7 @@ namespace FileSystem {
     ConfigManager              load_config();
     std::vector<ObjectAsset*>  load_objects();
     std::vector<AudioAsset*>   load_sounds();
-    std::vector<SpriteAsset>   load_sprites(TextureManager& texture_manager);
+    std::vector<SpriteAsset>   load_sprites(TextureDatabase& texture_manager);
     std::vector<TextureAsset*> load_textures();
     std::vector<int>           load_backgrounds();
 

@@ -108,22 +108,22 @@ TEST_CASE("WindowManager") {
   CHECK_EQ(window_manager.is_open(), false);
 }
 
-TEST_CASE("TextureManager") {
-  TextureManager texture_manager;
+TEST_CASE("TextureDatabase") {
+  TextureDatabase texture_database;
 
   std::string path = "images/playerRunSheet.png";
-  CHECK_EQ(texture_manager.has_texture(path), false);
+  CHECK_EQ(texture_database.has_texture(path), false);
 
-  texture_manager.insert(path);
-  CHECK_EQ(texture_manager.has_texture(path), true);
-  CHECK_EQ(texture_manager.get_textures_size(), 1);
+  texture_database.insert(path);
+  CHECK_EQ(texture_database.has_texture(path), true);
+  CHECK_EQ(texture_database.get_textures_size(), 1);
 
   TextureAsset texture(path);
-  CHECK_EQ(texture_manager.get_texture(path).get_size().x, texture.get_size().x);
-  CHECK_EQ(texture_manager.get_texture(path).get_size().y, texture.get_size().y);
+  CHECK_EQ(texture_database.get_texture(path).get_size().x, texture.get_size().x);
+  CHECK_EQ(texture_database.get_texture(path).get_size().y, texture.get_size().y);
 
-  texture_manager.destroy_all();
-  CHECK_EQ(texture_manager.get_textures_size(), 0);
+  texture_database.destroy_all();
+  CHECK_EQ(texture_database.get_textures_size(), 0);
 }
 
 TEST_CASE("InputManager") {
@@ -201,7 +201,7 @@ TEST_CASE("SpriteDatabase") {
   SpriteDatabase sprite_db;
   CHECK_EQ(sprite_db.sprite_exists("playerRun"), true);
   CHECK_EQ(sprite_db.sprite_exists("playerWalk"), false);
-  CHECK_EQ(sprite_db.get_texture_manager().get_textures_size(), 2);
+  CHECK_EQ(sprite_db.get_texture_database().get_textures_size(), 2);
   CHECK_EQ(sprite_db.get_sprite_id("sprCat"), 1);
   CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_texture_size().x, 320);
   CHECK_EQ(sprite_db.get_sprite_by_id(0)->get_texture_size().y, 80);
@@ -260,7 +260,7 @@ TEST_CASE("FileSystem") {
   }
 
   SUBCASE("Load sprite database") {
-    TextureManager texture_manager;
+    TextureDatabase texture_manager;
     std::vector<SpriteAsset> sprites = FileSystem::load_sprites(texture_manager);
     CHECK_EQ(sprites.size(), 2);
     CHECK_EQ(sprites.at(0).get_subimage_size().x, 80);
@@ -345,7 +345,7 @@ TEST_CASE("Visual test") {
   AudioDatabase audio_database;
   LuaManager lmanager;
 
-  CHECK_EQ(spr_database.get_texture_manager().get_textures_size(), 2);
+  CHECK_EQ(spr_database.get_texture_database().get_textures_size(), 2);
 
   lmanager.load_object_code(&obj_database);
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);

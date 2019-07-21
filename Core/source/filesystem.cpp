@@ -89,7 +89,7 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
  * @param texture_manager The manager which to store all the required textures in.
  * @return A vector of SpriteAssets as per the sprites.xml file.
  */
-std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manager) {
+std::vector<SpriteAsset> FileSystem::load_sprites(TextureDatabase& texture_database) {
   pugi::xml_document document;
   std::vector<SpriteAsset> sprite_vector;
   document.load_string(FileSystem::load_sprite_file().c_str());
@@ -120,12 +120,12 @@ std::vector<SpriteAsset> FileSystem::load_sprites(TextureManager& texture_manage
 
     // texture creation and population of texture_manager
     std::string texture_path = spr_xml.child("path").text().as_string();
-    if (!texture_manager.has_texture(texture_path)) {
-      texture_manager.insert(texture_path);
+    if (!texture_database.has_texture(texture_path)) {
+      texture_database.insert(texture_path);
     }
 
 
-    SpriteAsset spr(name, texture_manager.get_texture(texture_path), rects, hitbox);
+    SpriteAsset spr(name, texture_database.get_texture(texture_path), rects, hitbox);
     sprite_vector.push_back(spr);
     i++;
   }

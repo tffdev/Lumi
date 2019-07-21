@@ -5,7 +5,7 @@
  * the sprites vector and all texture paths referenced in `sprites.xml` into this object's instance of TextureManager.
  */
 SpriteDatabase::SpriteDatabase() {
-    sprites = FileSystem::load_sprites(texture_manager);
+    sprites = FileSystem::load_sprites(texture_database);
     int i = 0;
     for(SpriteAsset asset : sprites) {
       id_map.insert(std::pair<std::string, int>(asset.get_name(), i));
@@ -53,6 +53,6 @@ int SpriteDatabase::get_sprite_id(std::string name) {
  * @brief Get a reference to the texture manager contained in this instance.
  * @return A reference to an instance of TextureManager.
  */
-TextureManager& SpriteDatabase::get_texture_manager() {
-  return texture_manager;
+TextureDatabase& SpriteDatabase::get_texture_database() {
+  return texture_database;
 }

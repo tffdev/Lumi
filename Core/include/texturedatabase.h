@@ -2,11 +2,11 @@
 #include <textureasset.h>
 #include <map>
 
-class TextureManager
+class TextureDatabase
 {
 public:
-    TextureManager();
-    ~TextureManager();
+    TextureDatabase();
+    ~TextureDatabase();
     void insert(std::string path);
     bool has_texture(std::string);
     TextureAsset& get_texture(std::string);

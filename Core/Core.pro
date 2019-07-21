@@ -15,17 +15,17 @@ SOURCES += \
         source/assets/spriteasset.cpp \
         source/assets/subimagerect.cpp \
         source/assets/textureasset.cpp \
-        source/audiodatabase.cpp \
         source/lualibrary.cpp \
         source/main.cpp \
         source/filesystem.cpp \
         source/managers/configmanager.cpp \
         source/managers/inputmanager.cpp \
         source/managers/luamanager.cpp \
-        source/managers/texturemanager.cpp \
         source/managers/windowmanager.cpp \
-        source/objectdatabase.cpp \
-        source/spritedatabase.cpp
+        source/databases/audiodatabase.cpp \
+        source/databases/objectdatabase.cpp \
+        source/databases/spritedatabase.cpp \
+        source/databases/texturedatabase.cpp \
 
 HEADERS += \
     external/pugixml.hpp \
@@ -44,7 +44,7 @@ HEADERS += \
     include/spritedatabase.h \
     include/subimagerect.h \
     include/textureasset.h \
-    include/texturemanager.h \
+    include/texturedatabase.h \
     include/windowmanager.h
 
 # Run as test config

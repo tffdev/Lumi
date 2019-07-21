@@ -1,13 +1,13 @@
-#include "texturemanager.h"
+#include "texturedatabase.h"
 
-TextureManager::TextureManager() {}
-TextureManager::~TextureManager() { destroy_all(); }
+TextureDatabase::TextureDatabase() {}
+TextureDatabase::~TextureDatabase() { destroy_all(); }
 
 /**
  * @brief Given the filepath of a texture, load that texture into this manager.
  * @param path The virtual filesystem path of the texture.
  */
-void TextureManager::insert(std::string path) {
+void TextureDatabase::insert(std::string path) {
   textures.insert(std::pair<std::string, TextureAsset*>(path, new TextureAsset(path)));
 }
 
@@ -16,7 +16,7 @@ void TextureManager::insert(std::string path) {
  * @param path The virtual filesystem path of the texture.
  * @return True if this manager contains the texture, false otherwise.
  */
-bool TextureManager::has_texture(std::string path) {
+bool TextureDatabase::has_texture(std::string path) {
   std::map<std::string, TextureAsset*>::iterator it = textures.find(path);
   if (it != textures.end()) {
       return true;
@@ -29,7 +29,7 @@ bool TextureManager::has_texture(std::string path) {
  * @param path The virtual filesystem path of the texture.
  * @return A TextureAsset reference.
  */
-TextureAsset& TextureManager::get_texture(std::string path) {
+TextureAsset& TextureDatabase::get_texture(std::string path) {
   if(!has_texture(path))
     throw "Texture " + path + " doesn't exist!";
 
@@ -40,14 +40,14 @@ TextureAsset& TextureManager::get_texture(std::string path) {
  * @brief Get the number of textures contained within this manager.
  * @return The number of textures as an integer.
  */
-int TextureManager::get_textures_size() {
+int TextureDatabase::get_textures_size() {
   return static_cast<int>(textures.size());
 }
 
 /**
  * @brief Free the video memory taken up by all textures within this manager and remove all references in the map.
  */
-void TextureManager::destroy_all() {
+void TextureDatabase::destroy_all() {
   for (auto const& element : textures) {
     delete static_cast<TextureAsset*>(element.second);
   }

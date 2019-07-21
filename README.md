@@ -48,12 +48,15 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] LuaManager
 - [x] ConfigManager
 - [x] WindowManager
-- [x] TextureManager
 - [x] InputManager
 
+- [x] TextureDatabase
 - [x] ObjectDatabase
 - [x] SpriteDatabase
 - [x] AudioDatabase
+- [ ] TilesetDatabase
+- [ ] BackgroundDatabase
+- [ ] RoomDatabase
 
 - [x] ObjectAsset
 - [x] SpriteAsset
