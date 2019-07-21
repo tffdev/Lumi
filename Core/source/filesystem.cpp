@@ -174,8 +174,7 @@ std::vector<AudioAsset*> FileSystem::load_sounds() {
   std::vector<AudioAsset*> audio_assets;
   unsigned long long i = 0;
   for(pugi::xml_node node : document.child("sounds").children("sound")) {
-    std::string data = FileSystem::read_file(node.child("path").text().as_string(), true);
-    audio_assets.push_back(new AudioAsset(i, node.child("name").text().as_string(), data));
+    audio_assets.push_back(new AudioAsset(i, node.child("name").text().as_string(), node.child("path").text().as_string()));
     i++;
   }
 
