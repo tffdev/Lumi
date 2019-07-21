@@ -10,6 +10,7 @@ WindowManager::WindowManager(ConfigManager* config_manager)
 
   // Initialise everything for the window
   SDL_Init(SDL_INIT_EVERYTHING);
+  Mix_Init(MIX_INIT_OGG);
   Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, AUDIO_U8);
 
   create_window_using_config();

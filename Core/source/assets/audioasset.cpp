@@ -15,7 +15,9 @@ AudioAsset::AudioAsset(unsigned long long id, std::string name, std::string path
 void AudioAsset::load_audio() {
   std::string music_data = FileSystem::read_file(path, true);
   SDL_RWops* rw = SDL_RWFromConstMem(&music_data[0], static_cast<int>(music_data.size()));
-  audio = Mix_LoadWAV_RW(rw, true);
+  if(rw == nullptr) throw SDL_GetError();
+  audio = Mix_LoadWAV_RW(rw, false);
+  SDL_RWclose(rw);
   if(audio == nullptr) throw "Audio is null:" + std::string(Mix_GetError());
   loaded = true;
 }

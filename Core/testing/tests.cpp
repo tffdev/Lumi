@@ -214,6 +214,12 @@ TEST_CASE("AudioDatabase") {
   CHECK_EQ(audio_db.get_assets_size(), 2);
   CHECK_EQ(audio_db.get_audio_id("musicWater"), 0);
   CHECK_EQ(audio_db.get_audio_id("sfxCoin"), 1);
+  CHECK_EQ(audio_db.audio_id_exists(0), true);
+  CHECK_EQ(audio_db.audio_id_exists(1), true);
+  CHECK_EQ(audio_db.audio_id_exists(2), false);
+  CHECK_EQ(audio_db.audio_exists("musicWater"), true);
+  CHECK_EQ(audio_db.audio_exists("sfxCoin"), true);
+  CHECK_EQ(audio_db.audio_exists("musicNonexistent"), false);
 }
 
 /**
