@@ -39,6 +39,7 @@ This project is built using the QtCreator IDE and qmake build system!
 * have unique objects that run/can run predefined Lua code on every frame
 * let objects detect user input
 * let objects draw sprites onto the screen
+* let objects play sounds
 
 Implement basic, unoptimised versions of all listed modules:
 - [x] FileSystem (to-be virtual file system)
