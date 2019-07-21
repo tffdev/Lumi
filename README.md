@@ -16,7 +16,7 @@ Luma Game Creator is comprised of three main applications:
   custom filetype will be embedded alongside the core executable so that your game can
   be easily distributed and ran on **any machine**.
 
-Dependancies:
+Dependencies:
 --------------------------------------------------------
 * SDL2
 * Lua5.3
