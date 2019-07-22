@@ -1,6 +1,6 @@
 <p align="center"><img src="https://github.com/tfcat/LumaGameCreator/blob/master/promotional/Lumi_textonly.png?raw=true"></p>
 
-Luma Game Creator - version 0.0.1
+Lumi Game Creator - version 0.0.1
 --------------------------------------------------------
 Lumi Game Creator will a fast, cross-platform
 open-source solution for making 2D game prototypes.
