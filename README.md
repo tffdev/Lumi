@@ -1,18 +1,18 @@
-Luma Game Creator - version 0.0.1
+Lumi Game Creator - version 0.0.1
 --------------------------------------------------------
-Luma Game Creator will a fast, cross-platform
+Lumi Game Creator will a fast, cross-platform
 open-source solution for making 2D game prototypes.
 
 Feel free to report bugs or ideas in issues!
 
-Luma Game Creator is comprised of three main applications:
+Lumi Game Creator is comprised of three main applications:
 * **Editor.** An editor that produces XML files containing all information about 
-  the code, assets, and entities that a game created in Luma is comprised of.
+  the code, assets, and entities that a game created in Lumi is comprised of.
 
 * **Translator.** An executable that converts the editor's project files into a 
   single custom filetype which contains everything needed to run your game.
 
-* **Core.** An executable that can read Luma's custom game filetypes. The 
+* **Core.** An executable that can read Lumi's custom game filetypes. The 
   custom filetype will be embedded alongside the core executable so that your game can
   be easily distributed and ran on **any machine**.
 
