@@ -11,6 +11,8 @@
 #include <spritedatabase.h>
 #include <inputmanager.h>
 #include <audiodatabase.h>
+#include <backgroundasset.h>
+#include <backgrounddatabase.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -80,6 +82,15 @@ TEST_CASE("SpriteAsset") {
   CHECK_EQ(sprite.get_subimage_size().x, 80);
   CHECK_EQ(sprite.get_subimage_size().y, 80);
   CHECK_EQ(sprite.get_name().compare("mySprite"), 0);
+}
+
+TEST_CASE("BackgroundAsset") {
+  TextureAsset texture("images/bg1.png");
+  BackgroundAsset asset(4, "backgroundTest", texture);
+  CHECK_EQ(asset.get_id(), 4);
+  CHECK_EQ(asset.get_name().compare("backgroundTest"), 0);
+  CHECK_EQ(asset.get_texture_asset().get_size().x, 640);
+  CHECK_EQ(asset.get_texture_asset().get_size().y, 703);
 }
 
 /**
@@ -220,6 +231,21 @@ TEST_CASE("AudioDatabase") {
   CHECK_EQ(audio_db.audio_exists("musicWater"), true);
   CHECK_EQ(audio_db.audio_exists("sfxCoin"), true);
   CHECK_EQ(audio_db.audio_exists("musicNonexistent"), false);
+}
+
+TEST_CASE("BackgroundDatabase") {
+  BackgroundDatabase bg_db;
+  CHECK_EQ(bg_db.size(), 1);
+  CHECK_EQ(bg_db.get_id("backgroundTest"), 0);
+  CHECK_EQ(bg_db.get_name_from_id(0).compare("backgroundTest"), 0);
+}
+
+TEST_CASE("TilesetDatabase") {
+
+}
+
+TEST_CASE("RoomDatabase") {
+
 }
 
 /**

@@ -51,13 +51,14 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] ConfigManager
 - [x] WindowManager
 - [x] InputManager
+- [ ] RoomManager
 
 - [x] TextureDatabase
 - [x] ObjectDatabase
 - [x] SpriteDatabase
 - [x] AudioDatabase
 - [ ] TilesetDatabase
-- [ ] BackgroundDatabase
+- [x] BackgroundDatabase
 - [ ] RoomDatabase
 
 - [x] ObjectAsset
@@ -65,6 +66,9 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] TextureAsset
 - [x] HitboxAsset
 - [x] AudioAsset
+- [x] BackgroundAsset
+- [ ] RoomAsset
+- [ ] TilesetAsset
 
 Game folder structure (for now):
 ```

@@ -180,3 +180,19 @@ std::vector<AudioAsset*> FileSystem::load_sounds() {
 
   return audio_assets;
 }
+
+
+std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
+  pugi::xml_document document;
+  document.load_string(FileSystem::read_file(BACKGROUND_PATH).c_str());
+
+  std::vector<BackgroundAsset*> backgrounds;
+  unsigned long long i = 0;
+  for(pugi::xml_node node : document.child("backgrounds").children("background")) {
+    TextureAsset texture(node.attribute("path").as_string());
+    backgrounds.push_back(new BackgroundAsset(i, node.attribute("name").as_string(), texture));
+    i++;
+  }
+
+  return backgrounds;
+}
