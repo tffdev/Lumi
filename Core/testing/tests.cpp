@@ -269,12 +269,6 @@ TEST_CASE("FileSystem") {
     CHECK_EQ(FileSystem::hex_string_to_uint("FA842A"), 16417834);
   }
 
-  SUBCASE("Read object file.") {
-    CHECK_NE(FileSystem::load_object_file().compare(""), 0);
-    CHECK_NE(FileSystem::read_file("objects.xml").compare(""), 0);
-    CHECK_EQ(FileSystem::load_object_file().compare(FileSystem::read_file("objects.xml")), 0);
-  }
-
   SUBCASE("Load window configuration file into window config object.") {
     ConfigManager conf_manager = FileSystem::load_config();
     CHECK_EQ(conf_manager.get_window_size().x, 320);

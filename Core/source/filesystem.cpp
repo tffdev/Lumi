@@ -29,49 +29,13 @@ std::string FileSystem::read_file(std::string filename, bool binary) {
 }
 
 /**
- * @brief Load the contents of the default object file as a string.
- * @return The default object file's contents as a string.
- */
-std::string FileSystem::load_object_file() {
-  if (!file_exists(OBJECT_PATH)) throw "Cannot load Object XML file.";
-  return read_file(OBJECT_PATH);
-}
-
-/**
- * @brief Load the contents of the default sprite file as a string.
- * @return The default sprite file's contents as a string.
- */
-std::string FileSystem::load_sprite_file() {
-  if (!file_exists(SPRITE_PATH)) throw "Cannot load Sprite XML file.";
-  return read_file(SPRITE_PATH);
-}
-
-/**
- * @brief Load the contents of the default config file as a string.
- * @return The default config file's contents as a string.
- */
-std::string FileSystem::load_config_file() {
-  if (!file_exists(CONFIG_PATH)) throw "Cannot load Config XML file.";
-  return read_file(CONFIG_PATH);
-}
-
-/**
- * @brief Load the contents of the default config file as a string.
- * @return The default config file's contents as a string.
- */
-std::string FileSystem::load_sounds_file() {
-  if (!file_exists(AUDIO_PATH)) throw "Cannot load Sounds XML file.";
-  return read_file(AUDIO_PATH);
-}
-
-/**
  * @brief Using the default object xml file, create a vector of ObjectAssets.
  * @return A vector of ObjectAssets as per the objects.xml file.
  */
 std::vector<ObjectAsset*> FileSystem::load_objects() {
   pugi::xml_document document;
   std::vector<ObjectAsset*> object_vector;
-  document.load_string(FileSystem::load_object_file().c_str());
+  document.load_string(FileSystem::read_file(OBJECT_PATH).c_str());
 
   int i = 0;
   for (pugi::xml_node obj_xml: document.child("objects").children("object")) {
@@ -92,7 +56,7 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
 std::vector<SpriteAsset> FileSystem::load_sprites(TextureDatabase& texture_database) {
   pugi::xml_document document;
   std::vector<SpriteAsset> sprite_vector;
-  document.load_string(FileSystem::load_sprite_file().c_str());
+  document.load_string(FileSystem::read_file(SPRITE_PATH).c_str());
 
   int i = 0;
   for (pugi::xml_node spr_xml: document.child("sprites").children("sprite")) {
@@ -151,7 +115,7 @@ unsigned int FileSystem::hex_string_to_uint(std::string str) {
  */
 ConfigManager FileSystem::load_config() {
   pugi::xml_document document;
-  document.load_string(FileSystem::load_config_file().c_str());
+  document.load_string(FileSystem::read_file(CONFIG_PATH).c_str());
 
   ConfigManager config_asset(
     document.child("window").child("windowtitle").text().as_string(),
@@ -169,7 +133,7 @@ ConfigManager FileSystem::load_config() {
  */
 std::vector<AudioAsset*> FileSystem::load_sounds() {
   pugi::xml_document document;
-  document.load_string(FileSystem::load_sounds_file().c_str());
+  document.load_string(FileSystem::read_file(AUDIO_PATH).c_str());
 
   std::vector<AudioAsset*> audio_assets;
   unsigned long long i = 0;

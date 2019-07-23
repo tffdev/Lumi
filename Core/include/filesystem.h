@@ -26,17 +26,12 @@
  */
 
 namespace FileSystem {
-    std::string load_object_file();
-    std::string load_sprite_file();
-    std::string load_config_file();
-    std::string load_texture_file();
-    std::string load_sounds_file();
+    ConfigManager                 load_config();
+    std::vector<ObjectAsset*>     load_objects();
+    std::vector<AudioAsset*>      load_sounds();
+    std::vector<SpriteAsset>      load_sprites(TextureDatabase& texture_manager);
+    std::vector<TextureAsset*>    load_textures();
     std::vector<BackgroundAsset*> load_backgrounds();
-    ConfigManager              load_config();
-    std::vector<ObjectAsset*>  load_objects();
-    std::vector<AudioAsset*>   load_sounds();
-    std::vector<SpriteAsset>   load_sprites(TextureDatabase& texture_manager);
-    std::vector<TextureAsset*> load_textures();
 
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);
