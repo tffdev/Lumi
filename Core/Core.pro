@@ -27,7 +27,6 @@ SOURCES += \
         source/databases/audiodatabase.cpp \
         source/databases/objectdatabase.cpp \
         source/databases/spritedatabase.cpp \
-        source/databases/texturedatabase.cpp \
 
 HEADERS += \
     external/pugixml.hpp \
@@ -48,7 +47,6 @@ HEADERS += \
     include/spritedatabase.h \
     include/subimagerect.h \
     include/textureasset.h \
-    include/texturedatabase.h \
     include/windowmanager.h
 
 # Run as test config

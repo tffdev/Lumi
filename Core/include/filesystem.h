@@ -7,7 +7,6 @@
 #include <configmanager.h>
 #include <sstream>
 #include <spriteasset.h>
-#include <texturedatabase.h>
 #include <audioasset.h>
 #include <backgroundasset.h>
 
@@ -29,7 +28,7 @@ namespace FileSystem {
     ConfigManager                 load_config();
     std::vector<ObjectAsset*>     load_objects();
     std::vector<AudioAsset*>      load_sounds();
-    std::vector<SpriteAsset>      load_sprites(TextureDatabase& texture_manager);
+    std::vector<SpriteAsset*>      load_sprites();
     std::vector<TextureAsset*>    load_textures();
     std::vector<BackgroundAsset*> load_backgrounds();
 

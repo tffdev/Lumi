@@ -14,7 +14,8 @@
 class SpriteAsset
 {
 public:
-    SpriteAsset(std::string& name, TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox);
+    SpriteAsset(std::string& name, std::string path, std::vector<SubimageRect*> rects, HitboxAsset hitbox);
+    ~SpriteAsset();
     Vector2<int> get_subimage_size();
     SubimageRect* get_subimage(double subimage);
     std::string get_name();
@@ -22,7 +23,7 @@ public:
     Vector2<unsigned int> get_texture_size();
 private:
     std::vector<SubimageRect*> subimages;
-    TextureAsset& texture;
+    TextureAsset texture;
     HitboxAsset hitbox;
     std::string name;
     Vector2<int> size;

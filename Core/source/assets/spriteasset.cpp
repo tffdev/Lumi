@@ -7,14 +7,19 @@
  * @param rects Subimage rects of a sprite.
  * @param hitbox The hitbox object to attach to a sprite.
  */
-SpriteAsset::SpriteAsset(std::string& name, TextureAsset& texture, std::vector<SubimageRect*> rects, HitboxAsset hitbox):
+SpriteAsset::SpriteAsset(std::string& name, std::string path, std::vector<SubimageRect*> rects, HitboxAsset hitbox):
   subimages(rects),
-  texture(texture),
+  texture(path),
   hitbox(hitbox),
   name(name) {
   // TODO: Better way of managing the subimage size?
   size.x = rects[0]->get_rect().width;
   size.y = rects[0]->get_rect().height;
+}
+
+SpriteAsset::~SpriteAsset() {
+  printf("deleting sprite\n");
+  //delete texture;
 }
 
 /**

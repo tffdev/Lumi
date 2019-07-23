@@ -53,7 +53,6 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] InputManager
 - [ ] RoomManager
 
-- [x] TextureDatabase
 - [x] ObjectDatabase
 - [x] SpriteDatabase
 - [x] AudioDatabase
