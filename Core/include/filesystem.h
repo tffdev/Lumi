@@ -9,6 +9,7 @@
 #include <spriteasset.h>
 #include <audioasset.h>
 #include <backgroundasset.h>
+#include <tilesetasset.h>
 
 #define DATA_PATH "../data/"
 
@@ -17,6 +18,7 @@
 #define CONFIG_PATH "config.xml"
 #define AUDIO_PATH "sounds.xml"
 #define BACKGROUND_PATH "backgrounds.xml"
+#define TILESET_PATH "tilesets.xml"
 
 /**
  * FileSystem currently reads directly from the OS's regular file system.
@@ -28,9 +30,10 @@ namespace FileSystem {
     ConfigManager                 load_config();
     std::vector<ObjectAsset*>     load_objects();
     std::vector<AudioAsset*>      load_sounds();
-    std::vector<SpriteAsset*>      load_sprites();
+    std::vector<SpriteAsset*>     load_sprites();
     std::vector<TextureAsset*>    load_textures();
     std::vector<BackgroundAsset*> load_backgrounds();
+    std::vector<TilesetAsset*>    load_tilesets();
 
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);

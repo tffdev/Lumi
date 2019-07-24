@@ -140,7 +140,6 @@ std::vector<AudioAsset*> FileSystem::load_sounds() {
   return audio_assets;
 }
 
-
 std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
   pugi::xml_document document;
   document.load_string(FileSystem::read_file(BACKGROUND_PATH).c_str());
@@ -154,4 +153,18 @@ std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
   }
 
   return backgrounds;
+}
+
+std::vector<TilesetAsset*> FileSystem::load_tilesets() {
+  pugi::xml_document document;
+  document.load_string(FileSystem::read_file(TILESET_PATH).c_str());
+
+  std::vector<TilesetAsset*> tilesets;
+  unsigned int i = 0;
+  for(pugi::xml_node node : document.child("tilesets").children("tileset")) {
+    tilesets.push_back(new TilesetAsset(i, node.attribute("name").as_string(), node.attribute("path").as_string()));
+    i++;
+  }
+
+  return tilesets;
 }

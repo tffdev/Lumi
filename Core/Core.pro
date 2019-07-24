@@ -16,7 +16,9 @@ SOURCES += \
         source/assets/spriteasset.cpp \
         source/assets/subimagerect.cpp \
         source/assets/textureasset.cpp \
+    source/assets/tilesetasset.cpp \
     source/databases/backgrounddatabase.cpp \
+    source/databases/tilesetdatabase.cpp \
         source/lualibrary.cpp \
         source/main.cpp \
         source/filesystem.cpp \
@@ -47,6 +49,8 @@ HEADERS += \
     include/spritedatabase.h \
     include/subimagerect.h \
     include/textureasset.h \
+    include/tilesetasset.h \
+    include/tilesetdatabase.h \
     include/windowmanager.h
 
 # Run as test config

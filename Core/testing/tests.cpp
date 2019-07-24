@@ -13,6 +13,8 @@
 #include <audiodatabase.h>
 #include <backgroundasset.h>
 #include <backgrounddatabase.h>
+#include <tilesetasset.h>
+#include <tilesetdatabase.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -90,6 +92,13 @@ TEST_CASE("BackgroundAsset") {
   CHECK_EQ(asset.get_texture_asset().get_size().y, 703);
 }
 
+TEST_CASE("TilesetAsset") {
+  TilesetAsset tileset(20, "myTileset", "images/tileset.png");
+  CHECK_EQ(tileset.get_texture()->get_size().x, 256);
+  CHECK_EQ(tileset.get_texture()->get_size().y, 192);
+  CHECK_EQ(tileset.get_id(), 20);
+  CHECK_EQ(tileset.get_name().compare("myTileset"), 0);
+}
 /**
  * MANAGERS
  */
@@ -117,7 +126,7 @@ TEST_CASE("WindowManager") {
 }
 
 TEST_CASE("InputManager") {
-
+  // How would we test this?
 }
 
 int func_reg_check(lua_State *L) {
@@ -219,7 +228,10 @@ TEST_CASE("BackgroundDatabase") {
 }
 
 TEST_CASE("TilesetDatabase") {
-
+  TilesetDatabase tileset_db;
+  CHECK_EQ(tileset_db.get_size(), 2);
+  CHECK_EQ(tileset_db.get_id_from_name("tilesetForest"), 0);
+  CHECK_EQ(tileset_db.get_asset(0)->get_name().compare("tilesetForest"), 0);
 }
 
 TEST_CASE("RoomDatabase") {
@@ -326,6 +338,8 @@ TEST_CASE("LuaLibrary") {
     CHECK_EQ(lmanager.get_instance_count(), 4);
   }
 }
+
+
 
 
 
