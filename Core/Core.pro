@@ -19,6 +19,7 @@ SOURCES += \
         source/assets/textureasset.cpp \
     source/assets/tilesetasset.cpp \
     source/databases/backgrounddatabase.cpp \
+    source/databases/roomdatabase.cpp \
     source/databases/tilesetdatabase.cpp \
         source/lualibrary.cpp \
         source/main.cpp \
@@ -47,6 +48,7 @@ HEADERS += \
     include/objectasset.h \
     include/objectdatabase.h \
     include/roomasset.h \
+    include/roomdatabase.h \
     include/spriteasset.h \
     include/spritedatabase.h \
     include/subimagerect.h \

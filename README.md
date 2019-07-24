@@ -57,7 +57,7 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] SpriteDatabase
 - [x] AudioDatabase
 - [x] BackgroundDatabase
-- [ ] RoomDatabase
+- [x] RoomDatabase
 - [x] TilesetDatabase
 
 - [x] ObjectAsset

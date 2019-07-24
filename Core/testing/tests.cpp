@@ -16,6 +16,7 @@
 #include <tilesetasset.h>
 #include <tilesetdatabase.h>
 #include <roomasset.h>
+#include <roomdatabase.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -114,7 +115,8 @@ TEST_CASE("RoomAsset") {
   std::vector<RoomBackground> rm_backgrounds;
   rm_backgrounds.push_back({0, 100, 0, 0});
 
-  RoomAsset asset("room0", "x=5", 320, 240, tile_layers, rm_backgrounds);
+  RoomAsset asset(5, "room0", "x=5", 320, 240, tile_layers, rm_backgrounds);
+  CHECK_EQ(asset.get_id(), 5);
   CHECK_EQ(asset.get_size().x, 320);
   CHECK_EQ(asset.get_size().y, 240);
   CHECK_EQ(asset.get_name().compare("room0"), 0);
@@ -259,7 +261,13 @@ TEST_CASE("TilesetDatabase") {
 }
 
 TEST_CASE("RoomDatabase") {
-
+  BackgroundDatabase background_db;
+  TilesetDatabase tileset_db;
+  RoomDatabase room_db(&background_db, &tileset_db);
+  CHECK_EQ(room_db.get_size(), 1);
+  CHECK_EQ(room_db.get_id_from_name("room0"), 0);
+  CHECK_EQ(room_db.get_asset(0)->get_name().compare("room0"), 0);
+  CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.at(0).width, 64);
 }
 
 /**

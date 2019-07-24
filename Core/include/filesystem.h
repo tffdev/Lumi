@@ -10,6 +10,9 @@
 #include <audioasset.h>
 #include <backgroundasset.h>
 #include <tilesetasset.h>
+#include <roomasset.h>
+#include <tilesetdatabase.h>
+#include <backgrounddatabase.h>
 
 #define DATA_PATH "../data/"
 
@@ -19,6 +22,7 @@
 #define AUDIO_PATH "sounds.xml"
 #define BACKGROUND_PATH "backgrounds.xml"
 #define TILESET_PATH "tilesets.xml"
+#define ROOMS_PATH "rooms.xml"
 
 /**
  * FileSystem currently reads directly from the OS's regular file system.
@@ -34,6 +38,7 @@ namespace FileSystem {
     std::vector<TextureAsset*>    load_textures();
     std::vector<BackgroundAsset*> load_backgrounds();
     std::vector<TilesetAsset*>    load_tilesets();
+    std::vector<RoomAsset*>       load_rooms(TilesetDatabase*, BackgroundDatabase*);
 
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);

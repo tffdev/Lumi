@@ -1,12 +1,14 @@
 #include "include/roomasset.h"
 
-RoomAsset::RoomAsset(std::string name,
+RoomAsset::RoomAsset(unsigned int id,
+          std::string name,
           std::string creation_code,
           unsigned int size_x,
           unsigned int size_y,
           std::vector<RoomTileLayer> tile_layers,
           std::vector<RoomBackground> backgrounds)
-  : name(name),
+  : id(id),
+    name(name),
     creation_code(creation_code),
     size(size_x, size_y),
     room_tile_layers(tile_layers),
@@ -30,4 +32,8 @@ RoomBackground RoomAsset::get_background(unsigned int layer) {
 
 RoomTileLayer RoomAsset::get_tile_layer(unsigned int layer) {
   return room_tile_layers.at(layer);
+}
+
+unsigned int RoomAsset::get_id() {
+  return id;
 }

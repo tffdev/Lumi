@@ -168,3 +168,57 @@ std::vector<TilesetAsset*> FileSystem::load_tilesets() {
 
   return tilesets;
 }
+
+std::vector<RoomAsset*>
+FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* background_db)
+{
+  pugi::xml_document document;
+  document.load_string(FileSystem::read_file(ROOMS_PATH).c_str());
+
+  std::vector<RoomAsset*> room_assets;
+  unsigned int i = 0;
+  for(pugi::xml_node node : document.child("rooms").children("room")) {
+
+    // build tile layers
+    std::vector<RoomTileLayer> room_tile_layers;
+    for(pugi::xml_node tile_layer : node.child("tile_layers").children("layer")) {
+      RoomTileLayer layer;
+      for(pugi::xml_node xml_tile : tile_layer.children("tile")) {
+          RoomTile tile;
+          tile.x = xml_tile.attribute("x").as_int();
+          tile.y = xml_tile.attribute("y").as_int();
+          tile.width = xml_tile.attribute("width").as_int();
+          tile.height = xml_tile.attribute("height").as_int();
+          tile.texture_x = xml_tile.attribute("texture_x").as_int();
+          tile.texture_y = xml_tile.attribute("texture_y").as_int();
+          tile.tileset_ref = tileset_db->get_id_from_name(xml_tile.attribute("tileset").as_string());
+          layer.tiles.push_back(tile);
+      }
+      room_tile_layers.push_back(layer);
+    }
+
+    // build backgrounds
+    std::vector<RoomBackground> room_backgrounds;
+    for(pugi::xml_node bg_node : node.child("backgrounds").children("background")) {
+      RoomBackground rm_bg;
+      rm_bg.depth = bg_node.attribute("depth").as_int();
+      rm_bg.offset_x = bg_node.attribute("offset_x").as_int();
+      rm_bg.offset_y = bg_node.attribute("offset_y").as_int();
+      rm_bg.asset_ref = background_db->get_id(bg_node.attribute("image").as_string());
+      room_backgrounds.push_back(rm_bg);
+    }
+
+    room_assets.push_back(
+          new RoomAsset(i,
+                        node.attribute("name").as_string(),
+                        node.child("creation_code").text().as_string(),
+                        node.attribute("width").as_uint(),
+                        node.attribute("height").as_uint(),
+                        room_tile_layers,
+                        room_backgrounds));
+
+    i++;
+  }
+
+  return room_assets;
+}

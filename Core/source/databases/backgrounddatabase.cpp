@@ -12,14 +12,14 @@ unsigned long long BackgroundDatabase::size() {
   return backgrounds.size();
 }
 
-unsigned long long BackgroundDatabase::get_id(std::string name) {
+unsigned int BackgroundDatabase::get_id(std::string name) {
   return id_map.at(name);
 }
 
-std::string BackgroundDatabase::get_name_from_id(unsigned long long id) {
+std::string BackgroundDatabase::get_name_from_id(unsigned int id) {
   return backgrounds.at(id)->get_name();
 }
 
-BackgroundAsset* BackgroundDatabase::get_asset(unsigned long long id) {
+BackgroundAsset* BackgroundDatabase::get_asset(unsigned int id) {
   return backgrounds.at(id);
 }
