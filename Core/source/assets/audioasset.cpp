@@ -6,7 +6,7 @@
  * @param music_data The music file's data as a string.
  */
 AudioAsset::AudioAsset(unsigned long long id, std::string name, std::string path) : id(id), name(name), path(path) {
-  load_audio();
+  //load_audio();
 }
 
 /**

@@ -17,10 +17,7 @@ SpriteAsset::SpriteAsset(std::string& name, std::string path, std::vector<Subima
   size.y = rects[0]->get_rect().height;
 }
 
-SpriteAsset::~SpriteAsset() {
-  printf("deleting sprite\n");
-  //delete texture;
-}
+SpriteAsset::~SpriteAsset() {}
 
 /**
  * @brief Get the width and height of this sprite's subimages.

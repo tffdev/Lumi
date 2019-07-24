@@ -13,6 +13,7 @@ SOURCES += \
     source/assets/backgroundasset.cpp \
         source/assets/hitboxasset.cpp \
         source/assets/objectasset.cpp \
+    source/assets/roomasset.cpp \
         source/assets/spriteasset.cpp \
         source/assets/subimagerect.cpp \
         source/assets/textureasset.cpp \
@@ -45,6 +46,7 @@ HEADERS += \
     include/mathlibrary.h \
     include/objectasset.h \
     include/objectdatabase.h \
+    include/roomasset.h \
     include/spriteasset.h \
     include/spritedatabase.h \
     include/subimagerect.h \

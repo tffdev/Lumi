@@ -15,6 +15,7 @@
 #include <backgrounddatabase.h>
 #include <tilesetasset.h>
 #include <tilesetdatabase.h>
+#include <roomasset.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -99,6 +100,29 @@ TEST_CASE("TilesetAsset") {
   CHECK_EQ(tileset.get_id(), 20);
   CHECK_EQ(tileset.get_name().compare("myTileset"), 0);
 }
+
+TEST_CASE("RoomAsset") {
+  TilesetDatabase tileset_db;
+
+  std::vector<RoomTileLayer> tile_layers;
+    std::vector<RoomTile> tiles;
+    tiles.push_back({0,0,16,16,0,0,tileset_db.get_id_from_name("tilesetForest")});
+    tiles.push_back({16,0,16,16,0,0,tileset_db.get_id_from_name("tilesetForest")});
+    tiles.push_back({32,0,16,16,0,0,tileset_db.get_id_from_name("tilesetForest")});
+  tile_layers.push_back({tiles, 30});
+
+  std::vector<RoomBackground> rm_backgrounds;
+  rm_backgrounds.push_back({0, 100, 0, 0});
+
+  RoomAsset asset("room0", "x=5", 320, 240, tile_layers, rm_backgrounds);
+  CHECK_EQ(asset.get_size().x, 320);
+  CHECK_EQ(asset.get_size().y, 240);
+  CHECK_EQ(asset.get_name().compare("room0"), 0);
+  CHECK_EQ(asset.get_creation_code().compare("x=5"), 0);
+  CHECK_EQ(asset.get_background(0).depth, 100);
+  CHECK_EQ(asset.get_tile_layer(0).tiles.at(1).x, 16);
+}
+
 /**
  * MANAGERS
  */

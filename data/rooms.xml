@@ -4,9 +4,7 @@
 <rooms>
   <defaultroom>room0</defaultroom>
   <room name="room0" width="320" height="240">
-    <creationcode>
-      instance_create(objTest)
-    </creationcode>
+    <creationcode>instance_create(objTest)</creationcode>
     <tile_layers>
       <layer name="layer1" depth="0">
         <tile x="0" y="32" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>

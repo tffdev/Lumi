@@ -56,9 +56,9 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] ObjectDatabase
 - [x] SpriteDatabase
 - [x] AudioDatabase
-- [ ] TilesetDatabase
 - [x] BackgroundDatabase
 - [ ] RoomDatabase
+- [x] TilesetDatabase
 
 - [x] ObjectAsset
 - [x] SpriteAsset
@@ -66,8 +66,8 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] HitboxAsset
 - [x] AudioAsset
 - [x] BackgroundAsset
-- [ ] RoomAsset
-- [ ] TilesetAsset
+- [x] RoomAsset
+- [x] TilesetAsset
 
 Game folder structure (for now):
 ```
@@ -77,7 +77,6 @@ Game folder structure (for now):
 	┕━ main.lua (all Lua logicstuffs. hard-coded in future?)
 	┕━ config.xml (window config, general game settings etc)
 	┕━ objects.xml
-	┕━ objects.lua
 	┕━ images.xml
 	┕━ rooms.xml
 	┕━ audio
