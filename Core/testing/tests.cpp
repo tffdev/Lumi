@@ -204,6 +204,10 @@ TEST_CASE("LuaManager") {
 TEST_CASE("RoomManager") {
   RoomManager room_manager;
   CHECK_EQ(room_manager.get_current_room_id(), 0);
+  CHECK_EQ(room_manager.get_current_room()->get_id(), 0);
+  room_manager.set_room(room_manager.get_room_database()->get_id_from_name("extraRoom"));
+  CHECK_EQ(room_manager.get_current_room_id(), 1);
+  CHECK_EQ(room_manager.get_current_room()->get_size().x, 640);
 }
 
 
@@ -273,8 +277,9 @@ TEST_CASE("RoomDatabase") {
   BackgroundDatabase background_db;
   TilesetDatabase tileset_db;
   RoomDatabase room_db(&background_db, &tileset_db);
-  CHECK_EQ(room_db.get_size(), 1);
+  CHECK_EQ(room_db.get_size(), 2);
   CHECK_EQ(room_db.get_id_from_name("room0"), 0);
+  CHECK_EQ(room_db.get_id_from_name("extraRoom"), 1);
   CHECK_EQ(room_db.get_asset(0)->get_name().compare("room0"), 0);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.at(0).width, 64);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.size(), 2);

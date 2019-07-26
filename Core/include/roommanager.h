@@ -14,6 +14,7 @@ public:
   RoomAsset* get_current_room();
   void draw_tiles(WindowManager* win_manager);
   void draw_backgrounds(WindowManager* win_manager);
+  RoomDatabase* get_room_database();
 private:
   unsigned int default_room_id;
   RoomAsset* current_room;

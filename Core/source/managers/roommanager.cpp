@@ -32,7 +32,10 @@ void RoomManager::draw_backgrounds(WindowManager* win_manager) {
   for(RoomBackground background : current_room->get_backgrounds()) {
       TextureAsset* tex = background_database.get_asset(background.asset_ref)->get_texture_asset();
       SDL_Rect source = { 0, 0, static_cast<int>(tex->get_size().x), static_cast<int>(tex->get_size().y) };
-      printf("background texid: %u\n", tex->get_texture_id());
       win_manager->draw(tex, source, source);
   }
+}
+
+RoomDatabase* RoomManager::get_room_database() {
+  return &room_database;
 }

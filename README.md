@@ -51,7 +51,7 @@ Implement basic, unoptimised versions of all listed modules:
 - [x] ConfigManager
 - [x] WindowManager
 - [x] InputManager
-- [ ] RoomManager
+- [x] RoomManager
 
 - [x] ObjectDatabase
 - [x] SpriteDatabase

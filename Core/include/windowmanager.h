@@ -36,5 +36,7 @@ private:
     SDL_GLContext context;
     Color clear_color;
     Vector2<unsigned int> size;
+
+    Vector2<double> camera_position;
     double scale;
 };
