@@ -8,6 +8,12 @@ RoomDatabase::RoomDatabase(BackgroundDatabase* background_db, TilesetDatabase* t
   }
 }
 
+RoomDatabase::~RoomDatabase() {
+  for(RoomAsset* asset : assets) {
+    delete asset;
+  }
+}
+
 RoomAsset* RoomDatabase::get_asset(unsigned int id) {
   return assets.at(id);
 }

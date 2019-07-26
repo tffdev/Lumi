@@ -27,6 +27,7 @@ SOURCES += \
         source/managers/configmanager.cpp \
         source/managers/inputmanager.cpp \
         source/managers/luamanager.cpp \
+    source/managers/roommanager.cpp \
         source/managers/windowmanager.cpp \
         source/databases/audiodatabase.cpp \
         source/databases/objectdatabase.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     include/objectdatabase.h \
     include/roomasset.h \
     include/roomdatabase.h \
+    include/roommanager.h \
     include/spriteasset.h \
     include/spritedatabase.h \
     include/subimagerect.h \

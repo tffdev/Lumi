@@ -121,6 +121,31 @@ void WindowManager::draw(SpriteAsset* sprite, double subimage, int x, int y) {
   glDisable(GL_TEXTURE_2D);
 }
 
+void WindowManager::draw(TextureAsset* texture, SDL_Rect source, SDL_Rect dest) {
+
+  glEnable(GL_TEXTURE_2D);
+  glBindTexture(GL_TEXTURE_2D, texture->get_texture_id());
+  glBegin(GL_QUADS);
+      glTexCoord2f(static_cast<float>(source.x) / static_cast<float>(texture->get_size().x),
+                   static_cast<float>(source.y) / static_cast<float>(texture->get_size().y));
+      glVertex3f(dest.x, dest.y, 0);
+
+      glTexCoord2f(static_cast<float>(source.x + source.w) / static_cast<float>(texture->get_size().x),
+                   static_cast<float>(source.y) / static_cast<float>(texture->get_size().y));
+      glVertex3f(dest.x + dest.w, dest.y, 0);
+
+      glTexCoord2f(static_cast<float>(source.x + source.w) / static_cast<float>(texture->get_size().x),
+                   static_cast<float>(source.y + source.h) / static_cast<float>(texture->get_size().y));
+      glVertex3f(dest.x + dest.w, dest.y + dest.h, 0);
+
+      glTexCoord2f(static_cast<float>(source.x) / static_cast<float>(texture->get_size().x),
+                   static_cast<float>(source.y + source.h) / static_cast<float>(texture->get_size().y));
+      glVertex3f(dest.x, dest.y + dest.h, 0);
+
+  glEnd();
+  glDisable(GL_TEXTURE_2D);
+}
+
 /**
  * @brief Swap the window buffers, displaying all drawn assets to the user.
  */

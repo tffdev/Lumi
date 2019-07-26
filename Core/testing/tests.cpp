@@ -17,6 +17,7 @@
 #include <tilesetdatabase.h>
 #include <roomasset.h>
 #include <roomdatabase.h>
+#include <roommanager.h>
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);
@@ -86,12 +87,12 @@ TEST_CASE("SpriteAsset") {
 }
 
 TEST_CASE("BackgroundAsset") {
-  TextureAsset texture("images/bg1.png");
+  TextureAsset* texture = new TextureAsset("images/bg1.png");
   BackgroundAsset asset(4, "backgroundTest", texture);
   CHECK_EQ(asset.get_id(), 4);
   CHECK_EQ(asset.get_name().compare("backgroundTest"), 0);
-  CHECK_EQ(asset.get_texture_asset().get_size().x, 640);
-  CHECK_EQ(asset.get_texture_asset().get_size().y, 703);
+  CHECK_EQ(asset.get_texture_asset()->get_size().x, 640);
+  CHECK_EQ(asset.get_texture_asset()->get_size().y, 703);
 }
 
 TEST_CASE("TilesetAsset") {
@@ -199,6 +200,13 @@ TEST_CASE("LuaManager") {
   }
 }
 
+
+TEST_CASE("RoomManager") {
+  RoomManager room_manager;
+  CHECK_EQ(room_manager.get_current_room_id(), 0);
+}
+
+
 /*
  * Databases
  * (Contain assets with integer identifiers)
@@ -258,6 +266,7 @@ TEST_CASE("TilesetDatabase") {
   CHECK_EQ(tileset_db.get_size(), 2);
   CHECK_EQ(tileset_db.get_id_from_name("tilesetForest"), 0);
   CHECK_EQ(tileset_db.get_asset(0)->get_name().compare("tilesetForest"), 0);
+  CHECK_EQ(tileset_db.get_asset("tilesetForest2")->get_texture()->get_size().x, 256);
 }
 
 TEST_CASE("RoomDatabase") {
@@ -268,6 +277,8 @@ TEST_CASE("RoomDatabase") {
   CHECK_EQ(room_db.get_id_from_name("room0"), 0);
   CHECK_EQ(room_db.get_asset(0)->get_name().compare("room0"), 0);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.at(0).width, 64);
+  CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.size(), 2);
+  CHECK_EQ(room_db.get_asset(0)->get_tile_layer_size(), 2);
 }
 
 /**
@@ -330,6 +341,9 @@ TEST_CASE("FileSystem") {
       delete asset;
     }
   }
+  SUBCASE("Default room") {
+    CHECK_EQ(FileSystem::get_default_room_name().compare("room0"), 0);
+  }
 }
 
 
@@ -380,13 +394,14 @@ TEST_CASE("LuaLibrary") {
  */
 TEST_CASE("Visual test") {
   printf("=============================================== Visual test.\n");
-  ConfigManager conf = FileSystem::load_config();
-  WindowManager window_manager(&conf);
-  InputManager input_manager;
+  ConfigManager  conf = FileSystem::load_config();
+  WindowManager  window_manager(&conf);
+  InputManager   input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
-  AudioDatabase audio_database;
-  LuaManager lmanager;
+  AudioDatabase  audio_database;
+  LuaManager     lmanager;
+  RoomManager    room_manager;
 
   lmanager.load_object_code(&obj_database);
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
@@ -402,7 +417,10 @@ TEST_CASE("Visual test") {
 
       // process stuff
       lmanager.run_update_function();
+
+      //draw
       window_manager.clear();
+      room_manager.draw_backgrounds(&window_manager);
       lmanager.run_draw_function();
 
       // vsync
@@ -410,7 +428,7 @@ TEST_CASE("Visual test") {
       Uint32 delay = (1000/60) - (SDL_GetTicks() - ticks);
       if(delay > (1000/60)) delay = (1000/60);
       SDL_Delay(delay);
-
+      room_manager.draw_tiles(&window_manager);
       window_manager.display();
       input_manager.clear_pressed_keys();
   }

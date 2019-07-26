@@ -16,10 +16,13 @@ public:
 
     void clear();
     void draw(SpriteAsset* sprite, double subimage, int x, int y);
+    void draw(TextureAsset* sprite, SDL_Rect source, SDL_Rect dest);
+
     void display();
     bool poll_events(SDL_Event* e);
     bool is_open();
     void close();
+
     Vector2<unsigned int> get_size();
     Vector2<unsigned int> get_real_size();
 

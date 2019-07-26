@@ -31,6 +31,7 @@ TextureAsset::TextureAsset(std::string path): path(path) {
  * @brief Unallocates the video memory taken up by this texture.
  */
 TextureAsset::~TextureAsset() {
+  printf("deleting texture id %u\n", texture_id);
   glDeleteTextures(1, &texture_id);
 }
 

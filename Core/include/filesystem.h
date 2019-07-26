@@ -40,6 +40,7 @@ namespace FileSystem {
     std::vector<TilesetAsset*>    load_tilesets();
     std::vector<RoomAsset*>       load_rooms(TilesetDatabase*, BackgroundDatabase*);
 
+    std::string get_default_room_name();
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);
     std::string read_file(std::string filename, bool binary = false);

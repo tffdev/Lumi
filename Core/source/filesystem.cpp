@@ -147,7 +147,7 @@ std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
   std::vector<BackgroundAsset*> backgrounds;
   unsigned long long i = 0;
   for(pugi::xml_node node : document.child("backgrounds").children("background")) {
-    TextureAsset texture(node.attribute("path").as_string());
+    TextureAsset* texture = new TextureAsset(node.attribute("path").as_string());
     backgrounds.push_back(new BackgroundAsset(i, node.attribute("name").as_string(), texture));
     i++;
   }
@@ -221,4 +221,11 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
   }
 
   return room_assets;
+}
+
+std::string FileSystem::get_default_room_name() {
+  pugi::xml_document document;
+  document.load_string(FileSystem::read_file(ROOMS_PATH).c_str());
+
+  return document.child("rooms").child("defaultroom").text().as_string();
 }

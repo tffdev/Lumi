@@ -10,6 +10,10 @@
         <tile x="0" y="32" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>
         <tile x="0" y="0" width="64" height="32" texture_x="0" texture_y="32" tileset="tilesetForest"/>
       </layer>
+      <layer name="layer2" depth="30">
+        <tile x="64" y="32" width="64" height="64" texture_x="32" texture_y="0" tileset="tilesetForest"/>
+        <tile x="64" y="0" width="64" height="32" texture_x="64" texture_y="0" tileset="tilesetForest"/>
+      </layer>
     </tile_layers>
     <backgrounds>
       <background depth="100" offset_x="0" offset_y="0" image="backgroundTest"/>

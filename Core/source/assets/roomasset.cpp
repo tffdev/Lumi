@@ -37,3 +37,14 @@ RoomTileLayer RoomAsset::get_tile_layer(unsigned int layer) {
 unsigned int RoomAsset::get_id() {
   return id;
 }
+
+unsigned long long RoomAsset::get_tile_layer_size() {
+  return room_tile_layers.size();
+}
+
+std::vector<RoomTileLayer> RoomAsset::get_tile_layers() {
+  return room_tile_layers;
+}
+std::vector<RoomBackground> RoomAsset::get_backgrounds() {
+  return room_backgrounds;
+}
