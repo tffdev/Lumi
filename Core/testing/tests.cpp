@@ -422,6 +422,9 @@ TEST_CASE("Visual test") {
 
       // process stuff
       lmanager.run_update_function();
+      window_manager.set_camera_position(
+            lmanager.get_global_double("camera_x"),
+            lmanager.get_global_double("camera_y"));
 
       //draw
       window_manager.clear();

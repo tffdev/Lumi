@@ -44,6 +44,13 @@ function __luma_system:create_new_instance_environment(parent)
             end
             -- not in any scopes, doesn't exist
             return nil
+        end,
+        __newindex = function(table, key, value)
+            if(table._G[key] ~= nil) then
+                table._G[key] = value
+                return
+            end
+            rawset(table, key, value)
         end
     })
 end
@@ -99,6 +106,10 @@ end
 function printf(str, ...)
     print(string.format(str, ...))
 end
+
+-- globals
+camera_x = 10
+camera_y = 10
 
 -- test data
 ___lua_main_check = 983652

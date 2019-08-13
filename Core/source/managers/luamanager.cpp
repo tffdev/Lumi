@@ -43,6 +43,16 @@ int LuaManager::get_global_int(std::string name) {
 }
 
 /**
+ * @brief Get an double (default 'number') from the Lua state within the global scope.
+ * @param name The name of the global variable.
+ * @return The double value stored in that variable.
+ */
+double LuaManager::get_global_double(std::string name) {
+  lua_getglobal(L, name.c_str());
+  return lua_tonumber(L, -1);
+}
+
+/**
  * @brief Run the "update" closure on all instances.
  */
 void LuaManager::run_update_function() {

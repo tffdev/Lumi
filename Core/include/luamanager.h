@@ -19,6 +19,7 @@ public:
 
     void execute(std::string str);
     int get_global_int(std::string name);
+    double get_global_double(std::string name);
     int register_function(lua_CFunction fnc, std::string name);
     int register_luma_system_function(lua_CFunction func, std::string name);
     void assign_state_containers(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*, AudioDatabase*);

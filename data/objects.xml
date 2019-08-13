@@ -12,10 +12,13 @@
         if(key_down("down")) then y = y + 1 end
         if(key_down("left")) then x = x - 1 end
         if(key_down("right")) then x = x + 1 end
+        camera_x = x - 160
+        camera_y = y - 120
 
         if(key_pressed("e")) then 
             audio_play(sfxCoin, false) 
         end
+        
         if(key_pressed("k")) then
           audio_play(musicWater, true)
         end

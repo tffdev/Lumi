@@ -92,9 +92,12 @@ void WindowManager::clear() {
  * @param x The X position in which to draw the sprite.
  * @param y The Y position in which to draw the sprite.
  */
-void WindowManager::draw(SpriteAsset* sprite, double subimage, int x, int y) {
+void WindowManager::draw(SpriteAsset* sprite, double subimage, double input_x, double input_y) {
   SubimageRect* rect = sprite->get_subimage(subimage);
   rect->get_rect();
+
+  int x = static_cast<int>(input_x - camera_position.x);
+  int y = static_cast<int>(input_y - camera_position.y);
 
   GLfloat width = rect->get_rect().width;
   GLfloat height = rect->get_rect().height;
@@ -122,26 +125,24 @@ void WindowManager::draw(SpriteAsset* sprite, double subimage, int x, int y) {
 }
 
 void WindowManager::draw(TextureAsset* texture, SDL_Rect source, SDL_Rect dest) {
-
   glEnable(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, texture->get_texture_id());
   glBegin(GL_QUADS);
       glTexCoord2f(static_cast<float>(source.x) / static_cast<float>(texture->get_size().x),
                    static_cast<float>(source.y) / static_cast<float>(texture->get_size().y));
-      glVertex3f(dest.x, dest.y, 0);
+      glVertex3f(static_cast<int>(dest.x - camera_position.x), static_cast<int>(dest.y - camera_position.y), 0);
 
       glTexCoord2f(static_cast<float>(source.x + source.w) / static_cast<float>(texture->get_size().x),
                    static_cast<float>(source.y) / static_cast<float>(texture->get_size().y));
-      glVertex3f(dest.x + dest.w, dest.y, 0);
+      glVertex3f(static_cast<int>(dest.x - camera_position.x) + dest.w, static_cast<int>(dest.y - camera_position.y), 0);
 
       glTexCoord2f(static_cast<float>(source.x + source.w) / static_cast<float>(texture->get_size().x),
                    static_cast<float>(source.y + source.h) / static_cast<float>(texture->get_size().y));
-      glVertex3f(dest.x + dest.w, dest.y + dest.h, 0);
+      glVertex3f(static_cast<int>(dest.x - camera_position.x) + dest.w, static_cast<int>(dest.y - camera_position.y) + dest.h, 0);
 
       glTexCoord2f(static_cast<float>(source.x) / static_cast<float>(texture->get_size().x),
                    static_cast<float>(source.y + source.h) / static_cast<float>(texture->get_size().y));
-      glVertex3f(dest.x, dest.y + dest.h, 0);
-
+      glVertex3f(static_cast<int>(dest.x - camera_position.x), static_cast<int>(dest.y - camera_position.y) + dest.h, 0);
   glEnd();
   glDisable(GL_TEXTURE_2D);
 }
@@ -194,4 +195,9 @@ void WindowManager::toggle_fullscreen() {
 void WindowManager::set_fullscreen(bool set) {
   config.set_fullscreen(set);
   SDL_SetWindowFullscreen(window, (set) ? SDL_WINDOW_FULLSCREEN : 0);
+}
+
+void WindowManager::set_camera_position(double x, double y) {
+  camera_position.x = x;
+  camera_position.y = y;
 }

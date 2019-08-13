@@ -15,8 +15,9 @@ public:
     void create_window_using_config();
 
     void clear();
-    void draw(SpriteAsset* sprite, double subimage, int x, int y);
+    void draw(SpriteAsset* sprite, double subimage, double x, double y);
     void draw(TextureAsset* sprite, SDL_Rect source, SDL_Rect dest);
+    void set_camera_position(double x, double y);
 
     void display();
     bool poll_events(SDL_Event* e);
