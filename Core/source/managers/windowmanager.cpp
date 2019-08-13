@@ -1,4 +1,5 @@
 #include "windowmanager.h"
+#include "filesystem.h"
 
 /**
  * @brief Create an instance of WindowManager.
@@ -52,7 +53,7 @@ void WindowManager::create_window_using_config() {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  glClearColor(clear_color.r, clear_color.g, clear_color.b, clear_color.a);
+  set_clear_color(clear_color);
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -76,6 +77,14 @@ void WindowManager::close() {
   SDL_GL_DeleteContext(context);
   SDL_DestroyWindow(window);
   open = false;
+}
+
+void WindowManager::set_clear_color(Color new_color) {
+  glClearColor(
+        static_cast<float>(new_color.r)/255.0f,
+        static_cast<float>(new_color.g)/255.0f,
+        static_cast<float>(new_color.b)/255.0f,
+        1.0f);
 }
 
 /**

@@ -8,12 +8,11 @@
 class Color {
 public:
   Color(unsigned int color_hex = 0) {
-    r = (color_hex >> 24) % 0x100;
-    g = (color_hex >> 16) % 0x100;
-    b = (color_hex >> 8) % 0x100;
-    a = (color_hex >> 0) % 0x100;
+    r = (color_hex >> 16) % 0x100;
+    g = (color_hex >> 8) % 0x100;
+    b = (color_hex >> 0) % 0x100;
   }
-  int r,g,b,a;
+  int r,g,b;
 };
 
 class ConfigManager {

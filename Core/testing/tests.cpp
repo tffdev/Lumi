@@ -130,14 +130,13 @@ TEST_CASE("RoomAsset") {
  * MANAGERS
  */
 TEST_CASE("ConfigManager") {
-  ConfigManager conf_manager("Hello", 320, 240, 0x32d61cff);
+  ConfigManager conf_manager("Hello", 320, 240, 0x32d61c);
   CHECK_EQ(conf_manager.get_window_size().x, 320);
   CHECK_EQ(conf_manager.get_window_size().y, 240);
   CHECK_EQ(conf_manager.get_window_title().compare("Hello"), 0);
   CHECK_EQ(conf_manager.get_window_draw_color().r, 50);
   CHECK_EQ(conf_manager.get_window_draw_color().g, 214);
   CHECK_EQ(conf_manager.get_window_draw_color().b, 28);
-  CHECK_EQ(conf_manager.get_window_draw_color().a, 255);
 }
 
 TEST_CASE("WindowManager") {
