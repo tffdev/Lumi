@@ -211,7 +211,7 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
     room_assets.push_back(
           new RoomAsset(i,
                         node.attribute("name").as_string(),
-                        node.child("creation_code").text().as_string(),
+                        node.child("creationcode").text().as_string(),
                         node.attribute("width").as_uint(),
                         node.attribute("height").as_uint(),
                         room_tile_layers,
