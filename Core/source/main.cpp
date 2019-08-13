@@ -1,11 +1,3 @@
-#include <stdio.h>
-#include <filesystem.h>
-#include <objectasset.h>
-#include <luamanager.h>
-#include <configmanager.h>
-#include <objectdatabase.h>
-#include <lualibrary.h>
-#include <windowmanager.h>
 /**
  * Lumi Game Creator - version 0.0.1
  * --------------------------------------------------------
@@ -36,6 +28,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+#include <stdio.h>
+#include <filesystem.h>
+#include <objectasset.h>
+#include <luamanager.h>
+#include <configmanager.h>
+#include <objectdatabase.h>
+#include <lualibrary.h>
+#include <windowmanager.h>
 
 int main(int, char*[]) {
   ObjectDatabase obj_database;

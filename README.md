@@ -15,8 +15,14 @@ Lumi Game Creator is comprised of three main applications:
   single custom filetype which contains everything needed to run your game.
 
 * **Core.** An executable that can read Lumi's custom game filetypes. The 
-  custom filetype will be embedded alongside the core executable so that your game can
-  be easily distributed and ran on **any machine**.
+  custom filetype will be embedded alongside the core executable so that your game can be easily distributed and ran on **any machine**.
+
+Roadmap
+--------------------------------------------------------
+You can see the progress and future plans of this engine
+on [this Trello board.](https://trello.com/b/W8TegB7A/lumi).
+
+Please submit an issue if you have any suggestions at all.
 
 Dependencies:
 --------------------------------------------------------
@@ -32,3 +38,4 @@ This project is built using the QtCreator IDE and qmake build system!
 * Open `Core.pro` in QtCreator with any valid configuration and Build!
 * (Windows) Copy the SDL2.dll and Lua5.3.dll files into the build directory.
 * Run from QtCreator
+
