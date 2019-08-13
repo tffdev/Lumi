@@ -168,8 +168,11 @@ TEST_CASE("LuaManager") {
   SpriteDatabase spr_database;
   AudioDatabase audio_database;
   LuaManager lmanager;
+  RoomManager room_manager;
   lmanager.load_object_code(&obj_database);
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
+  lmanager.load_library(&obj_database, &window_manager,
+                        &spr_database, &input_manager,
+                        &audio_database, &room_manager);
 
   SUBCASE("Lua execution check") {
     lmanager.execute("___lua_execute_check = 370439");
@@ -205,7 +208,7 @@ TEST_CASE("RoomManager") {
   RoomManager room_manager;
   CHECK_EQ(room_manager.get_current_room_id(), 0);
   CHECK_EQ(room_manager.get_current_room()->get_id(), 0);
-  room_manager.set_room(room_manager.get_room_database()->get_id_from_name("extraRoom"));
+  room_manager.set_room(room_manager.get_room_database()->get_room_id("extraRoom"));
   CHECK_EQ(room_manager.get_current_room_id(), 1);
   CHECK_EQ(room_manager.get_current_room()->get_size().x, 640);
 }
@@ -278,9 +281,10 @@ TEST_CASE("RoomDatabase") {
   TilesetDatabase tileset_db;
   RoomDatabase room_db(&background_db, &tileset_db);
   CHECK_EQ(room_db.get_size(), 2);
-  CHECK_EQ(room_db.get_id_from_name("room0"), 0);
-  CHECK_EQ(room_db.get_id_from_name("extraRoom"), 1);
+  CHECK_EQ(room_db.get_room_id("room0"), 0);
+  CHECK_EQ(room_db.get_room_id("extraRoom"), 1);
   CHECK_EQ(room_db.get_asset(0)->get_name().compare("room0"), 0);
+  CHECK_EQ(room_db.get_asset(0)->get_creation_code().compare("instance_create(objTest)"), 0);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.at(0).width, 64);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.size(), 2);
   CHECK_EQ(room_db.get_asset(0)->get_tile_layer_size(), 2);
@@ -360,8 +364,9 @@ TEST_CASE("LuaLibrary") {
   SpriteDatabase spr_database;
   AudioDatabase audio_database;
   LuaManager lmanager;
+  RoomManager room_manager;
   lmanager.load_object_code(&obj_database);
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database, &room_manager);
 
   SUBCASE("Lua global library check"){
     lmanager.execute("__lua_library_var_check = lua_library_test()");
@@ -374,7 +379,7 @@ TEST_CASE("LuaLibrary") {
   }
 
   SUBCASE("Database-dependant Luma System library check"){
-    lmanager.execute("__object_id_check = __luma_system:get_object_id('objTest2')");
+    lmanager.execute("__object_id_check = __luma_system:get_asset_id('objTest2')");
     CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
   }
 
@@ -409,8 +414,9 @@ TEST_CASE("Visual test") {
   RoomManager    room_manager;
 
   lmanager.load_object_code(&obj_database);
-  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database);
-  lmanager.execute("instance_create(objTest)");
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database, &room_manager);
+  // run initial room creation code
+  lmanager.execute(room_manager.get_current_room()->get_creation_code());
 
   SDL_Event e;
   while(window_manager.is_open()) {

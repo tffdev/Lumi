@@ -6,6 +6,7 @@
 #include <spritedatabase.h>
 #include <inputmanager.h>
 #include <audiodatabase.h>
+#include <roommanager.h>
 
 class LuaManager
 {
@@ -22,8 +23,8 @@ public:
     double get_global_double(std::string name);
     int register_function(lua_CFunction fnc, std::string name);
     int register_luma_system_function(lua_CFunction func, std::string name);
-    void assign_state_containers(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*, AudioDatabase*);
-    void load_library(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*, AudioDatabase*);
+    void assign_state_containers(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*, AudioDatabase*, RoomManager*);
+    void load_library(ObjectDatabase*, WindowManager*, SpriteDatabase*, InputManager*, AudioDatabase*, RoomManager*);
 
     int get_instance_count();
     int object_code_length();

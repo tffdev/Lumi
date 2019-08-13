@@ -21,15 +21,14 @@
   </room>
 
   <room name="extraRoom" width="640" height="240">
-    <creationcode>instance_create(objTest)</creationcode>
+<creationcode>
+print("Hello from extraRoom")
+instance_create(objTest, 100, 100)
+</creationcode>
     <tile_layers>
       <layer name="layer1" depth="0">
-        <tile x="0" y="32" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>
-        <tile x="0" y="0" width="64" height="32" texture_x="0" texture_y="32" tileset="tilesetForest"/>
-      </layer>
-      <layer name="layer2" depth="30">
-        <tile x="64" y="32" width="64" height="64" texture_x="32" texture_y="0" tileset="tilesetForest"/>
-        <tile x="64" y="0" width="64" height="32" texture_x="64" texture_y="0" tileset="tilesetForest"/>
+        <tile x="10" y="42" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>
+        <tile x="4" y="8" width="64" height="32" texture_x="0" texture_y="32" tileset="tilesetForest"/>
       </layer>
     </tile_layers>
     <backgrounds>

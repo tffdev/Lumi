@@ -2,11 +2,11 @@
 #include <filesystem.h>
 
 RoomManager::RoomManager() : room_database(&background_database, &tileset_database) {
-  default_room_id = room_database.get_id_from_name(FileSystem::get_default_room_name());
+  default_room_id = room_database.get_room_id(FileSystem::get_default_room_name());
   current_room = room_database.get_asset(default_room_id);
 }
 
-void RoomManager::set_room(unsigned int id) {
+void RoomManager::set_room(unsigned long long id) {
   current_room = room_database.get_asset(id);
 }
 

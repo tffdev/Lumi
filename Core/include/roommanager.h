@@ -9,7 +9,7 @@ class RoomManager
 {
 public:
   RoomManager();
-  void set_room(unsigned int);
+  void set_room(unsigned long long);
   unsigned int get_current_room_id();
   RoomAsset* get_current_room();
   void draw_tiles(WindowManager* win_manager);

@@ -8,11 +8,9 @@ LuaManager::LuaManager() {
   L = luaL_newstate();
   luaL_openlibs(L);
 
+  // load boilerplate code
   if(luaL_dostring(L, FileSystem::read_file("main.lua").c_str()) != 0)
     throw "Error loading main.lua:\n" + std::string(lua_tostring(L, -1));
-
-  //if(luaL_dostring(L, FileSystem::read_file("objects.lua").c_str()) != 0)
-  //  throw "Error loading objects.lua:\n" + std::string(lua_tostring(L, -1));
 }
 
 /**
@@ -128,7 +126,8 @@ void LuaManager::assign_state_containers(ObjectDatabase* objdatabase,
                                          WindowManager* window_manager,
                                          SpriteDatabase* sprite_database,
                                          InputManager* input_manager,
-                                         AudioDatabase* audio_database) {
+                                         AudioDatabase* audio_database,
+                                         RoomManager* room_manager) {
   lua_pushstring(L, "object_database");
   lua_pushlightuserdata(L, objdatabase);
   lua_settable(L, LUA_REGISTRYINDEX);
@@ -148,6 +147,10 @@ void LuaManager::assign_state_containers(ObjectDatabase* objdatabase,
   lua_pushstring(L, "audio_database");
   lua_pushlightuserdata(L, audio_database);
   lua_settable(L, LUA_REGISTRYINDEX);
+
+  lua_pushstring(L, "room_manager");
+  lua_pushlightuserdata(L, room_manager);
+  lua_settable(L, LUA_REGISTRYINDEX);
 }
 
 /**
@@ -160,10 +163,11 @@ void LuaManager::load_library(ObjectDatabase* object_database,
                               WindowManager* window_manager,
                               SpriteDatabase* sprite_database,
                               InputManager* input_manager,
-                              AudioDatabase* audio_database) {
+                              AudioDatabase* audio_database,
+                              RoomManager* room_manager) {
 
   // Register Lua state variablse
-  assign_state_containers(object_database, window_manager, sprite_database, input_manager, audio_database);
+  assign_state_containers(object_database, window_manager, sprite_database, input_manager, audio_database, room_manager);
 
   // Register global functions
   register_function(LuaLibrary::lua_library_test, "lua_library_test");
@@ -173,12 +177,11 @@ void LuaManager::load_library(ObjectDatabase* object_database,
   register_function(LuaLibrary::lua_key_released, "key_released");
   register_function(LuaLibrary::lua_audio_play, "audio_play");
   register_function(LuaLibrary::lua_audio_stop, "audio_stop");
+  register_function(LuaLibrary::lua_set_room, "set_room");
 
   // Register __luma_system functions
   register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
-  register_luma_system_function(LuaLibrary::luma_system_get_object_id, "get_object_id");
-  register_luma_system_function(LuaLibrary::luma_system_get_sprite_id, "get_sprite_id");
-  register_luma_system_function(LuaLibrary::luma_system_get_audio_id, "get_audio_id");
+  register_luma_system_function(LuaLibrary::luma_system_get_asset_id, "get_asset_id");
   register_luma_system_function(LuaLibrary::luma_system_process_in_environment, "process_in_environment");
 }
 

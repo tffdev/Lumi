@@ -35,7 +35,6 @@ namespace LuaLibrary {
 
     lua_pushstring(L, "object_database");
     lua_gettable(L, LUA_REGISTRYINDEX);
-
     ObjectDatabase* obj_database = static_cast<ObjectDatabase*>(lua_touserdata(L, -1));
 
     if(obj_database == nullptr) throw_db_error();
@@ -55,45 +54,56 @@ namespace LuaLibrary {
    * @param L The passed Lua state
    * @return [Integer] The ID of the sprite.
    */
-  int luma_system_get_sprite_id(lua_State* L) {
+  int luma_system_get_asset_id(lua_State* L) {
     std::string name(lua_tostring(L, -1));
 
+    // check object database
+    lua_pushstring(L, "object_database");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    ObjectDatabase* obj_database = static_cast<ObjectDatabase*>(lua_touserdata(L, -1));
+    if(obj_database == nullptr) throw_db_error();
+    if(obj_database->object_name_exists(name)) {
+      int id = obj_database->get_object_id(name);
+      lua_pushnumber(L, id);
+      return 1;
+    }
+
+    // check sprite database
     lua_pushstring(L, "sprite_database");
     lua_gettable(L, LUA_REGISTRYINDEX);
     SpriteDatabase* spr_database = static_cast<SpriteDatabase*>(lua_touserdata(L, -1));
-
     if(spr_database == nullptr) throw_db_error();
 
-    if(!spr_database->sprite_exists(name)) {
-      return 0; // return 0 results == nil
+    if(spr_database->sprite_exists(name)) {
+      int id = spr_database->get_sprite_id(name);
+      lua_pushnumber(L, id);
+      return 1;
     }
 
-    int id = spr_database->get_sprite_id(name);
-    lua_pushnumber(L, id);
-    return 1;
-  }
-
-  /**
-   * @brief Gets the ID of a sprite given the name of the sprite. `__luma_system:get_sprite_id("sprTest")`
-   * @param L The passed Lua state
-   * @return [Integer] The ID of the sprite.
-   */
-  int luma_system_get_audio_id(lua_State* L) {
-    std::string name(lua_tostring(L, -1));
-
+    // check audio database
     lua_pushstring(L, "audio_database");
     lua_gettable(L, LUA_REGISTRYINDEX);
     AudioDatabase* audio_database = static_cast<AudioDatabase*>(lua_touserdata(L, -1));
-
     if(audio_database == nullptr) throw_db_error();
-
-    if(!audio_database->audio_exists(name)) {
-      return 0; // return 0 results == nil
+    if(audio_database->audio_exists(name)) {
+      // FIX THIS, all IDs should be unsigned long longs
+      unsigned long long id = audio_database->get_audio_id(name);
+      lua_pushnumber(L, id);
+      return 1;
     }
 
-    unsigned long long id = audio_database->get_audio_id(name);
-    lua_pushnumber(L, id);
-    return 1;
+    // check room database
+    lua_pushstring(L, "room_manager");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    RoomManager* room_manager = static_cast<RoomManager*>(lua_touserdata(L, -1));
+    if(room_manager == nullptr) throw_db_error();
+    if(room_manager->get_room_database()->room_exists(name)) {
+      unsigned long long id = room_manager->get_room_database()->get_room_id(name);
+      lua_pushnumber(L, id);
+      return 1;
+    }
+
+    return 0; // return 0 results == nil
   }
 
   /**
@@ -213,6 +223,30 @@ namespace LuaLibrary {
 
     printf("stopping audio id %llu\n", id);
     audio_database->stop_audio(id);
+    return 0;
+  }
+
+  int lua_set_room(lua_State* L) {
+    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -1));
+
+    lua_pushstring(L, "room_manager");
+    lua_gettable(L, LUA_REGISTRYINDEX);
+    RoomManager* room_manager = static_cast<RoomManager*>(lua_touserdata(L, -1));
+    if(room_manager == nullptr) throw_db_error();
+
+    // unload/destroy all current entities (excluding persistent entities)
+    luaL_dostring(L, "__luma_system:clear_all_instances()");
+
+    // unload all assets (?)
+
+    // set the new room
+    room_manager->set_room(id);
+
+    // run room creation code
+    printf("creation code: %s\n", room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str());
+    if(luaL_dostring(L, room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str()) != LUA_OK) {
+      throw "Room creation code invalid";
+    }
     return 0;
   }
 };

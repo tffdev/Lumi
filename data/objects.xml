@@ -3,8 +3,6 @@
 <!-- EDITING THIS FILE CAN BREAK YOUR GAME. Proceed with caution. -->
 <objects>
   <object name="objTest" sprite="" persistent="0">
-    x = math.random(10)
-    y = math.random(10)
     index = 0
 
     function update()
@@ -18,7 +16,11 @@
         if(key_pressed("e")) then 
             audio_play(sfxCoin, false) 
         end
-        
+
+        if(key_pressed("o")) then 
+            set_room(extraRoom)
+        end
+
         if(key_pressed("k")) then
           audio_play(musicWater, true)
         end

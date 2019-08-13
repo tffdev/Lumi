@@ -9,22 +9,18 @@ __luma_system.containers.instances = {}
 __luma_system.containers.instances_buffer = {}
 
 -- C function placeholders
-function __luma_system:get_object_id(name) end
+function __luma_system:get_asset_id(name) end
 
 -- prepare global scope.
 setmetatable(_G, {
     __index = function(table, key)
-        -- if the variable is an object reference
-        local id = table._G.__luma_system:get_object_id(key)
-        if(id ~= nil) then return id end
-        id = table._G.__luma_system:get_sprite_id(key)
-        if(id ~= nil) then return id end
-        id = table._G.__luma_system:get_audio_id(key)
+        -- if the variable is an asset reference contained in any of the attached databases
+        local id = table._G.__luma_system:get_asset_id(key)
         if(id ~= nil) then return id end
         return nil
     end,
     __newindex = function(table, key, value)
-        if(table._G.__luma_system:get_object_id(key) ~= nil) then
+        if(table._G.__luma_system:get_asset_id(key) ~= nil) then
             error("[LUMA] Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
@@ -53,6 +49,17 @@ function __luma_system:create_new_instance_environment(parent)
             rawset(table, key, value)
         end
     })
+end
+
+function __luma_system:clear_all_instances()
+    for i,v in ipairs(__luma_system.containers.instances) do
+        if __luma_system.containers.instances[i].persistent ~= true then
+            table.remove(__luma_system.containers.instances, i)
+        end
+        if __luma_system.containers.instances_buffer[i].persistent ~= true then
+            table.remove(__luma_system.containers.instances_buffer, i)
+        end
+    end
 end
 
 function __luma_system:instance_create(id, x, y)

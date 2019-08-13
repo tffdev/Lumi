@@ -14,12 +14,17 @@ RoomDatabase::~RoomDatabase() {
   }
 }
 
-RoomAsset* RoomDatabase::get_asset(unsigned int id) {
+RoomAsset* RoomDatabase::get_asset(unsigned long long id) {
   return assets.at(id);
 }
 
-unsigned int RoomDatabase::get_id_from_name(std::string name) {
+unsigned long long RoomDatabase::get_room_id(std::string name) {
   return id_map.at(name);
+}
+
+bool RoomDatabase::room_exists(std::string name) {
+  if(id_map.count(name) > 0) return true;
+  return false;
 }
 
 unsigned long long RoomDatabase::get_size() {
