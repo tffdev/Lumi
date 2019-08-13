@@ -1,33 +1,33 @@
 -- Containers and Standard Library
 --------------------------------------------------------
--- Warning that using functionality contained in __luma_system is NOT safe for users.
--- System functionality is contained in __luma_system to make sure users don't accidentally call
+-- Warning that using functionality contained in __lumi_system is NOT safe for users.
+-- System functionality is contained in __lumi_system to make sure users don't accidentally call
 -- these functions resulting in incorrect game behaviour etc.
-__luma_system = {}
-__luma_system.containers = {}
-__luma_system.containers.instances = {}
-__luma_system.containers.instances_buffer = {}
+__lumi_system = {}
+__lumi_system.containers = {}
+__lumi_system.containers.instances = {}
+__lumi_system.containers.instances_buffer = {}
 
 -- C function placeholders
-function __luma_system:get_asset_id(name) end
+function __lumi_system:get_asset_id(name) end
 
 -- prepare global scope.
 setmetatable(_G, {
     __index = function(table, key)
         -- if the variable is an asset reference contained in any of the attached databases
-        local id = table._G.__luma_system:get_asset_id(key)
+        local id = table._G.__lumi_system:get_asset_id(key)
         if(id ~= nil) then return id end
         return nil
     end,
     __newindex = function(table, key, value)
-        if(table._G.__luma_system:get_asset_id(key) ~= nil) then
+        if(table._G.__lumi_system:get_asset_id(key) ~= nil) then
             error("[LUMA] Cannot overwrite constant \"" .. tostring(key) .. "\".")
         end
         rawset(table, key, value)
     end
 })
 
-function __luma_system:create_new_instance_environment(parent)
+function __lumi_system:create_new_instance_environment(parent)
     local new_env = parent or {}
     -- all properly created environments will have
     -- correct access to the original global environment
@@ -51,36 +51,36 @@ function __luma_system:create_new_instance_environment(parent)
     })
 end
 
-function __luma_system:clear_all_instances()
-    for i,v in ipairs(__luma_system.containers.instances) do
-        if __luma_system.containers.instances[i].persistent ~= true then
-            table.remove(__luma_system.containers.instances, i)
+function __lumi_system:clear_all_instances()
+    for i,v in ipairs(__lumi_system.containers.instances) do
+        if __lumi_system.containers.instances[i].persistent ~= true then
+            table.remove(__lumi_system.containers.instances, i)
         end
-        if __luma_system.containers.instances_buffer[i].persistent ~= true then
-            table.remove(__luma_system.containers.instances_buffer, i)
+        if __lumi_system.containers.instances_buffer[i].persistent ~= true then
+            table.remove(__lumi_system.containers.instances_buffer, i)
         end
     end
 end
 
-function __luma_system:instance_create(id, x, y)
-    local instance = __luma_system:create_new_instance_environment()
+function __lumi_system:instance_create(id, x, y)
+    local instance = __lumi_system:create_new_instance_environment()
     instance.id = id
     instance.x = x
     instance.y = y
-    __luma_system:process_in_environment(__luma_system.containers.object_code[id+1], instance)
-    __luma_system:process_in_environment(instance.init, instance)
-    table.insert(__luma_system.containers.instances_buffer, instance)
+    __lumi_system:process_in_environment(__lumi_system.containers.object_code[id+1], instance)
+    __lumi_system:process_in_environment(instance.init, instance)
+    table.insert(__lumi_system.containers.instances_buffer, instance)
 end
 
-function __luma_system:push_instances()
+function __lumi_system:push_instances()
     -- v contains table of instances
-    for i, v in ipairs(__luma_system.containers.instances_buffer) do
-        table.insert(__luma_system.containers.instances, v)
+    for i, v in ipairs(__lumi_system.containers.instances_buffer) do
+        table.insert(__lumi_system.containers.instances, v)
     end
-    __luma_system.containers.instances_buffer = {}
+    __lumi_system.containers.instances_buffer = {}
 end
 
-function __luma_system:try_running(func)
+function __lumi_system:try_running(func)
     if(func ~= nil and type(func) == "function") then 
         func()
         return true
@@ -88,18 +88,18 @@ function __luma_system:try_running(func)
     return false
 end
 
-function __luma_system:process_draw()
+function __lumi_system:process_draw()
     -- draw loop!
-    for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j].draw, __luma_system.containers.instances[j])
+    for j, v in ipairs(__lumi_system.containers.instances) do
+        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].draw, __lumi_system.containers.instances[j])
     end
 end
 
-function __luma_system:process_update()
-    __luma_system:push_instances()
+function __lumi_system:process_update()
+    __lumi_system:push_instances()
     -- update loop!
-    for j, v in ipairs(__luma_system.containers.instances) do
-        __luma_system:process_in_environment(__luma_system.containers.instances[j].update, __luma_system.containers.instances[j])
+    for j, v in ipairs(__lumi_system.containers.instances) do
+        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].update, __lumi_system.containers.instances[j])
     end
 end
 
@@ -107,7 +107,7 @@ end
 function instance_create(id, x, y)
     local x = x or 0
     local y = y or 0
-    return __luma_system:instance_create(id, x, y)
+    return __lumi_system:instance_create(id, x, y)
 end
 
 function printf(str, ...)

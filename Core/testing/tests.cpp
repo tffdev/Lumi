@@ -196,10 +196,10 @@ TEST_CASE("LuaManager") {
     lmanager.execute("func_reg_check_var = func_reg_check()");
     CHECK_EQ(lmanager.get_global_int("func_reg_check_var"), 68923);
 
-    // Register function to __luma_system table.
+    // Register function to __lumi_system table.
     // If this doesn't work, it will throw an error upon trying to call a nil value.
-    lmanager.register_luma_system_function(func_reg_check, "system_func_reg_check");
-    lmanager.execute("__luma_system:system_func_reg_check()");
+    lmanager.register_lumi_system_function(func_reg_check, "system_func_reg_check");
+    lmanager.execute("__lumi_system:system_func_reg_check()");
   }
 }
 
@@ -373,13 +373,13 @@ TEST_CASE("LuaLibrary") {
     CHECK_EQ(lmanager.get_global_int("__lua_library_var_check"), 42);
   }
 
-  SUBCASE("Luma System library check"){
-    lmanager.execute("__luma_system_var_check = __luma_system:luma_system_test()");
-    CHECK_EQ(lmanager.get_global_int("__luma_system_var_check"), 65894);
+  SUBCASE("Lumi System library check"){
+    lmanager.execute("__lumi_system_var_check = __lumi_system:lumi_system_test()");
+    CHECK_EQ(lmanager.get_global_int("__lumi_system_var_check"), 65894);
   }
 
-  SUBCASE("Database-dependant Luma System library check"){
-    lmanager.execute("__object_id_check = __luma_system:get_asset_id('objTest2')");
+  SUBCASE("Database-dependant Lumi System library check"){
+    lmanager.execute("__object_id_check = __lumi_system:get_asset_id('objTest2')");
     CHECK_EQ(lmanager.get_global_int("__object_id_check"), 1);
   }
 
@@ -389,7 +389,7 @@ TEST_CASE("LuaLibrary") {
     lmanager.execute("instance_create(objTest3)");
     lmanager.execute("instance_create(objTest)");
     lmanager.execute("instance_create(objTest2)");
-    lmanager.execute("__luma_system:push_instances()");
+    lmanager.execute("__lumi_system:push_instances()");
 
     CHECK_EQ(lmanager.get_instance_count(), 4);
   }

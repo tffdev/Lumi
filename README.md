@@ -1,4 +1,4 @@
-<p align="center"><img src="https://github.com/tfcat/LumaGameCreator/blob/master/promotional/Lumi_textonly.png?raw=true"></p>
+<p align="center"><img src="https://github.com/tfcat/LumiGameCreator/blob/master/promotional/Lumi_textonly.png?raw=true"></p>
 
 Lumi Game Creator - version 0.0.1
 --------------------------------------------------------

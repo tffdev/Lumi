@@ -7,9 +7,9 @@
 #include <lualibrary.h>
 #include <windowmanager.h>
 /**
- * Luma Game Creator - version 0.0.1
+ * Lumi Game Creator - version 0.0.1
  * --------------------------------------------------------
- * Report bugs and download new versions at https://github.com/tfcat/lumagamecreator
+ * Report bugs and download new versions at https://github.com/tfcat/lumigamecreator
  * Copyright (C) 2019-2019, by Daniel Brier (danbrierly@gmail.com)
  *
  *

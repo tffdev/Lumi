@@ -16,21 +16,21 @@ namespace LuaLibrary {
     return 1;
   }
 
-  int luma_system_test(lua_State* L) {
+  int lumi_system_test(lua_State* L) {
     lua_pushnumber(L, 65894);
     return 1;
   }
 
   /**
-   * Luma Library
+   * Lumi Library
    */
 
   /**
-   * @brief Gets the ID of an object given the name of the object. `__luma_system:get_object_id("objTest")`
+   * @brief Gets the ID of an object given the name of the object. `__lumi_system:get_object_id("objTest")`
    * @param L The passed Lua state
    * @return [Integer] The ID of the object.
    */
-  int luma_system_get_object_id(lua_State* L) {
+  int lumi_system_get_object_id(lua_State* L) {
     std::string name(lua_tostring(L, -1));
 
     lua_pushstring(L, "object_database");
@@ -50,11 +50,11 @@ namespace LuaLibrary {
 
 
   /**
-   * @brief Gets the ID of a sprite given the name of the sprite. `__luma_system:get_sprite_id("sprTest")`
+   * @brief Gets the ID of a sprite given the name of the sprite. `__lumi_system:get_sprite_id("sprTest")`
    * @param L The passed Lua state
    * @return [Integer] The ID of the sprite.
    */
-  int luma_system_get_asset_id(lua_State* L) {
+  int lumi_system_get_asset_id(lua_State* L) {
     std::string name(lua_tostring(L, -1));
 
     // check object database
@@ -108,12 +108,12 @@ namespace LuaLibrary {
 
   /**
    * @brief Process a Lua closure using a given table as a
-   * first-class environment. `__luma_system:process_in_environment(function, environment)`
+   * first-class environment. `__lumi_system:process_in_environment(function, environment)`
    *
    * @param L The passed Lua state
    * @return Nil
    */
-  int luma_system_process_in_environment(lua_State* L) {
+  int lumi_system_process_in_environment(lua_State* L) {
     if(lua_isnil(L, -2) == 1) return 0;
     lua_setupvalue(L, -2, 1);
     if(lua_pcall(L, 0, 0, 0) != 0)
@@ -235,17 +235,16 @@ namespace LuaLibrary {
     if(room_manager == nullptr) throw_db_error();
 
     // unload/destroy all current entities (excluding persistent entities)
-    luaL_dostring(L, "__luma_system:clear_all_instances()");
+    luaL_dostring(L, "__lumi_system:clear_all_instances()");
 
-    // unload all assets (?)
+    // unload all unused assets (?)
 
     // set the new room
     room_manager->set_room(id);
 
     // run room creation code
-    printf("creation code: %s\n", room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str());
     if(luaL_dostring(L, room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str()) != LUA_OK) {
-      throw "Room creation code invalid";
+      throw "Invalid room creation code: " + std::string(lua_tostring(L, -1));
     }
     return 0;
   }

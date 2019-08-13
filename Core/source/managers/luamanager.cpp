@@ -24,9 +24,9 @@ void LuaManager::execute(std::string str) {
 }
 
 void LuaManager::load_object_code(ObjectDatabase *database) {
-  execute("__luma_system.containers.object_code = {}");
+  execute("__lumi_system.containers.object_code = {}");
   for(ObjectAsset* object : database->get_all_object_assets()){
-    execute("__luma_system.containers.object_code["+std::to_string(object->get_id()+1)+"] = function()\n" + object->get_code() + "\nend");
+    execute("__lumi_system.containers.object_code["+std::to_string(object->get_id()+1)+"] = function()\n" + object->get_code() + "\nend");
   }
 }
 
@@ -54,7 +54,7 @@ double LuaManager::get_global_double(std::string name) {
  * @brief Run the "update" closure on all instances.
  */
 void LuaManager::run_update_function() {
-  lua_getglobal(L, "__luma_system");
+  lua_getglobal(L, "__lumi_system");
   lua_getfield(L, -1, "process_update");
   lua_pcall(L, 0, 0, 0);
 }
@@ -64,7 +64,7 @@ void LuaManager::run_update_function() {
  */
 void LuaManager::run_draw_function() {
   int top = lua_gettop(L);
-  lua_getglobal(L, "__luma_system");
+  lua_getglobal(L, "__lumi_system");
   lua_getfield(L, -1, "process_draw");
   lua_pcall(L, 0, 0, 0);
   lua_settop(L, top);
@@ -75,7 +75,7 @@ void LuaManager::run_draw_function() {
  * @return The amount of instances as an integer.
  */
 int LuaManager::get_instance_count() {
-  lua_getglobal(L, "__luma_system");
+  lua_getglobal(L, "__lumi_system");
   lua_getfield(L, -1, "containers");
   lua_getfield(L, -1, "instances");
   lua_len(L, -1);
@@ -95,13 +95,13 @@ int LuaManager::register_function(lua_CFunction func, std::string name) {
 }
 
 /**
- * @brief Makes a C function callable from Lua and contains the function within the "__luma_system" table.
+ * @brief Makes a C function callable from Lua and contains the function within the "__lumi_system" table.
  * @param func The function to attach.
- * @param name The name to give the function in Lua-space within the "__luma_system" table.
+ * @param name The name to give the function in Lua-space within the "__lumi_system" table.
  * @return Nil
  */
-int LuaManager::register_luma_system_function(lua_CFunction func, std::string name) {
-  lua_getglobal(L, "__luma_system");
+int LuaManager::register_lumi_system_function(lua_CFunction func, std::string name) {
+  lua_getglobal(L, "__lumi_system");
   lua_pushstring(L, name.c_str());
   lua_pushcfunction(L, func);
   lua_settable(L, -3);
@@ -179,10 +179,10 @@ void LuaManager::load_library(ObjectDatabase* object_database,
   register_function(LuaLibrary::lua_audio_stop, "audio_stop");
   register_function(LuaLibrary::lua_set_room, "set_room");
 
-  // Register __luma_system functions
-  register_luma_system_function(LuaLibrary::luma_system_test, "luma_system_test");
-  register_luma_system_function(LuaLibrary::luma_system_get_asset_id, "get_asset_id");
-  register_luma_system_function(LuaLibrary::luma_system_process_in_environment, "process_in_environment");
+  // Register __lumi_system functions
+  register_lumi_system_function(LuaLibrary::lumi_system_test, "lumi_system_test");
+  register_lumi_system_function(LuaLibrary::lumi_system_get_asset_id, "get_asset_id");
+  register_lumi_system_function(LuaLibrary::lumi_system_process_in_environment, "process_in_environment");
 }
 
 /**
@@ -190,7 +190,7 @@ void LuaManager::load_library(ObjectDatabase* object_database,
  * @return The number of object closures as an int.
  */
 int LuaManager::object_code_length() {
-  lua_getglobal(L, "__luma_system");
+  lua_getglobal(L, "__lumi_system");
   lua_getfield(L, -1, "containers");
   lua_getfield(L, -1, "object_code");
   lua_len(L, -1);

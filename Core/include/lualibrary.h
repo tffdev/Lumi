@@ -7,10 +7,10 @@ namespace LuaLibrary {
 
     int lua_library_test(lua_State* L);
 
-    int luma_system_test(lua_State* L);
-    int luma_system_get_asset_id(lua_State* L);
-    int luma_system_instance_create(lua_State* L);
-    int luma_system_process_in_environment(lua_State*);
+    int lumi_system_test(lua_State* L);
+    int lumi_system_get_asset_id(lua_State* L);
+    int lumi_system_instance_create(lua_State* L);
+    int lumi_system_process_in_environment(lua_State*);
 
     int lua_draw_sprite(lua_State*);
     int lua_set_room(lua_State*);
