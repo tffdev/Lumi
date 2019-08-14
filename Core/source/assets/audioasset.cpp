@@ -5,7 +5,7 @@
  * @brief Given the data in the form of a string of bytes, loads a music asset into this instance.
  * @param music_data The music file's data as a string.
  */
-AudioAsset::AudioAsset(unsigned long long id, std::string name, std::string path) : id(id), name(name), path(path) {
+AudioAsset::AudioAsset(size_t id, std::string name, std::string path) : id(id), name(name), path(path) {
   //load_audio();
 }
 
@@ -45,6 +45,6 @@ std::string AudioAsset::get_name() {
   return name;
 }
 
-unsigned long long AudioAsset::get_id() {
+size_t AudioAsset::get_id() {
   return id;
 }

@@ -22,11 +22,11 @@ AudioDatabase::~AudioDatabase() {
   }
 }
 
-unsigned long long AudioDatabase::get_assets_size() {
+size_t AudioDatabase::get_assets_size() {
   return audio_assets.size();
 }
 
-unsigned long long AudioDatabase::get_audio_id(std::string name) {
+size_t AudioDatabase::get_audio_id(std::string name) {
   try {
     return audio_map.at(name);
   } catch (...) {
@@ -34,7 +34,7 @@ unsigned long long AudioDatabase::get_audio_id(std::string name) {
   }
 }
 
-bool AudioDatabase::audio_id_exists(unsigned long long id) {
+bool AudioDatabase::audio_id_exists(size_t id) {
   if(id < audio_assets.size()) return true;
   return false;
 }
@@ -48,8 +48,8 @@ bool AudioDatabase::audio_exists(std::string name) {
   }
 }
 
-void AudioDatabase::play_audio(unsigned long long id, bool loop) {
-  AudioAsset* sound_to_play = audio_assets.at(static_cast<unsigned long long>(id));
+void AudioDatabase::play_audio(size_t id, bool loop) {
+  AudioAsset* sound_to_play = audio_assets.at(id);
   if(sound_to_play == nullptr) throw "Sound asset is null";
   if(sound_to_play->get_audio() == nullptr) throw "Sound data is null";
 
@@ -59,7 +59,7 @@ void AudioDatabase::play_audio(unsigned long long id, bool loop) {
   channel_currently_playing[channel] = sound_to_play->get_id();
 }
 
-void AudioDatabase::stop_audio(unsigned long long id) {
+void AudioDatabase::stop_audio(size_t id) {
   for (int i = 0; i < MAX_CHANNELS; i++) {
     if(channel_currently_playing[i] == id && Mix_Playing(i)) {
       Mix_HaltChannel(i);

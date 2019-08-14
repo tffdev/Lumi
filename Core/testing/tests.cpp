@@ -213,7 +213,11 @@ TEST_CASE("ObjectDatabase") {
   SUBCASE("Get ID from object names") {
     CHECK_EQ(objdatabase.get_object_id("objTest"), 0);
     CHECK_EQ(objdatabase.get_object_id("objTest2"), 1);
-    CHECK_EQ(objdatabase.get_object_id("objDoesntExist"), -1);
+    bool err = false;
+    try {
+      objdatabase.get_object_id("objDoesntExist");
+    } catch (...) { err = true; }
+    CHECK_EQ(err, true);
   }
 }
 
@@ -263,11 +267,11 @@ TEST_CASE("RoomDatabase") {
   CHECK_EQ(room_db.get_size(), 2);
   CHECK_EQ(room_db.get_room_id("room0"), 0);
   CHECK_EQ(room_db.get_room_id("extraRoom"), 1);
-  CHECK_EQ(room_db.get_asset(0)->get_name().compare("room0"), 0);
-  CHECK_EQ(room_db.get_asset(0)->get_creation_code().compare("instance_create(objTest)"), 0);
-  CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.at(0).width, 64);
-  CHECK_EQ(room_db.get_asset(0)->get_tile_layer(0).tiles.size(), 2);
-  CHECK_EQ(room_db.get_asset(0)->get_tile_layer_size(), 2);
+  CHECK_EQ(room_db.get_room_by_id(0)->get_name().compare("room0"), 0);
+  CHECK_EQ(room_db.get_room_by_id(0)->get_creation_code().compare("instance_create(objTest)"), 0);
+  CHECK_EQ(room_db.get_room_by_id(0)->get_tile_layer(0).tiles.at(0).width, 64);
+  CHECK_EQ(room_db.get_room_by_id(0)->get_tile_layer(0).tiles.size(), 2);
+  CHECK_EQ(room_db.get_room_by_id(0)->get_tile_layer_size(), 2);
 }
 
 /**

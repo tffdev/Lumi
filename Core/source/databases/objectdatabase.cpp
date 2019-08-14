@@ -16,9 +16,9 @@ ObjectDatabase::ObjectDatabase() {
  * @param id The ID of an object.
  * @return A string containing the name of the object. An empty string if the object doesn't exist.
  */
-std::string ObjectDatabase::get_object_name(int id) {
+std::string ObjectDatabase::get_object_name(size_t id) {
   try {
-    return object_assets.at(static_cast<unsigned long long>(id))->get_name();
+    return object_assets.at(id)->get_name();
   } catch (...) {
     return "";
   }
@@ -29,12 +29,9 @@ std::string ObjectDatabase::get_object_name(int id) {
  * @param name The name of an object.
  * @return The integer ID of the object.
  */
-int ObjectDatabase::get_object_id(std::string name) {
-  try {
+size_t ObjectDatabase::get_object_id(std::string name) {
+    if(!object_name_exists(name)) throw "Object " + name + " doesn't exist.";
     return object_name_id_map.at(name);
-  } catch (...) {
-    return -1;
-  }
 }
 
 /**
@@ -42,9 +39,9 @@ int ObjectDatabase::get_object_id(std::string name) {
  * @param id
  * @return The Lua code for an object as a string. Returns an empty string if the object doesn't exist.
  */
-std::string ObjectDatabase::get_object_code(int id) {
+std::string ObjectDatabase::get_object_code(size_t id) {
   try {
-    return object_assets.at(static_cast<unsigned long long>(id))->get_code();
+    return object_assets.at(id)->get_code();
   } catch (...) {
     return "";
   }
@@ -64,9 +61,9 @@ bool ObjectDatabase::object_name_exists(std::string name) {
  * @param id The ID of an object.
  * @return Returns true if an object with the given ID exists. False otherwise.
  */
-bool ObjectDatabase::object_id_exists(int id) {
+bool ObjectDatabase::object_id_exists(size_t id) {
   try {
-    return (object_assets.at(static_cast<unsigned long long>(id))) ? true : false;
+    return (object_assets.at(id)) ? true : false;
   } catch (...) {
     return false;
   }

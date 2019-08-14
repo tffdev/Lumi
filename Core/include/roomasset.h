@@ -11,7 +11,7 @@ struct RoomTile {
   int height;
   int texture_x;
   int texture_y;
-  unsigned int tileset_ref;
+  size_t tileset_ref;
 };
 
 struct RoomTileLayer {
@@ -20,7 +20,7 @@ struct RoomTileLayer {
 };
 
 struct RoomBackground {
-  unsigned int asset_ref;
+  size_t asset_ref;
   int depth;
   double offset_x;
   double offset_y;
@@ -29,16 +29,16 @@ struct RoomBackground {
 class RoomAsset
 {
 public:
-  RoomAsset(unsigned int id,
+  RoomAsset(size_t id,
             std::string name,
             std::string creation_code,
-            unsigned int size_x,
-            unsigned int size_y,
+            size_t size_x,
+            size_t size_y,
             std::vector<RoomTileLayer> tile_layers,
             std::vector<RoomBackground> backgrounds);
 
-  unsigned int get_id();
-  Vector2<unsigned int> get_size();
+  size_t get_id();
+  Vector2<size_t> get_size();
   std::string get_name();
   std::string get_creation_code();
   unsigned long long get_tile_layer_size();
@@ -47,10 +47,10 @@ public:
   RoomTileLayer get_tile_layer(unsigned int layer);
   RoomBackground get_background(unsigned int layer);
 private:
-  unsigned int id;
+  size_t id;
   std::string name;
   std::string creation_code;
-  Vector2<unsigned int> size;
+  Vector2<size_t> size;
   std::vector<RoomTileLayer> room_tile_layers;
   std::vector<RoomBackground> room_backgrounds;
 };

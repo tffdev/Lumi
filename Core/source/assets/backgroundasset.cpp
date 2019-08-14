@@ -1,13 +1,13 @@
 #include "include/backgroundasset.h"
 
-BackgroundAsset::BackgroundAsset(unsigned long long id, std::string name, TextureAsset* texture)
+BackgroundAsset::BackgroundAsset(size_t id, std::string name, TextureAsset* texture)
   : id(id), name(name), texture(texture) {}
 
 BackgroundAsset::~BackgroundAsset() {
   delete texture;
 }
 
-unsigned long long BackgroundAsset::get_id() {
+size_t BackgroundAsset::get_id() {
   return id;
 }
 

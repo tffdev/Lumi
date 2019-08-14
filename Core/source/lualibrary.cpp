@@ -43,7 +43,7 @@ namespace LuaLibrary {
         return 0; // return 0 results == nil
       }
 
-    int id = obj_database->get_object_id(name);
+    size_t id = obj_database->get_object_id(name);
     lua_pushnumber(L, id);
     return 1;
   }
@@ -63,7 +63,7 @@ namespace LuaLibrary {
     ObjectDatabase* obj_database = static_cast<ObjectDatabase*>(lua_touserdata(L, -1));
     if(obj_database == nullptr) throw_db_error();
     if(obj_database->object_name_exists(name)) {
-      int id = obj_database->get_object_id(name);
+      size_t id = obj_database->get_object_id(name);
       lua_pushnumber(L, id);
       return 1;
     }
@@ -75,7 +75,7 @@ namespace LuaLibrary {
     if(spr_database == nullptr) throw_db_error();
 
     if(spr_database->sprite_exists(name)) {
-      int id = spr_database->get_sprite_id(name);
+      size_t id = spr_database->get_sprite_id(name);
       lua_pushnumber(L, id);
       return 1;
     }
@@ -87,7 +87,7 @@ namespace LuaLibrary {
     if(audio_database == nullptr) throw_db_error();
     if(audio_database->audio_exists(name)) {
       // FIX THIS, all IDs should be unsigned long longs
-      unsigned long long id = audio_database->get_audio_id(name);
+      size_t id = audio_database->get_audio_id(name);
       lua_pushnumber(L, id);
       return 1;
     }
@@ -98,7 +98,7 @@ namespace LuaLibrary {
     RoomManager* room_manager = static_cast<RoomManager*>(lua_touserdata(L, -1));
     if(room_manager == nullptr) throw_db_error();
     if(room_manager->get_room_database()->room_exists(name)) {
-      unsigned long long id = room_manager->get_room_database()->get_room_id(name);
+      size_t id = room_manager->get_room_database()->get_room_id(name);
       lua_pushnumber(L, id);
       return 1;
     }
@@ -132,7 +132,7 @@ namespace LuaLibrary {
    * @return Nil
    */
   int lua_draw_sprite(lua_State* L) {
-    unsigned long long sprite_id = static_cast<unsigned long long>(lua_tonumber(L, -4));
+    size_t sprite_id = static_cast<size_t>(lua_tonumber(L, -4));
     int subimage = static_cast<int>(lua_tonumber(L, -3));
     double x = lua_tonumber(L, -2);
     double y = lua_tonumber(L, -1);
@@ -196,7 +196,7 @@ namespace LuaLibrary {
   }
 
   int lua_audio_play(lua_State* L) {
-    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -2));
+    size_t id = static_cast<size_t>(lua_tonumber(L, -2));
     bool loop = lua_toboolean(L, -1);
 
     lua_pushstring(L, "audio_database");
@@ -209,7 +209,7 @@ namespace LuaLibrary {
   }
 
   int lua_audio_stop(lua_State* L) {
-    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -1));
+    size_t id = static_cast<size_t>(lua_tonumber(L, -1));
 
     lua_pushstring(L, "audio_databasee");
     lua_gettable(L, LUA_REGISTRYINDEX);
@@ -221,7 +221,7 @@ namespace LuaLibrary {
   }
 
   int lua_set_room(lua_State* L) {
-    unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -1));
+    size_t id = static_cast<size_t>(lua_tonumber(L, -1));
 
     lua_pushstring(L, "room_manager");
     lua_gettable(L, LUA_REGISTRYINDEX);
@@ -237,13 +237,13 @@ namespace LuaLibrary {
     room_manager->set_room(id);
     lua_pushnumber(L, id);
     lua_setglobal(L, "current_room");
-    lua_pushnumber(L, room_manager->get_room_database()->get_asset(id)->get_size().x);
+    lua_pushnumber(L, room_manager->get_room_database()->get_room_by_id(id)->get_size().x);
     lua_setglobal(L, "room_width");
-    lua_pushnumber(L, room_manager->get_room_database()->get_asset(id)->get_size().y);
+    lua_pushnumber(L, room_manager->get_room_database()->get_room_by_id(id)->get_size().y);
     lua_setglobal(L, "room_height");
 
     // run room creation code
-    if(luaL_dostring(L, room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str()) != LUA_OK) {
+    if(luaL_dostring(L, room_manager->get_room_database()->get_room_by_id(id)->get_creation_code().c_str()) != LUA_OK) {
       throw "Invalid room creation code: " + std::string(lua_tostring(L, -1));
     }
     return 0;

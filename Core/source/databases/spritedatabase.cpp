@@ -8,7 +8,7 @@ SpriteDatabase::SpriteDatabase() {
     sprites = FileSystem::load_sprites();
     int i = 0;
     for(SpriteAsset* asset : sprites) {
-      id_map.insert(std::pair<std::string, int>(asset->get_name(), i));
+      id_map.insert(std::pair<std::string, size_t>(asset->get_name(), i));
       i++;
     }
 }
@@ -24,7 +24,7 @@ SpriteDatabase::~SpriteDatabase() {
  * @param id The ID of the sprite.
  * @return A pointer to a SpriteAsset.
  */
-SpriteAsset* SpriteDatabase::get_sprite_by_id(unsigned long long id) {
+SpriteAsset* SpriteDatabase::get_sprite_by_id(size_t id) {
   try {
     return sprites.at(id);
   } catch (...) {
@@ -38,7 +38,7 @@ SpriteAsset* SpriteDatabase::get_sprite_by_id(unsigned long long id) {
  * @return True if a sprite with the given name exists, false otherwise.
  */
 bool SpriteDatabase::sprite_exists(std::string name) {
-  std::map<std::string,int>::iterator it = id_map.find(name);
+  std::map<std::string,size_t>::iterator it = id_map.find(name);
   if(it != id_map.end()) {
     return true;
   }
@@ -50,7 +50,7 @@ bool SpriteDatabase::sprite_exists(std::string name) {
  * @param name The name of a sprite.
  * @return The ID of a sprite.
  */
-int SpriteDatabase::get_sprite_id(std::string name) {
+size_t SpriteDatabase::get_sprite_id(std::string name) {
   if(!sprite_exists(name)) throw "Sprite " + name + " does not exist.";
   return id_map.at(name);
 }

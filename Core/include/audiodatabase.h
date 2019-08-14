@@ -9,15 +9,15 @@ class AudioDatabase {
 public:
   AudioDatabase();
   ~AudioDatabase();
-  bool audio_id_exists(unsigned long long id);
+  bool audio_id_exists(size_t id);
   bool audio_exists(std::string name);
-  unsigned long long get_assets_size();
-  unsigned long long get_audio_id(std::string name);
-  void play_audio(unsigned long long id, bool loop = false);
-  void stop_audio(unsigned long long id);
+  size_t get_assets_size();
+  size_t get_audio_id(std::string name);
+  void play_audio(size_t id, bool loop = false);
+  void stop_audio(size_t id);
 private:
-  unsigned long long channel_currently_playing[MAX_CHANNELS];
-  std::map<std::string, unsigned long long> audio_map;
+  size_t channel_currently_playing[MAX_CHANNELS];
+  std::map<std::string, size_t> audio_map;
   std::vector<AudioAsset*> audio_assets;
-  unsigned int channel_step;
+  size_t channel_step;
 };

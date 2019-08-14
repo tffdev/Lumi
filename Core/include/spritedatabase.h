@@ -8,10 +8,10 @@ class SpriteDatabase
 public:
     SpriteDatabase();
     ~SpriteDatabase();
-    SpriteAsset* get_sprite_by_id(unsigned long long id);
-    int get_sprite_id(std::string name);
+    SpriteAsset* get_sprite_by_id(size_t id);
+    size_t get_sprite_id(std::string name);
     bool sprite_exists(std::string name);
 private:
     std::vector<SpriteAsset*> sprites;
-    std::map<std::string, int> id_map;
+    std::map<std::string, size_t> id_map;
 };

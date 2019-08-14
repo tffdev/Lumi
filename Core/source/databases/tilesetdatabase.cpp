@@ -4,15 +4,15 @@
 TilesetDatabase::TilesetDatabase() {
   assets = FileSystem::load_tilesets();
   for(TilesetAsset* asset : assets) {
-    id_map.insert(std::pair<std::string, unsigned int>(asset->get_name(), asset->get_id()));
+    id_map.insert(std::pair<std::string, size_t>(asset->get_name(), asset->get_id()));
   }
 }
 
-unsigned long long TilesetDatabase::get_size() {
+size_t TilesetDatabase::get_size() {
   return assets.size();
 }
 
-TilesetAsset* TilesetDatabase::get_asset(unsigned int id) {
+TilesetAsset* TilesetDatabase::get_asset(size_t id) {
   return assets.at(id);
 }
 
@@ -20,8 +20,8 @@ TilesetAsset* TilesetDatabase::get_asset(std::string name) {
   return assets.at(get_id_from_name(name));
 }
 
-unsigned int TilesetDatabase::get_id_from_name(std::string name) {
-  std::map<std::string, unsigned int>::iterator it = id_map.find(name);
+size_t TilesetDatabase::get_id_from_name(std::string name) {
+  std::map<std::string, size_t>::iterator it = id_map.find(name);
   if(it != id_map.end()) {
      return id_map.at(name);
   }

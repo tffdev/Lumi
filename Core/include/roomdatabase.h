@@ -9,11 +9,11 @@ class RoomDatabase
 public:
   RoomDatabase(BackgroundDatabase* background_db, TilesetDatabase* tileset_db);
   ~RoomDatabase();
-  RoomAsset* get_asset(unsigned long long id);
-  unsigned long long get_room_id(std::string name);
+  RoomAsset* get_room_by_id(size_t id);
+  size_t get_room_id(std::string name);
   bool room_exists(std::string name);
-  unsigned long long get_size();
+  size_t get_size();
 private:
   std::vector<RoomAsset*> assets;
-  std::map<std::string, unsigned long long> id_map;
+  std::map<std::string, size_t> id_map;
 };
