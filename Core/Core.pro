@@ -21,6 +21,7 @@ SOURCES += \
     source/databases/backgrounddatabase.cpp \
     source/databases/roomdatabase.cpp \
     source/databases/tilesetdatabase.cpp \
+    source/engine.cpp \
         source/lualibrary.cpp \
         source/main.cpp \
         source/filesystem.cpp \
@@ -40,6 +41,7 @@ HEADERS += \
     include/backgroundasset.h \
     include/backgrounddatabase.h \
     include/configmanager.h \
+    include/engine.h \
     include/filesystem.h \
     include/hitboxasset.h \
     include/inputmanager.h \
