@@ -43,16 +43,16 @@ void LumiEngine::run() {
       if(lmanager.run_draw_function() != LUA_OK)
         window_manager.bluescreen(lmanager.get_error(&obj_database));
 
-      // vsync
-      // TODO: replace "60" with FPS.
-      Uint32 delay = (1000/60) - (SDL_GetTicks() - ticks);
-      if(delay > (1000/60)) delay = (1000/60);
-      SDL_Delay(delay);
 
       room_manager.draw_tiles(&window_manager);
 
       window_manager.display();
 
       input_manager.clear_pressed_keys();
+
+      // vsync
+      // TODO: replace "60" with FPS.
+      Uint32 delay = std::max<Uint32>((1000/60) - std::min<Uint32>((SDL_GetTicks() - ticks), 1000/60), 0);
+      SDL_Delay(delay);
   }
 }
