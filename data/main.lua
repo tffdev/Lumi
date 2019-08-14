@@ -166,5 +166,10 @@ end
 camera_x = 0
 camera_y = 0
 
+current_room = 0
+room_width = 0
+room_height = 0
+
+
 -- test data
 ___lua_main_check = 983652

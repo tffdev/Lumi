@@ -6,11 +6,15 @@ RoomManager::RoomManager() : room_database(&background_database, &tileset_databa
   current_room = room_database.get_asset(default_room_id);
 }
 
-void RoomManager::set_room(unsigned long long id) {
+size_t RoomManager::get_default_room_id() {
+  return default_room_id;
+}
+
+void RoomManager::set_room(size_t id) {
   current_room = room_database.get_asset(id);
 }
 
-unsigned int RoomManager::get_current_room_id() {
+size_t RoomManager::get_current_room_id() {
   return current_room->get_id();
 }
 

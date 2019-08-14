@@ -235,6 +235,12 @@ namespace LuaLibrary {
 
     // set the new room
     room_manager->set_room(id);
+    lua_pushnumber(L, id);
+    lua_setglobal(L, "current_room");
+    lua_pushnumber(L, room_manager->get_room_database()->get_asset(id)->get_size().x);
+    lua_setglobal(L, "room_width");
+    lua_pushnumber(L, room_manager->get_room_database()->get_asset(id)->get_size().y);
+    lua_setglobal(L, "room_height");
 
     // run room creation code
     if(luaL_dostring(L, room_manager->get_room_database()->get_asset(id)->get_creation_code().c_str()) != LUA_OK) {
