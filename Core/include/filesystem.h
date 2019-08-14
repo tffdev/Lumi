@@ -24,6 +24,8 @@
 #define TILESET_PATH "tilesets.xml"
 #define ROOMS_PATH "rooms.xml"
 
+#define DEBUG_BITMAP_FONT_LOCATION "lumi/debug_bitmap_font.png"
+
 /**
  * FileSystem currently reads directly from the OS's regular file system.
  * In future, this will be an intemediary layer that accesses a compressed

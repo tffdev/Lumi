@@ -36,29 +36,76 @@
 #include <objectdatabase.h>
 #include <lualibrary.h>
 #include <windowmanager.h>
+#undef main
+
+void run_game();
 
 int main(int, char*[]) {
+  try {
+    run_game();
+  } catch (const std::exception& e) {
+    printf("Error in run_game: %s\n", e.what());
+  }
+}
+
+void run_game() {
+  ConfigManager  conf = FileSystem::load_config();
+  WindowManager  window_manager(&conf);
+  InputManager   input_manager;
   ObjectDatabase obj_database;
-  LuaManager lmanager;
-  ConfigManager conf = FileSystem::load_config();
-  WindowManager window_manager(&conf, true);
-  lmanager.load_library(&obj_database, &window_manager);
+  SpriteDatabase spr_database;
+  AudioDatabase  audio_database;
+  LuaManager     lmanager;
+  RoomManager    room_manager;
 
-  lmanager.execute("instance_create(objTest)");
-  lmanager.execute("instance_create(objTest3)");
-  lmanager.execute("instance_create(objTest)");
-  lmanager.execute("instance_create(objTest2)");
+  if(lmanager.load_object_code(&obj_database) != LUA_OK)
+      window_manager.bluescreen(lmanager.get_error(&obj_database));
 
+  lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database, &room_manager);
+
+  // run initial room creation code
+  if(lmanager.execute(room_manager.get_current_room()->get_creation_code()) != LUA_OK)
+    window_manager.bluescreen(lmanager.get_error(&obj_database));
+
+  SDL_Event e;
+  int until_bluescreen = 100;
   while(window_manager.is_open()) {
-      sf::Event e;
-      while(window_manager.poll_events(e)){
-          if(e.type == sf::Event::Closed) window_manager.close();
-        }
-      lmanager.run_update_function();
+      Uint32 ticks = SDL_GetTicks();
+      while (SDL_PollEvent(&e)) {
+        if (e.type == SDL_QUIT) window_manager.close();
+        input_manager.process_events(&e);
+      }
 
+      // process stuff
+      if(lmanager.run_update_function() != LUA_OK)
+        window_manager.bluescreen(lmanager.get_error(&obj_database));
+
+      // until_bluescreen -= 1;
+      std::string err("This is a fake bluescreen error. This is a fake bluescreen error. This is a fake bluescreen error. This is a fake bluescreen error.");
+      if(until_bluescreen <= 0) window_manager.bluescreen(err);
+
+      window_manager.set_camera_position(
+            lmanager.get_global_double("camera_x"),
+            lmanager.get_global_double("camera_y"));
+
+      //draw
       window_manager.clear();
-      lmanager.run_draw_function();
+      room_manager.draw_backgrounds(&window_manager);
+
+      if(lmanager.run_draw_function() != LUA_OK)
+        window_manager.bluescreen(lmanager.get_error(&obj_database));
+
+      // vsync
+      // TODO: replace "60" with FPS.
+      Uint32 delay = (1000/60) - (SDL_GetTicks() - ticks);
+      if(delay > (1000/60)) delay = (1000/60);
+      SDL_Delay(delay);
+
+      room_manager.draw_tiles(&window_manager);
+
       window_manager.display();
-    }
+
+      input_manager.clear_pressed_keys();
+  }
 }
 

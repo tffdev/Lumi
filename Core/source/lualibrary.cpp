@@ -117,7 +117,7 @@ namespace LuaLibrary {
     if(lua_isnil(L, -2) == 1) return 0;
     lua_setupvalue(L, -2, 1);
     if(lua_pcall(L, 0, 0, 0) != 0)
-      throw "Error processing in environment: " + std::string(lua_tostring(L, -1));
+      luaL_error(L, std::string("Error processing in environment: " + std::string(lua_tostring(L, -1))).c_str());
     return 0;
   }
 
@@ -196,9 +196,6 @@ namespace LuaLibrary {
   }
 
   int lua_audio_play(lua_State* L) {
-    if (lua_gettop(L) != 2) {
-      return luaL_error(L, "audio_play expcts 2 arguments. (int, bool)");
-    }
     unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -2));
     bool loop = lua_toboolean(L, -1);
 
@@ -212,12 +209,9 @@ namespace LuaLibrary {
   }
 
   int lua_audio_stop(lua_State* L) {
-    if (lua_gettop(L) != 1) {
-      return luaL_error(L, "audio_play expcts 1 arguments. (int)");
-    }
     unsigned long long id = static_cast<unsigned long long>(lua_tonumber(L, -1));
 
-    lua_pushstring(L, "audio_database");
+    lua_pushstring(L, "audio_databasee");
     lua_gettable(L, LUA_REGISTRYINDEX);
     AudioDatabase* audio_database = static_cast<AudioDatabase*>(lua_touserdata(L, -1));
 

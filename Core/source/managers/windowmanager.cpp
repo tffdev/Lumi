@@ -210,3 +210,49 @@ void WindowManager::set_camera_position(double x, double y) {
   camera_position.x = x;
   camera_position.y = y;
 }
+
+void WindowManager::bluescreen(std::string error) {
+  TextureAsset debug_bitmap_texture(std::string(DATA_PATH) + std::string(DEBUG_BITMAP_FONT_LOCATION));
+  set_clear_color(Color(0x0088c3));
+
+  // "crash" game until it closes
+  SDL_Event e;
+  set_camera_position(0, 0);
+
+  /*
+   * This is a horrible piece of code. Fix this please!
+   */
+  while(is_open()) {
+    // wait to be closed
+    while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) close(); }
+
+    clear();
+
+    // draw the error text to the screen
+    int x = 0, y = 0;
+    for(size_t i = 0; i < error.size(); ++i) {
+        char ch = error[i];
+        int char_position = static_cast<int>(DEBUG_ALPHABET.find(ch)) + 1;
+
+        if(char_position == -1) continue;
+        if(ch == '\n') { ++y; x = 0; continue; }
+
+        //check if proceding word can fit onto screenspace without overflow
+        size_t j = i;
+        while(j < error.size() && error[j] != -1 && error[j] != ' ') ++j;
+        if((x + static_cast<int>(j - i)) * 6 <= static_cast<int>(get_size().x - 20)) {
+          // Render text onto screen
+          draw(&debug_bitmap_texture,
+               SDL_Rect{ (char_position % 16) * 12, (char_position/16)*13, 12, 13 },
+               SDL_Rect{ x*6 + 5, y*12 + 10, 12, 13 });
+          x++;
+          continue;
+        }
+        // Can't fit. Make new line
+        ++y; x = 0; i--;
+        continue;
+    }
+    display();
+    SDL_Delay(1);
+  }
+}

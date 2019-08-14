@@ -7,6 +7,10 @@
 #include <GL/gl.h>
 #include <GL/wglext.h>
 
+
+
+static std::string DEBUG_ALPHABET = "!+#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
 class WindowManager
 {
 public:
@@ -30,6 +34,10 @@ public:
     bool is_fullscreen();
     void set_fullscreen(bool);
     void toggle_fullscreen();
+    void bluescreen(std::string error);
+
+    void set_clear_color(Color new_color);
+
 private:
     ConfigManager config;
     bool open = true;
@@ -40,4 +48,6 @@ private:
 
     Vector2<double> camera_position;
     double scale;
+
+    bool bluescreened = false;
 };

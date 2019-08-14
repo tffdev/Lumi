@@ -186,9 +186,7 @@ TEST_CASE("LuaManager") {
     CHECK_EQ(lmanager.get_global_int("sprCat"), 1);
   }
   SUBCASE("Invalid code throw check"){
-    bool error = false;
-    try { lmanager.execute("lk hsd dglg"); } catch (...) { error = true; }
-    CHECK_EQ(error, true);
+    CHECK_EQ(lmanager.execute("lk hsd dglg") != LUA_OK, true);
   }
   SUBCASE("Lua Function Registration") {
     lmanager.register_function(func_reg_check, "func_reg_check");
@@ -412,12 +410,17 @@ TEST_CASE("Visual test") {
   LuaManager     lmanager;
   RoomManager    room_manager;
 
-  lmanager.load_object_code(&obj_database);
+  if(lmanager.load_object_code(&obj_database) != LUA_OK)
+      window_manager.bluescreen(lmanager.get_error(&obj_database));
+
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database, &room_manager);
+
   // run initial room creation code
-  lmanager.execute(room_manager.get_current_room()->get_creation_code());
+  if(lmanager.execute(room_manager.get_current_room()->get_creation_code()) != LUA_OK)
+    window_manager.bluescreen(lmanager.get_error(&obj_database));
 
   SDL_Event e;
+  int until_bluescreen = 100;
   while(window_manager.is_open()) {
       Uint32 ticks = SDL_GetTicks();
       while (SDL_PollEvent(&e)) {
@@ -426,7 +429,13 @@ TEST_CASE("Visual test") {
       }
 
       // process stuff
-      lmanager.run_update_function();
+      if(lmanager.run_update_function() != LUA_OK)
+        window_manager.bluescreen(lmanager.get_error(&obj_database));
+
+      // until_bluescreen -= 1;
+      std::string err("This is a fake bluescreen error. This is a fake bluescreen error. This is a fake bluescreen error. This is a fake bluescreen error.");
+      if(until_bluescreen <= 0) window_manager.bluescreen(err);
+
       window_manager.set_camera_position(
             lmanager.get_global_double("camera_x"),
             lmanager.get_global_double("camera_y"));
@@ -434,15 +443,20 @@ TEST_CASE("Visual test") {
       //draw
       window_manager.clear();
       room_manager.draw_backgrounds(&window_manager);
-      lmanager.run_draw_function();
+
+      if(lmanager.run_draw_function() != LUA_OK)
+        window_manager.bluescreen(lmanager.get_error(&obj_database));
 
       // vsync
       // TODO: replace "60" with FPS.
       Uint32 delay = (1000/60) - (SDL_GetTicks() - ticks);
       if(delay > (1000/60)) delay = (1000/60);
       SDL_Delay(delay);
+
       room_manager.draw_tiles(&window_manager);
+
       window_manager.display();
+
       input_manager.clear_pressed_keys();
   }
 }

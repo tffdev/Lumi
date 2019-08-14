@@ -4,6 +4,7 @@
 -- System functionality is contained in __lumi_system to make sure users don't accidentally call
 -- these functions resulting in incorrect game behaviour etc.
 __lumi_system = {}
+__lumi_system.c_library = {}
 __lumi_system.containers = {}
 __lumi_system.containers.instances = {}
 __lumi_system.containers.instances_buffer = {}
@@ -91,7 +92,10 @@ end
 function __lumi_system:process_draw()
     -- draw loop!
     for j, v in ipairs(__lumi_system.containers.instances) do
-        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].draw, __lumi_system.containers.instances[j])
+        -- __lumi_system:process_in_environment(__lumi_system.containers.instances[j].draw, __lumi_system.containers.instances[j])
+        _ENV = __lumi_system.containers.instances[j]
+        __lumi_system.containers.instances[j].draw()
+        _ENV = _G
     end
 end
 
@@ -99,11 +103,55 @@ function __lumi_system:process_update()
     __lumi_system:push_instances()
     -- update loop!
     for j, v in ipairs(__lumi_system.containers.instances) do
-        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].update, __lumi_system.containers.instances[j])
+        -- __lumi_system:process_in_environment(__lumi_system.containers.instances[j].update, __lumi_system.containers.instances[j])
+        _ENV = __lumi_system.containers.instances[j]
+        __lumi_system.containers.instances[j].update()
+        _ENV = _G
     end
 end
 
--- PUBLIC standard library
+
+-- C utility library wrappers
+-- ty checking is included here because it's easier to handle lua-side!
+function draw_sprite(...)
+  return __lumi_system.c_library:draw_sprite(...)
+end
+
+function key_pressed(key)
+  if(type(key) ~= "string") then error(string.format("key_pressed(key) expects `key` to be a string. %s [%s] given.", type(key), key), 2) end
+  return __lumi_system.c_library:key_pressed(key)
+end
+
+function key_down(key)
+  if(type(key) ~= "string") then error(string.format("key_down(key) expects `key` to be a string. %s [%s] given.", type(key), key), 2) end
+  return __lumi_system.c_library:key_down(key)
+end
+
+function key_released(key)
+  if(type(key) ~= "string") then error(string.format("key_released(key) expects `key` to be a string. %s [%s] given.", type(key), key), 2) end
+  return __lumi_system.c_library:key_released(key)
+end
+
+function audio_play(id, loop)
+  loop = loop or false
+  if(type(id) ~= "number") then error(string.format("audio_play(id, loop) expects `id` to be a number. %s [%s] given.", type(id), id), 2) end
+  if(type(loop) ~= "boolean") then error(string.format("audio_play(id, loop) expects `id` to be a boolean. %s [%s] given.", type(loop), loop), 2) end
+  return __lumi_system.c_library:audio_play(id, loop)
+end
+
+function audio_stop(id)
+  if(type(id) ~= "number") then error(string.format("audio_stop(id) expects `id` to be a number. %s [%s] given.", type(id), id), 2) end
+  return __lumi_system.c_library:audio_stop(id)
+end
+
+function set_room(id)
+  if(type(id) ~= "number") then error(string.format("set_room(id) expects `id` to be a number. %s [%s] given.", type(id), id), 2) end
+  return __lumi_system.c_library:set_room(id)
+end
+
+
+-- Lua-side utility library
+
 function instance_create(id, x, y)
     local x = x or 0
     local y = y or 0
@@ -115,8 +163,8 @@ function printf(str, ...)
 end
 
 -- globals
-camera_x = 10
-camera_y = 10
+camera_x = 0
+camera_y = 0
 
 -- test data
 ___lua_main_check = 983652

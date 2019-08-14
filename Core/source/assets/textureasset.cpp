@@ -6,6 +6,7 @@
  * @param path The virtual filesystem path of the texture image.
  */
 TextureAsset::TextureAsset(std::string path): path(path) {
+  if(!FileSystem::file_exists(path)) throw "[TextureAsset] Image '" + path + "' doesn't exist.";
   std::string str = FileSystem::read_file(path, true);
 
   SDL_RWops* rw = SDL_RWFromMem(&str[0], static_cast<int>(str.size()*sizeof(char)));
