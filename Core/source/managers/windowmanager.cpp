@@ -211,7 +211,19 @@ void WindowManager::set_camera_position(double x, double y) {
   camera_position.y = y;
 }
 
-void WindowManager::bluescreen(std::string error) {
+void WindowManager::bluescreen(std::string title, std::string error) {
+
+  SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_ERROR, title.c_str(), error.c_str(), window);
+  close();
+
+
+  /*
+   * This is commented out because I didn't take into consideration ultra low-resolution games
+   * (such as the ones made for Lorez jam, e.g. 64x64px) making errors unreadable.
+   * I'll solve this later but for now, error message boxes work well.
+   */
+
+  /*
   TextureAsset debug_bitmap_texture(std::string(DATA_PATH) + std::string(DEBUG_BITMAP_FONT_LOCATION));
   set_clear_color(Color(0x0088c3));
 
@@ -219,9 +231,7 @@ void WindowManager::bluescreen(std::string error) {
   SDL_Event e;
   set_camera_position(0, 0);
 
-  /*
-   * This is a horrible piece of code. Fix this please!
-   */
+  // This is a horrible piece of code. Fix this please!
   while(is_open()) {
     // wait to be closed
     while (SDL_PollEvent(&e)) { if (e.type == SDL_QUIT) close(); }
@@ -255,4 +265,5 @@ void WindowManager::bluescreen(std::string error) {
     display();
     SDL_Delay(1);
   }
+  */
 }

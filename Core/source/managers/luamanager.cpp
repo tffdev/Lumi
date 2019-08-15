@@ -217,6 +217,7 @@ std::string LuaManager::get_error(ObjectDatabase* obj_database) {
   else
     last_error = "Unknown error.";
 
+  // IF THE ERROR IS AN OBJECT CODE ERROR
   if(last_error.substr(0, 46).compare("[string \"__lumi_system.containers.object_code[") == 0) {
     last_error.replace(0, 46, "");
     size_t obj_number_id_end = last_error.find_first_of(']');
@@ -226,11 +227,27 @@ std::string LuaManager::get_error(ObjectDatabase* obj_database) {
     last_error.replace(0, last_error.find_first_of(':') + 2, "");
 
     std::string error_string = last_error;
-
     std::stringstream err_stream;
     err_stream << "Error in object `" << object_name << "` line " << std::to_string(line_num-1) << ":\n" << error_string;
     last_error = err_stream.str();
   }
+
+  // IF THE ERROR IS A ROOM CREATION CODE ERROR
+  if(last_error.substr(0, 18).compare("[string \"-- ROOM [") == 0) {
+    last_error.replace(0, 18, "");
+    size_t obj_number_id_end = last_error.find_first_of(']');
+    std::string room_name = last_error.substr(0, obj_number_id_end).c_str();
+    last_error.replace(0, last_error.find_first_of(':') + 1, "");
+    int line_num = std::atoi(last_error.substr(0, last_error.find_first_of(':')).c_str());
+    last_error.replace(0, last_error.find_first_of(':') + 2, "");
+
+    std::string error_string = last_error;
+    std::stringstream err_stream;
+    err_stream << "Error in room `" << room_name << "` creation code line " << std::to_string(line_num-1) << ":\n" << error_string;
+    last_error = err_stream.str();
+  }
+
+
   printf("%s\n", last_error.c_str());
   return last_error;
 }

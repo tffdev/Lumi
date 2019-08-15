@@ -34,7 +34,7 @@ public:
     bool is_fullscreen();
     void set_fullscreen(bool);
     void toggle_fullscreen();
-    void bluescreen(std::string error);
+    void bluescreen(std::string title, std::string error);
 
     void set_clear_color(Color new_color);
 

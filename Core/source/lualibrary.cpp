@@ -243,8 +243,9 @@ namespace LuaLibrary {
     lua_setglobal(L, "room_height");
 
     // run room creation code
-    if(luaL_dostring(L, room_manager->get_room_database()->get_room_by_id(id)->get_creation_code().c_str()) != LUA_OK) {
-      throw "Invalid room creation code: " + std::string(lua_tostring(L, -1));
+    RoomAsset* room = room_manager->get_room_database()->get_room_by_id(id);
+    if(luaL_dostring(L, std::string("-- ROOM ["+room->get_name()+"] CREATION CODE\n" + room->get_creation_code()).c_str()) != LUA_OK) {
+      luaL_error(L, std::string(std::string(lua_tostring(L, -1))).c_str());
     }
     return 0;
   }

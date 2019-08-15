@@ -5,6 +5,10 @@
   <defaultroom>room0</defaultroom>
   <room name="room0" width="320" height="240">
     <creationcode>instance_create(objTest)</creationcode>
+    <instances>
+      <instance name="objTest" x="0" y="0" />
+      <instance name="objTest" x="130" y="100" />
+    </instances>
     <tile_layers>
       <layer name="layer1" depth="0">
         <tile x="0" y="32" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>
@@ -19,12 +23,11 @@
       <background depth="100" offset_x="0" offset_y="0" image="backgroundTest"/>
     </backgrounds>
   </room>
-
   <room name="extraRoom" width="640" height="240">
-<creationcode>
-print("Hello from extraRoom")
-instance_create(objTest, 100, 100)
-</creationcode>
+    <creationcode>
+    print("Hello from extraRoom")
+    instance_create(objTest, 100, 100)
+    </creationcode>
     <tile_layers>
       <layer name="layer1" depth="0">
         <tile x="10" y="42" width="64" height="32" texture_x="0" texture_y="0" tileset="tilesetForest"/>
