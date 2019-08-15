@@ -117,19 +117,9 @@ TEST_CASE("RoomAsset") {
 /**
  * MANAGERS
  */
-TEST_CASE("ConfigManager") {
-  ConfigManager conf_manager("Hello", 320, 240, 0x32d61c);
-  CHECK_EQ(conf_manager.get_window_size().x, 320);
-  CHECK_EQ(conf_manager.get_window_size().y, 240);
-  CHECK_EQ(conf_manager.get_window_title().compare("Hello"), 0);
-  CHECK_EQ(conf_manager.get_window_draw_color().r, 50);
-  CHECK_EQ(conf_manager.get_window_draw_color().g, 214);
-  CHECK_EQ(conf_manager.get_window_draw_color().b, 28);
-}
 
 TEST_CASE("WindowManager") {
-  ConfigManager config("hi", 320, 240, 0xff0000, 2.0);
-  WindowManager window_manager(&config);
+  WindowManager window_manager;
   CHECK_EQ(window_manager.is_open(), true);
   CHECK_EQ(window_manager.get_size().x, 320);
   CHECK_EQ(window_manager.get_size().y, 240);
@@ -149,7 +139,7 @@ int func_reg_check(lua_State *L) {
 }
 
 TEST_CASE("LuaManager") {
-  WindowManager window_manager(new ConfigManager("hi", 320, 240, 0xff0000ff));
+  WindowManager window_manager;
   InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
@@ -301,13 +291,13 @@ TEST_CASE("FileSystem") {
   }
 
   SUBCASE("Load window configuration file into window config object.") {
-    ConfigManager conf_manager = FileSystem::load_config();
-    CHECK_EQ(conf_manager.get_window_size().x, 320);
-    CHECK_EQ(conf_manager.get_window_size().y, 240);
-    CHECK_EQ(conf_manager.get_window_title().compare("Hello World!"), 0);
-    CHECK_EQ(conf_manager.get_window_draw_color().r, 255);
-    CHECK_EQ(conf_manager.get_window_draw_color().g, 0);
-    CHECK_EQ(conf_manager.get_window_draw_color().b, 0);
+    WindowConfiguration config = FileSystem::load_config();
+    CHECK_EQ(config.size.x, 320);
+    CHECK_EQ(config.size.y, 240);
+    CHECK_EQ(config.windowtitle.compare("Hello World!"), 0);
+    CHECK_EQ(config.clear_color.r, 255);
+    CHECK_EQ(config.clear_color.g, 0);
+    CHECK_EQ(config.clear_color.b, 0);
   }
 
   SUBCASE("Load sprite database") {
@@ -346,8 +336,7 @@ TEST_CASE("FileSystem") {
 
 
 TEST_CASE("LuaLibrary") {
-  ConfigManager conf = FileSystem::load_config();
-  WindowManager window_manager(&conf);
+  WindowManager window_manager;
   InputManager input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;

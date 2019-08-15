@@ -2,21 +2,38 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 #include <SDL2/SDL_opengl.h>
-#include <configmanager.h>
 #include <spriteasset.h>
 #include <GL/gl.h>
 #include <GL/wglext.h>
 
-
-
 static std::string DEBUG_ALPHABET = "!+#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+/**
+ * @brief The Color class creates RGBA values given a unsigned int referring to a 32-bit color.
+ */
+class Color {
+public:
+  Color(unsigned int color_hex = 0) {
+    r = (color_hex >> 16) % 0x100;
+    g = (color_hex >> 8) % 0x100;
+    b = (color_hex >> 0) % 0x100;
+  }
+  int r,g,b;
+};
+
+struct WindowConfiguration {
+  std::string windowtitle;
+  Vector2<unsigned int> size;
+  double scale;
+  Color clear_color;
+  Uint32 fps;
+};
 
 class WindowManager
 {
 public:
-    WindowManager(ConfigManager* config_manager);
+    WindowManager();
     ~WindowManager();
-    void create_window_using_config();
 
     void clear();
     void draw(SpriteAsset* sprite, double subimage, double x, double y);
@@ -39,7 +56,6 @@ public:
     void set_clear_color(Color new_color);
 
 private:
-    ConfigManager config;
     bool open = true;
     SDL_Window* window;
     SDL_GLContext context;
@@ -48,6 +64,8 @@ private:
 
     Vector2<double> camera_position;
     double scale;
+
+    bool fullscreen = false;
 
     bool bluescreened = false;
 };

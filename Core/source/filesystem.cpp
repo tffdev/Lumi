@@ -108,18 +108,18 @@ unsigned int FileSystem::hex_string_to_uint(std::string str) {
  * @brief Create a ConfigManager object given the values within the default config.xml file.
  * @return An instance of ConfigManager.
  */
-ConfigManager FileSystem::load_config() {
+WindowConfiguration FileSystem::load_config() {
   pugi::xml_document document;
   document.load_string(FileSystem::read_file(CONFIG_PATH).c_str());
 
-  ConfigManager config_asset(
-    document.child("window").child("windowtitle").text().as_string(),
-    document.child("window").child("windowsize").child("width").text().as_uint(),
-    document.child("window").child("windowsize").child("height").text().as_uint(),
-    hex_string_to_uint(std::string(document.child("window").child("windowdrawcolor").text().as_string())),
-    document.child("window").child("scale").text().as_double());
+  WindowConfiguration config;
+  config.windowtitle = document.child("window").child("windowtitle").text().as_string();
+  config.size.x = document.child("window").child("windowsize").child("width").text().as_uint();
+  config.size.y = document.child("window").child("windowsize").child("height").text().as_uint();
+  config.clear_color = Color(hex_string_to_uint(std::string(document.child("window").child("windowdrawcolor").text().as_string())));
+  config.scale = document.child("window").child("scale").text().as_double();
 
-  return config_asset;
+  return config;
 }
 
 /**

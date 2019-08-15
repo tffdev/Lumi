@@ -4,7 +4,6 @@
 #include <pugixml.hpp>
 #include <vector>
 #include <objectasset.h>
-#include <configmanager.h>
 #include <sstream>
 #include <spriteasset.h>
 #include <audioasset.h>
@@ -13,12 +12,13 @@
 #include <roomasset.h>
 #include <tilesetdatabase.h>
 #include <backgrounddatabase.h>
+#include <windowmanager.h>
 
 #define DATA_PATH "../data/"
 
 #define OBJECT_PATH "objects.xml"
 #define SPRITE_PATH "sprites.xml"
-#define CONFIG_PATH "config.xml"
+#define CONFIG_PATH "windowconfig.xml"
 #define AUDIO_PATH "sounds.xml"
 #define BACKGROUND_PATH "backgrounds.xml"
 #define TILESET_PATH "tilesets.xml"
@@ -31,9 +31,8 @@
  * In future, this will be an intemediary layer that accesses a compressed
  * (and possibly encrypted) resources file to protect developer's code and assets.
  */
-
 namespace FileSystem {
-    ConfigManager                 load_config();
+    WindowConfiguration           load_config();
     std::vector<ObjectAsset*>     load_objects();
     std::vector<AudioAsset*>      load_sounds();
     std::vector<SpriteAsset*>     load_sprites();

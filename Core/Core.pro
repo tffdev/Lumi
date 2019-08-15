@@ -25,7 +25,6 @@ SOURCES += \
         source/lualibrary.cpp \
         source/main.cpp \
         source/filesystem.cpp \
-        source/managers/configmanager.cpp \
         source/managers/inputmanager.cpp \
         source/managers/luamanager.cpp \
     source/managers/roommanager.cpp \
@@ -40,7 +39,6 @@ HEADERS += \
     include/audiodatabase.h \
     include/backgroundasset.h \
     include/backgrounddatabase.h \
-    include/configmanager.h \
     include/engine.h \
     include/filesystem.h \
     include/hitboxasset.h \

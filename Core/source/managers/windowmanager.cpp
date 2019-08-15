@@ -5,34 +5,18 @@
  * @brief Create an instance of WindowManager.
  * @param config_manager The configuration object to refer to when building the window.
  */
-WindowManager::WindowManager(ConfigManager* config_manager)
-  : config(*config_manager),
-  clear_color(config_manager->get_window_draw_color()) {
-
+WindowManager::WindowManager() {
+  WindowConfiguration config = FileSystem::load_config();
   // Initialise everything for the window
   SDL_Init(SDL_INIT_EVERYTHING);
   Mix_Init(MIX_INIT_OGG);
   Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, AUDIO_U8);
 
-  create_window_using_config();
-}
+  size = Vector2<unsigned int>(config.size.x, config.size.y);
+  scale = config.scale;
+  clear_color = config.clear_color;
 
-/**
- * @brief Deletes the OpenGL context and attached window.
- */
-WindowManager::~WindowManager() {
-  SDL_GL_DeleteContext(context);
-  SDL_DestroyWindow(window);
-}
-
-/**
- * @brief Creates a window using the ConfigManager object attributes given on construction. (attributes such as size, scale, and title.)
- */
-void WindowManager::create_window_using_config() {
-  size = Vector2<unsigned int>(config.get_window_size().x, config.get_window_size().y);
-  scale = config.get_scale();
-
-  window = SDL_CreateWindow(config.get_window_title().c_str(),
+  window = SDL_CreateWindow(config.windowtitle.c_str(),
                             SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED,
                             static_cast<int>(size.x * scale),
@@ -60,6 +44,14 @@ void WindowManager::create_window_using_config() {
 
   GLuint err = glGetError();
   if(err != 0) throw "Window creation error";
+}
+
+/**
+ * @brief Deletes the OpenGL context and attached window.
+ */
+WindowManager::~WindowManager() {
+  SDL_GL_DeleteContext(context);
+  SDL_DestroyWindow(window);
 }
 
 /**
@@ -194,15 +186,15 @@ Vector2<unsigned int> WindowManager::get_real_size() {
  * @brief Switches the fullscreen mode of this window.
  */
 void WindowManager::toggle_fullscreen() {
-  config.set_fullscreen(!config.get_fullscreen());
-  SDL_SetWindowFullscreen(window, (config.get_fullscreen()) ? SDL_WINDOW_FULLSCREEN : 0);
+  fullscreen = !fullscreen;
+  SDL_SetWindowFullscreen(window, (fullscreen) ? SDL_WINDOW_FULLSCREEN : 0);
 }
 /**
  * @brief Sets the fullscreen mode of this window.
  * @param set True for fullscreen, false for windowed.
  */
 void WindowManager::set_fullscreen(bool set) {
-  config.set_fullscreen(set);
+  fullscreen = set;
   SDL_SetWindowFullscreen(window, (set) ? SDL_WINDOW_FULLSCREEN : 0);
 }
 

@@ -1,6 +1,6 @@
 #include "include/engine.h"
 
-LumiEngine::LumiEngine() : conf(FileSystem::load_config()), window_manager(&conf) {}
+LumiEngine::LumiEngine() {}
 
 void LumiEngine::run() {
   if(lmanager.load_object_code(&obj_database) != LUA_OK)
