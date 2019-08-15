@@ -207,19 +207,22 @@ int LuaManager::object_code_length() {
   return static_cast<int>(lua_tointeger(L, -1));
 }
 
+/**
+ * TODO: Make this method better. Currently a huuuuuge hack.
+ */
 std::string LuaManager::get_error(ObjectDatabase* obj_database) {
   /*
    * TODO: Let this function format the string into something more easily readable.
    */
   //push custom error string
-  if(lua_isstring(L, -1))
-    last_error = lua_tostring(L, -1);
-  else
-    last_error = "Unknown error.";
+  if(lua_isstring(L, -1)) last_error = lua_tostring(L, -1);
+  else last_error = "Unknown error.";
 
   // IF THE ERROR IS AN OBJECT CODE ERROR
-  if(last_error.substr(0, 100).compare("[string \"-- Containers and Standard Library...\"]:103: [string \"__lumi_system.containers.object_code[") == 0) {
-    last_error.replace(0, 100, "");
+  size_t find_obj_error = last_error.find("[string \"__lumi_system.containers.object_code[");
+  if(find_obj_error != std::string::npos) {
+    last_error.replace(0, find_obj_error + 46, "");
+
     size_t obj_number_id_end = last_error.find_first_of(']');
     std::string object_name = obj_database->get_object_name( static_cast<size_t>(std::atoll(last_error.substr(0, obj_number_id_end).c_str()) - 1));
     last_error.replace(0, last_error.find_first_of(':') + 1, "");
@@ -235,8 +238,8 @@ std::string LuaManager::get_error(ObjectDatabase* obj_database) {
   // IF THE ERROR IS A ROOM CREATION CODE ERROR
   if(last_error.substr(0, 18).compare("[string \"-- ROOM [") == 0) {
     last_error.replace(0, 18, "");
-    size_t obj_number_id_end = last_error.find_first_of(']');
-    std::string room_name = last_error.substr(0, obj_number_id_end).c_str();
+    size_t room_number_id_end = last_error.find_first_of(']');
+    std::string room_name = last_error.substr(0, room_number_id_end).c_str();
     last_error.replace(0, last_error.find_first_of(':') + 1, "");
     int line_num = std::atoi(last_error.substr(0, last_error.find_first_of(':')).c_str());
     last_error.replace(0, last_error.find_first_of(':') + 2, "");
