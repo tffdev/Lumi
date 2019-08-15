@@ -92,10 +92,7 @@ end
 function __lumi_system:process_draw()
     -- draw loop!
     for j, v in ipairs(__lumi_system.containers.instances) do
-        -- __lumi_system:process_in_environment(__lumi_system.containers.instances[j].draw, __lumi_system.containers.instances[j])
-        _ENV = __lumi_system.containers.instances[j]
-        __lumi_system.containers.instances[j].draw()
-        _ENV = _G
+        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].draw, __lumi_system.containers.instances[j])
     end
 end
 
@@ -103,10 +100,7 @@ function __lumi_system:process_update()
     __lumi_system:push_instances()
     -- update loop!
     for j, v in ipairs(__lumi_system.containers.instances) do
-        -- __lumi_system:process_in_environment(__lumi_system.containers.instances[j].update, __lumi_system.containers.instances[j])
-        _ENV = __lumi_system.containers.instances[j]
-        __lumi_system.containers.instances[j].update()
-        _ENV = _G
+        __lumi_system:process_in_environment(__lumi_system.containers.instances[j].update, __lumi_system.containers.instances[j])
     end
 end
 

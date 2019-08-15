@@ -218,10 +218,10 @@ std::string LuaManager::get_error(ObjectDatabase* obj_database) {
     last_error = "Unknown error.";
 
   // IF THE ERROR IS AN OBJECT CODE ERROR
-  if(last_error.substr(0, 46).compare("[string \"__lumi_system.containers.object_code[") == 0) {
-    last_error.replace(0, 46, "");
+  if(last_error.substr(0, 100).compare("[string \"-- Containers and Standard Library...\"]:103: [string \"__lumi_system.containers.object_code[") == 0) {
+    last_error.replace(0, 100, "");
     size_t obj_number_id_end = last_error.find_first_of(']');
-    std::string object_name = obj_database->get_object_name( std::atoi(last_error.substr(0, obj_number_id_end).c_str()) - 1);
+    std::string object_name = obj_database->get_object_name( static_cast<size_t>(std::atoll(last_error.substr(0, obj_number_id_end).c_str()) - 1));
     last_error.replace(0, last_error.find_first_of(':') + 1, "");
     int line_num = std::atoi(last_error.substr(0, last_error.find_first_of(':')).c_str());
     last_error.replace(0, last_error.find_first_of(':') + 2, "");

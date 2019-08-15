@@ -116,8 +116,7 @@ namespace LuaLibrary {
   int lumi_system_process_in_environment(lua_State* L) {
     if(lua_isnil(L, -2) == 1) return 0;
     lua_setupvalue(L, -2, 1);
-    if(lua_pcall(L, 0, 0, 0) != 0)
-      luaL_error(L, std::string("Error processing in environment: " + std::string(lua_tostring(L, -1))).c_str());
+    if(lua_pcall(L, 0, 0, 0) != 0) luaL_error(L, lua_tostring(L, -1));
     return 0;
   }
 
