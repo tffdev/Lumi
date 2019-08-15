@@ -8,22 +8,8 @@ void LumiEngine::run() {
 
   lmanager.load_library(&obj_database, &window_manager, &spr_database, &input_manager, &audio_database, &room_manager);
 
-  // So it initialises current room width/height
+  // Set current room
   lmanager.execute("set_room(" + std::to_string(room_manager.get_default_room_id()) + ")");
-
-  // run initial room creation code
-  RoomAsset* room = room_manager.get_current_room();
-  if(lmanager.execute("-- ROOM [" + room->get_name() + "] CREATION CODE\n" + room->get_creation_code()) != LUA_OK)
-    window_manager.bluescreen("ERROR IN ROOM CREATION CODE", lmanager.get_error(&obj_database));
-
-  // run initial room instance creation
-  for(InstancePlacement instance : room->get_instance_placements()) {
-    std::string command("instance_create(" +
-                        instance.object_name + ", " +
-                        std::to_string(instance.position.x) + ", " +
-                        std::to_string(instance.position.y) + ")");
-    lmanager.execute(command);
-  }
 
   SDL_Event e;
   while(window_manager.is_open()) {
