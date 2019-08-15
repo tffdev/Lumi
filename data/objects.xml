@@ -4,7 +4,7 @@
 <objects>
   <object name="objTest" sprite="" persistent="0">
     animation_index = 0
-
+    
     function update()
         if(key_down("up")) then y = y - 1 end
         if(key_down("down")) then y = y + 1 end

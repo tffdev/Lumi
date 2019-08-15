@@ -53,14 +53,21 @@ function __lumi_system:create_new_instance_environment(parent)
 end
 
 function __lumi_system:clear_all_instances()
-    for i,v in ipairs(__lumi_system.containers.instances) do
-        if __lumi_system.containers.instances[i].persistent ~= true then
-            table.remove(__lumi_system.containers.instances, i)
-        end
-        if __lumi_system.containers.instances_buffer[i].persistent ~= true then
-            table.remove(__lumi_system.containers.instances_buffer, i)
+    for k,v in pairs(__lumi_system.containers.instances) do
+        if __lumi_system.containers.instances[k].persistent ~= true then
+            __lumi_system.containers.instances[k] = nil
         end
     end
+
+    -- __lumi_system.containers.instances = {}
+
+    for k,v in pairs(__lumi_system.containers.instances_buffer) do
+        if __lumi_system.containers.instances_buffer[k].persistent ~= true then
+            __lumi_system.containers.instances_buffer[k] = nil
+        end
+    end
+
+    -- __lumi_system.containers.instances_buffer = {}
 end
 
 function __lumi_system:instance_create(id, x, y)
