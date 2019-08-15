@@ -371,13 +371,6 @@ TEST_CASE("LuaLibrary") {
 
     CHECK_EQ(lmanager.get_instance_count(), 4);
   }
-  SUBCASE("'execute' soak test") {
-    lmanager.execute("soak_test_int = 0");
-    lmanager.execute("print('soak test')");
-    for(int i = 0; i < 100000; i++) {
-      lmanager.execute("soak_test_int = soak_test_int + 1");
-    }
-  }
 }
 
 
