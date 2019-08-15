@@ -6,13 +6,15 @@ RoomAsset::RoomAsset(size_t id,
           size_t size_x,
           size_t size_y,
           std::vector<RoomTileLayer> tile_layers,
-          std::vector<RoomBackground> backgrounds)
+          std::vector<RoomBackground> backgrounds,
+          std::vector<InstancePlacement> instance_placements)
   : id(id),
     name(name),
     creation_code(creation_code),
     size(size_x, size_y),
     room_tile_layers(tile_layers),
-    room_backgrounds(backgrounds) {}
+    room_backgrounds(backgrounds),
+    instance_placements(instance_placements) {}
 
 Vector2<size_t> RoomAsset::get_size() {
   return size;
@@ -47,4 +49,8 @@ std::vector<RoomTileLayer> RoomAsset::get_tile_layers() {
 }
 std::vector<RoomBackground> RoomAsset::get_backgrounds() {
   return room_backgrounds;
+}
+
+std::vector<InstancePlacement> RoomAsset::get_instance_placements() {
+  return instance_placements;
 }

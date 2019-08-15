@@ -246,6 +246,16 @@ namespace LuaLibrary {
     if(luaL_dostring(L, std::string("-- ROOM ["+room->get_name()+"] CREATION CODE\n" + room->get_creation_code()).c_str()) != LUA_OK) {
       luaL_error(L, std::string(std::string(lua_tostring(L, -1))).c_str());
     }
+
+    // run room instance creation
+    for(InstancePlacement instance : room->get_instance_placements()) {
+      std::string command("instance_create(" +
+                          instance.object_name + ", " +
+                          std::to_string(instance.position.x) + ", " +
+                          std::to_string(instance.position.y) + ")");
+      luaL_dostring(L, command.c_str());
+    }
+
     return 0;
   }
 };

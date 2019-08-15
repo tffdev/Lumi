@@ -6,7 +6,7 @@
   <room name="room0" width="320" height="240">
     <creationcode>instance_create(objTest)</creationcode>
     <instances>
-      <instance name="objTest" x="0" y="0" />
+      <instance name="objTest" x="30" y="30" />
       <instance name="objTest" x="130" y="100" />
     </instances>
     <tile_layers>

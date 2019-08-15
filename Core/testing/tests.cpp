@@ -99,7 +99,10 @@ TEST_CASE("RoomAsset") {
   std::vector<RoomBackground> rm_backgrounds;
   rm_backgrounds.push_back({0, 100, 0, 0});
 
-  RoomAsset asset(5, "room0", "x=5", 320, 240, tile_layers, rm_backgrounds);
+  std::vector<InstancePlacement> instance_placements;
+  instance_placements.push_back({"objTest", Vector2<int>{0, 0}});
+
+  RoomAsset asset(5, "room0", "x=5", 320, 240, tile_layers, rm_backgrounds, instance_placements);
   CHECK_EQ(asset.get_id(), 5);
   CHECK_EQ(asset.get_size().x, 320);
   CHECK_EQ(asset.get_size().y, 240);
@@ -107,6 +110,8 @@ TEST_CASE("RoomAsset") {
   CHECK_EQ(asset.get_creation_code().compare("x=5"), 0);
   CHECK_EQ(asset.get_background(0).depth, 100);
   CHECK_EQ(asset.get_tile_layer(0).tiles.at(1).x, 16);
+  CHECK_EQ(asset.get_instance_placements().size(), 1);
+  CHECK_EQ(asset.get_instance_placements().at(0).object_name.compare("objTest"), 0);
 }
 
 /**

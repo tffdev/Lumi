@@ -208,6 +208,15 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
       room_backgrounds.push_back(rm_bg);
     }
 
+    // instance placements
+    std::vector<InstancePlacement> room_instance_placements;
+    for(pugi::xml_node instance_node : node.child("instances").children("instance")) {
+      InstancePlacement instance;
+      instance.object_name = instance_node.attribute("name").as_string();
+      instance.position = { instance_node.attribute("x").as_int(), instance_node.attribute("y").as_int() };
+      room_instance_placements.push_back(instance);
+    }
+
     room_assets.push_back(
           new RoomAsset(i,
                         node.attribute("name").as_string(),
@@ -215,7 +224,8 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
                         node.attribute("width").as_uint(),
                         node.attribute("height").as_uint(),
                         room_tile_layers,
-                        room_backgrounds));
+                        room_backgrounds,
+                        room_instance_placements));
 
     i++;
   }

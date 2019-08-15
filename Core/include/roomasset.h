@@ -26,6 +26,11 @@ struct RoomBackground {
   double offset_y;
 };
 
+struct InstancePlacement {
+  std::string object_name;
+  Vector2<int> position;
+};
+
 class RoomAsset
 {
 public:
@@ -35,7 +40,8 @@ public:
             size_t size_x,
             size_t size_y,
             std::vector<RoomTileLayer> tile_layers,
-            std::vector<RoomBackground> backgrounds);
+            std::vector<RoomBackground> backgrounds,
+            std::vector<InstancePlacement> instance_placements);
 
   size_t get_id();
   Vector2<size_t> get_size();
@@ -44,8 +50,10 @@ public:
   unsigned long long get_tile_layer_size();
   std::vector<RoomTileLayer> get_tile_layers();
   std::vector<RoomBackground> get_backgrounds();
+  std::vector<InstancePlacement> get_instance_placements();
   RoomTileLayer get_tile_layer(unsigned int layer);
   RoomBackground get_background(unsigned int layer);
+
 private:
   size_t id;
   std::string name;
@@ -53,4 +61,5 @@ private:
   Vector2<size_t> size;
   std::vector<RoomTileLayer> room_tile_layers;
   std::vector<RoomBackground> room_backgrounds;
+  std::vector<InstancePlacement> instance_placements;
 };
