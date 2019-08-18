@@ -1,5 +1,6 @@
 #include "include/audiodatabase.h"
 #include <filesystem.h>
+#include <thread>
 
 AudioDatabase::AudioDatabase() {
   audio_assets = FileSystem::load_sounds();
@@ -48,7 +49,7 @@ bool AudioDatabase::audio_exists(std::string name) {
   }
 }
 
-void AudioDatabase::play_audio(size_t id, bool loop) {
+void AudioDatabase::load_and_play_thread(size_t id, bool loop) {
   AudioAsset* sound_to_play = audio_assets.at(id);
   if(sound_to_play == nullptr) throw "Sound asset is null";
   if(sound_to_play->get_audio() == nullptr) throw "Sound data is null";
@@ -57,6 +58,11 @@ void AudioDatabase::play_audio(size_t id, bool loop) {
   printf("playing on channel %i\n", channel);
   if(channel == -1) { printf("Channels are full!\n"); return; }
   channel_currently_playing[channel] = sound_to_play->get_id();
+}
+
+void AudioDatabase::play_audio(size_t id, bool loop) {
+  std::thread thread_object(&AudioDatabase::load_and_play_thread, this, id, loop);
+  thread_object.detach();
 }
 
 void AudioDatabase::stop_audio(size_t id) {

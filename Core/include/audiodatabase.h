@@ -13,6 +13,7 @@ public:
   bool audio_exists(std::string name);
   size_t get_assets_size();
   size_t get_audio_id(std::string name);
+  void load_and_play_thread(size_t id, bool loop);
   void play_audio(size_t id, bool loop = false);
   void stop_audio(size_t id);
 private:
