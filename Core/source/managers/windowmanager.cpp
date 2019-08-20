@@ -11,6 +11,7 @@ WindowManager::WindowManager() {
   SDL_Init(SDL_INIT_EVERYTHING);
   Mix_Init(MIX_INIT_OGG);
   Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, AUDIO_U8);
+  IMG_Init(IMG_INIT_PNG);
 
   size = Vector2<unsigned int>(config.size.x, config.size.y);
   scale = config.scale;

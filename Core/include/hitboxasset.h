@@ -6,8 +6,6 @@ enum HITBOX_SHAPE {
   RECTANGLE
 };
 
-
-
 class HitboxAsset
 {
 public:

@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/r">
+        <file>dlls/libgcc_s_seh-1.dll</file>
+        <file>dlls/libjpeg-9.dll</file>
+        <file>dlls/libogg-0.dll</file>
+        <file>dlls/libpng16-16.dll</file>
+        <file>dlls/libvorbis-0.dll</file>
+        <file>dlls/libvorbisfile-3.dll</file>
+        <file>dlls/libwinpthread-1.dll</file>
+        <file>dlls/lua53.dll</file>
+        <file>dlls/zlib1.dll</file>
+    </qresource>
+</RCC>

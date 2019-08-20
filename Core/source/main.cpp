@@ -1,4 +1,5 @@
 /**
+
  * Lumi Game Creator - version 0.0.1
  * --------------------------------------------------------
  * Report bugs and download new versions at https://github.com/tfcat/lumigamecreator
@@ -28,12 +29,17 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
  * OTHER DEALINGS IN THE SOFTWARE.
  */
+#include <windows.h>
+#include <iostream>
+#include <vector>
+#include <QFile>
+#include <QStandardPaths>
+#include <QFileInfo>
+#include <QDir>
 #include <engine.h>
 #undef main
 
-void run_game();
-
-int main(int, char*[]) {
+void engine_main() {
   try {
     LumiEngine game;
     game.run();
@@ -42,3 +48,45 @@ int main(int, char*[]) {
   }
 }
 
+int main() {
+  // Load DLLs
+  QString destination = QString(
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+      + "/LumiGameEngine";
+
+  if(!QDir(destination).exists())
+    QDir().mkdir(destination);
+
+  std::vector<QString> files = {
+    ":/r/dlls/lua53.dll",
+    ":/r/dlls/libgcc_s_seh-1.dll",
+    ":/r/dlls/libjpeg-9.dll",
+    ":/r/dlls/libogg-0.dll",
+    ":/r/dlls/libpng16-16.dll",
+    ":/r/dlls/libvorbis-0.dll",
+    ":/r/dlls/libvorbisfile-3.dll",
+    ":/r/dlls/libwinpthread-1.dll",
+    ":/r/dlls/zlib1.dll",
+  };
+
+  for(QString dll_resource_path : files) {
+    QFile file(dll_resource_path);
+    QFileInfo fileInfo(file.fileName());
+    QString truncated_filename(fileInfo.fileName());
+
+    if(!QFile::exists(destination + "/" + truncated_filename)) {
+      if(!file.copy(destination + "/" + truncated_filename)) {
+        printf("Can't copy dll [%s] to temporary directory: %s\n",
+               (destination + "/" + truncated_filename).toUtf8().data(),
+               file.errorString().toUtf8().data());
+        throw;
+      } else {
+        printf("Copied dll file [%s] to temp directory.\n",
+              (destination + "/" + truncated_filename).toUtf8().data());
+      }
+    }
+  }
+
+  SetDllDirectoryA(destination.toUtf8().constData());
+  engine_main();
+}

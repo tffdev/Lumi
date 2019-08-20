@@ -1,5 +1,9 @@
 #pragma once
-#include <lua.hpp>
+extern "C" {
+  #include <lua.h>
+  #include <lualib.h>
+  #include <lauxlib.h>
+}
 #include <filesystem.h>
 #include <objectdatabase.h>
 #include <windowmanager.h>

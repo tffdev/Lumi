@@ -20,8 +20,7 @@ void AssetTree::itemAssetPressed(QTreeWidgetItem* item, int) {
 
 /*
  * Only let objects be dropped inside of
- * their respective top level items.
- */
+ * their respective top level items. */
 void AssetTree::dropEvent(QDropEvent* event) {
   QList<QTreeWidgetItem*> kids = this->selectedItems();
 

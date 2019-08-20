@@ -1,4 +1,5 @@
 #pragma once
+#define SDL_MAIN_HANDLED
 #include <windowmanager.h>
 #include <luamanager.h>
 
