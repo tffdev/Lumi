@@ -8,7 +8,7 @@ MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  connect(ui->actionLoad, SIGNAL(triggered()), this, SLOT(on_actionLoad_clicked()));
+  this->setWindowTitle("Lumi Game Creator");
 }
 
 MainWindow::~MainWindow() {
@@ -25,6 +25,8 @@ void MainWindow::insert_widgets(int itemnum, Database<T>* db) {
   foreach(QTreeWidgetItem* i, toplvlitem->takeChildren()) delete i;
   for(auto asset : db->get_all_assets()) {
     QTreeWidgetItem* child = new QTreeWidgetItem(toplvlitem, { asset.name.c_str() });
+    child->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
+    child->sortChildren(0, Qt::SortOrder::AscendingOrder);
     toplvlitem->insertChild(-1, child);
   }
 }
@@ -36,6 +38,11 @@ void MainWindow::load_database_into_tree() {
   insert_widgets(3, &database.sounds);
   insert_widgets(4, &database.tilesets);
   insert_widgets(5, &database.rooms);
+
+  // sort items
+  for(int i=0; i < ui->assetTree->topLevelItemCount(); i++){
+    ui->assetTree->topLevelItem(i)->sortChildren(0, Qt::SortOrder::AscendingOrder);
+  }
 }
 
 void MainWindow::load_project() {
@@ -63,6 +70,6 @@ void MainWindow::load_project() {
 void MainWindow::on_loadButton_clicked() {
     load_project();
 }
-void MainWindow::on_actionLoad_clicked() {
+void MainWindow::on_actionLoad_triggered() {
   load_project();
 }

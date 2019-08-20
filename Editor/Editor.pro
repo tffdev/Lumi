@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++11
 
 SOURCES += \
+        assettree.cpp \
         main.cpp \
         mainwindow.cpp \
         external/pugixml.cpp \
@@ -32,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
         asset_types.h \
+        assettree.h \
         generic_database.h \
         mainwindow.h \
         external/pugixml.hpp \
@@ -44,3 +46,5 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES +=

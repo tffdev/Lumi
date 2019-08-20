@@ -1,5 +1,6 @@
 #pragma once
 #include <QMainWindow>
+#include <QTreeWidgetItem>
 #include <projectdata.h>
 
 namespace Ui {
@@ -16,7 +17,7 @@ public:
 private slots:
   void on_editorTabs_tabCloseRequested(int index);
   void on_loadButton_clicked();
-  void on_actionLoad_clicked();
+  void on_actionLoad_triggered();
 
 private:
   template <typename T>

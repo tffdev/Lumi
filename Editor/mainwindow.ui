@@ -13,6 +13,11 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset>
+    <selectedon>icons/lumilogo.png</selectedon>
+   </iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout_2">
     <property name="spacing">
@@ -71,6 +76,11 @@
             <property name="text">
              <string>New</string>
             </property>
+            <property name="icon">
+             <iconset>
+              <selectedon>icons/file.svg</selectedon>
+             </iconset>
+            </property>
            </widget>
           </item>
           <item>
@@ -81,6 +91,11 @@
             <property name="text">
              <string>Load</string>
             </property>
+            <property name="icon">
+             <iconset>
+              <selectedon>icons/opened_folder.svg</selectedon>
+             </iconset>
+            </property>
            </widget>
           </item>
           <item>
@@ -90,6 +105,11 @@
             </property>
             <property name="text">
              <string>Save</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <selectedon>icons/checkmark.svg</selectedon>
+             </iconset>
             </property>
            </widget>
           </item>
@@ -108,6 +128,11 @@
             <property name="text">
              <string>Run</string>
             </property>
+            <property name="icon">
+             <iconset>
+              <selectedon>icons/start.svg</selectedon>
+             </iconset>
+            </property>
            </widget>
           </item>
           <item>
@@ -117,6 +142,11 @@
             </property>
             <property name="text">
              <string>Export</string>
+            </property>
+            <property name="icon">
+             <iconset>
+              <selectedon>icons/upload.svg</selectedon>
+             </iconset>
             </property>
            </widget>
           </item>
@@ -394,12 +424,33 @@
               </widget>
              </item>
              <item>
-              <widget class="QTreeWidget" name="assetTree">
+              <widget class="AssetTree" name="assetTree">
                <property name="maximumSize">
                 <size>
                  <width>240</width>
                  <height>16777215</height>
                 </size>
+               </property>
+               <property name="tabKeyNavigation">
+                <bool>true</bool>
+               </property>
+               <property name="dragEnabled">
+                <bool>true</bool>
+               </property>
+               <property name="dragDropOverwriteMode">
+                <bool>true</bool>
+               </property>
+               <property name="dragDropMode">
+                <enum>QAbstractItemView::InternalMove</enum>
+               </property>
+               <property name="defaultDropAction">
+                <enum>Qt::MoveAction</enum>
+               </property>
+               <property name="alternatingRowColors">
+                <bool>false</bool>
+               </property>
+               <property name="textElideMode">
+                <enum>Qt::ElideRight</enum>
                </property>
                <property name="indentation">
                 <number>20</number>
@@ -440,11 +491,6 @@
                 <property name="text">
                  <string>Objects</string>
                 </property>
-                <item>
-                 <property name="text">
-                  <string>obj_test</string>
-                 </property>
-                </item>
                </item>
                <item>
                 <property name="text">
@@ -518,6 +564,11 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
+   <property name="icon">
+    <iconset>
+     <selectedon>icons/file.svg</selectedon>
+    </iconset>
+   </property>
    <property name="text">
     <string>New Project</string>
    </property>
@@ -526,6 +577,11 @@
    </property>
   </action>
   <action name="actionLoad">
+   <property name="icon">
+    <iconset>
+     <selectedon>icons/opened_folder.svg</selectedon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Load</string>
    </property>
@@ -534,6 +590,11 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="icon">
+    <iconset>
+     <selectedon>icons/checkmark.svg</selectedon>
+    </iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
@@ -543,6 +604,13 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>AssetTree</class>
+   <extends>QTreeWidget</extends>
+   <header>assettree.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
