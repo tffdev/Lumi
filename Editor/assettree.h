@@ -10,7 +10,6 @@ public:
   void dropEvent(QDropEvent* event);
   void showEvent(QShowEvent* event);
 private slots:
-  void mouseMoveEvent(QMouseEvent* event);
-  void mousePressEvent(QMouseEvent* event);
-  void itemDroppedSlot(QTreeWidgetItem* item, int col);
+  void itemAssetPressed(QTreeWidgetItem* item, int col);
+  int a=0;
 };

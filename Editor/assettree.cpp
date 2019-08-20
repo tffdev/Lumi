@@ -1,35 +1,19 @@
 #include "assettree.h"
+#include <QDrag>
 
 AssetTree::AssetTree(QWidget* parent) : QTreeWidget(parent) {
-  connect(this, &AssetTree::itemPressed, this, &AssetTree::itemDroppedSlot);
+  connect(this, &AssetTree::itemPressed, this, &AssetTree::itemAssetPressed);
   setMouseTracking(true);
 }
 
-void AssetTree::mousePressEvent(QMouseEvent* event) {
-  QTreeWidget::mousePressEvent(event);
-}
-
-
-void AssetTree::mouseMoveEvent(QMouseEvent* event) {
-  QTreeWidget::mouseMoveEvent(event);
-
-  if(itemAt(event->pos())) setCursor(Qt::PointingHandCursor);
-  else setCursor(Qt::ArrowCursor);
-
-  if(this->selectedItems().size() > 0) {
-    // dragging an item
-    // this->selectedItems().at(0)
-  }
-}
-
-void AssetTree::showEvent(QShowEvent* event) {
+void AssetTree::showEvent(QShowEvent*) {
   auto rootItem = invisibleRootItem();
   rootItem->setFlags( rootItem->flags() ^ Qt::ItemIsDropEnabled );
   for(int i = 0; i < 6; i++)
     topLevelItem(i)->setFlags((topLevelItem(i)->flags() | Qt::ItemFlag::ItemIsDropEnabled) ^ Qt::ItemFlag::ItemIsDragEnabled);
 }
 
-void AssetTree::itemDroppedSlot(QTreeWidgetItem* item, int col) {
+void AssetTree::itemAssetPressed(QTreeWidgetItem* item, int) {
   if(!item->parent()) return; // top level, ignore
   printf("Item was pressed: %s\n", item->text(0).toUtf8().data());
 }
@@ -43,15 +27,12 @@ void AssetTree::dropEvent(QDropEvent* event) {
 
   /* row number before the drag - initial position */
   if (kids.size() == 0) return;
-  int start = this->indexFromItem(kids.at(0)).row();
-  int end = start; // assume only 1 kid can be dragged
   QTreeWidgetItem* parent = kids.at(0)->parent();
 
   /* perform the default implementation */
   QTreeWidget::dropEvent(event);
 
   /* get new index */
-  int row = this->indexFromItem(kids.at(0)).row();
   QTreeWidgetItem* destination = kids.at(0)->parent();
 
   if(parent != destination) {

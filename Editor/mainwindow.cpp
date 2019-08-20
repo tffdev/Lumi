@@ -3,12 +3,31 @@
 #include <string>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::MainWindow) {
   ui->setupUi(this);
   this->setWindowTitle("Lumi Game Creator");
+
+  QFile file(":/rc/style.css");
+  if(!file.open(QIODevice::ReadOnly)) {
+      QMessageBox::information(nullptr, "error", file.errorString());
+  }
+
+  QString text;
+
+  QTextStream in(&file);
+  while(!in.atEnd()) {
+      QString line = in.readLine();
+      text.append(line);
+  }
+
+  setStyleSheet(text);
+
+  file.close();
+
 }
 
 MainWindow::~MainWindow() {
@@ -68,8 +87,9 @@ void MainWindow::load_project() {
 }
 
 void MainWindow::on_loadButton_clicked() {
-    load_project();
+  load_project();
 }
+
 void MainWindow::on_actionLoad_triggered() {
   load_project();
 }
