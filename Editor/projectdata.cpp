@@ -1,6 +1,15 @@
 #include "projectdata.h"
 
-void ProjectData::clear_all() {
+bool ProjectData::asset_name_exists(std::string name) {
+  return rooms.asset_exists(name) ||
+         sounds.asset_exists(name) ||
+         objects.asset_exists(name) ||
+         sprites.asset_exists(name) ||
+         tilesets.asset_exists(name) ||
+         backgrounds.asset_exists(name);
+}
+
+void ProjectData::clear_all_databases() {
   // clear databases
   objects.clear();
   rooms.clear();
@@ -10,7 +19,7 @@ void ProjectData::clear_all() {
   tilesets.clear();
 }
 
-void ProjectData::load_rooms(pugi::xml_node& root) {
+void ProjectData::load_rooms_from_xml(pugi::xml_node& root) {
   // load rooms
   for(pugi::xml_node node : root.child("rooms").children()) {
     RoomAsset asset;
@@ -65,7 +74,7 @@ void ProjectData::load_rooms(pugi::xml_node& root) {
   }
 }
 
-void ProjectData::load_sounds(pugi::xml_node &root) {
+void ProjectData::load_sounds_from_xml(pugi::xml_node &root) {
   for(pugi::xml_node sound_node : root.child("sounds").children()) {
     SoundAsset sound;
     sound.name = sound_node.attribute("name").as_string();
@@ -74,7 +83,7 @@ void ProjectData::load_sounds(pugi::xml_node &root) {
   }
 }
 
-void ProjectData::load_objects(pugi::xml_node& root) {
+void ProjectData::load_objects_from_xml(pugi::xml_node& root) {
   // load objects
   for(pugi::xml_node node : root.child("objects").children()) {
       ObjectAsset asset;
@@ -86,7 +95,7 @@ void ProjectData::load_objects(pugi::xml_node& root) {
   }
 }
 
-void ProjectData::load_sprites(pugi::xml_node &root) {
+void ProjectData::load_sprites_from_xml(pugi::xml_node &root) {
   for(pugi::xml_node node : root.child("sprites").children()){
     SpriteAsset sprite;
     sprite.name = node.attribute("name").as_string();
@@ -133,7 +142,7 @@ void ProjectData::load_sprites(pugi::xml_node &root) {
   }
 }
 
-void ProjectData::load_tilesets(pugi::xml_node &root) {
+void ProjectData::load_tilesets_from_xml(pugi::xml_node &root) {
   for(pugi::xml_node node : root.child("tilesets").children()){
     TilesetAsset asset;
     asset.name = node.attribute("name").as_string();
@@ -146,7 +155,7 @@ void ProjectData::load_tilesets(pugi::xml_node &root) {
   }
 }
 
-void ProjectData::load_backgrounds(pugi::xml_node &root) {
+void ProjectData::load_backgrounds_from_xml(pugi::xml_node &root) {
   for(pugi::xml_node node : root.child("backgrounds").children()){
     BackgroundAsset asset;
     asset.name = node.attribute("name").as_string();
@@ -155,7 +164,17 @@ void ProjectData::load_backgrounds(pugi::xml_node &root) {
   }
 }
 
-bool ProjectData::load_project_file_into_db(std::string path) {
+void ProjectData::load_config_from_xml(pugi::xml_node &root) {
+  pugi::xml_node window_node = root.child("window");
+  config.size = { window_node.attribute("width").as_int(),
+                  window_node.attribute("height").as_int() };
+  config.fps = window_node.attribute("fps").as_uint();
+  config.scale = window_node.attribute("scale").as_double();
+  config.title = window_node.attribute("title").as_string();
+  config.background_color = std::strtoul(window_node.attribute("drawcolor").as_string(), nullptr, 16);
+}
+
+bool ProjectData::load_project_file_into_databases(std::string path) {
   pugi::xml_document doc;
   pugi::xml_parse_result result = doc.load_file(path.c_str());
   if (result) {
@@ -165,22 +184,41 @@ bool ProjectData::load_project_file_into_db(std::string path) {
     return false;
   }
 
-  clear_all();
+  clear_all_databases();
 
-  // Load project into databases
   pugi::xml_node root = doc.child("project");
 
   // load project name
   game_name = root.child("name").text().as_string();
-  load_objects(root);
-  load_rooms(root);
-  load_sounds(root);
-  load_sprites(root);
-  load_tilesets(root);
-  load_backgrounds(root);
 
-  // load configuration
-
+  // Load project into databases
+  load_objects_from_xml(root);
+  load_rooms_from_xml(root);
+  load_sounds_from_xml(root);
+  load_sprites_from_xml(root);
+  load_tilesets_from_xml(root);
+  load_backgrounds_from_xml(root);
+  load_config_from_xml(root);
 
   return true;
+}
+
+// getters
+Database<ObjectAsset>& ProjectData::get_objects() {
+  return objects;
+}
+Database<RoomAsset>& ProjectData::get_rooms() {
+  return rooms;
+}
+Database<SoundAsset>& ProjectData::get_sounds() {
+  return sounds;
+}
+Database<SpriteAsset>& ProjectData::get_sprites() {
+  return sprites;
+}
+Database<BackgroundAsset>& ProjectData::get_backgrounds() {
+  return backgrounds;
+}
+Database<TilesetAsset>& ProjectData::get_tilesets() {
+  return tilesets;
 }

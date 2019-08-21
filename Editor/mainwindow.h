@@ -18,15 +18,13 @@ private slots:
   void on_editorTabs_tabCloseRequested(int index);
   void on_loadButton_clicked();
   void on_actionLoad_triggered();
+  void on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
 
 private:
-  template <typename T>
-  void insert_widgets(int itemnum, Database<T>* db);
   void load_project();
-  void load_database_into_tree();
+  void style_main_window();
 
   Ui::MainWindow *ui;
   Configuration config;
-  ProjectData database;
   QString last_open_filename;
 };

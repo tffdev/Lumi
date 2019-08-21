@@ -4,64 +4,26 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
+#include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent) :
-  QMainWindow(parent),
-  ui(new Ui::MainWindow) {
+MainWindow::MainWindow(QWidget *parent)
+: QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  this->setWindowTitle("Lumi Game Creator");
-
-  QFile file(":/rc/style.css");
-  if(!file.open(QIODevice::ReadOnly)) {
-      QMessageBox::information(nullptr, "error", file.errorString());
-  }
-
-  QString text;
-
-  QTextStream in(&file);
-  while(!in.atEnd()) {
-      QString line = in.readLine();
-      text.append(line);
-  }
-
-  setStyleSheet(text);
-
-  file.close();
-
+  style_main_window();
 }
 
 MainWindow::~MainWindow() {
   delete ui;
 }
 
-void MainWindow::on_editorTabs_tabCloseRequested(int index) {
-  ui->editorTabs->removeTab(index);
-}
-
-template <typename T>
-void MainWindow::insert_widgets(int itemnum, Database<T>* db) {
-  QTreeWidgetItem* toplvlitem = ui->assetTree->topLevelItem(itemnum);
-  foreach(QTreeWidgetItem* i, toplvlitem->takeChildren()) delete i;
-  for(auto asset : db->get_all_assets()) {
-    QTreeWidgetItem* child = new QTreeWidgetItem(toplvlitem, { asset.name.c_str() });
-    child->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsDragEnabled);
-    child->sortChildren(0, Qt::SortOrder::AscendingOrder);
-    toplvlitem->insertChild(-1, child);
+void MainWindow::style_main_window() {
+  this->setWindowTitle("Lumi Game Creator");
+  QFile file(":/rc/style.css");
+  if(!file.open(QIODevice::ReadOnly)) {
+      QMessageBox::information(nullptr, "error", file.errorString());
   }
-}
-
-void MainWindow::load_database_into_tree() {
-  insert_widgets(0, &database.objects);
-  insert_widgets(1, &database.sprites);
-  insert_widgets(2, &database.backgrounds);
-  insert_widgets(3, &database.sounds);
-  insert_widgets(4, &database.tilesets);
-  insert_widgets(5, &database.rooms);
-
-  // sort items
-  for(int i=0; i < ui->assetTree->topLevelItemCount(); i++){
-    ui->assetTree->topLevelItem(i)->sortChildren(0, Qt::SortOrder::AscendingOrder);
-  }
+  setStyleSheet(QString(file.readAll()));
+  file.close();
 }
 
 void MainWindow::load_project() {
@@ -74,7 +36,7 @@ void MainWindow::load_project() {
 
   /* If the .lumi file is invalid,
    * throw a message box displaying the error. */
-  if(!database.load_project_file_into_db(filename)) {
+  if(!ProjectData::db().load_project_file_into_databases(filename)) {
     QMessageBox mb;
     mb.setWindowTitle("Error Loading Project");
     mb.setText("Error parsing project file " + qfilename.split("/").last());
@@ -82,14 +44,39 @@ void MainWindow::load_project() {
     mb.exec();
   } else {
     ui->statusBar->showMessage("Loaded project successfully!");
-    load_database_into_tree();
+    ui->assetTree->load_database_into_tree();
   }
 }
 
+/*****************************************
+ * SLOTS
+ *****************************************/
 void MainWindow::on_loadButton_clicked() {
   load_project();
 }
 
 void MainWindow::on_actionLoad_triggered() {
   load_project();
+}
+
+void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem* item, int) {
+  // if top level item
+  if(!item->parent()) return;
+
+  // if tab is already open
+  for(int i = 0; i < ui->editorTabs->count(); ++i) {
+    QString text = ui->editorTabs->tabText(i);
+    if(item->text(0) == text) {
+      ui->editorTabs->setCurrentIndex(i);
+      return;
+    }
+  }
+  // open new tab
+  int index = ui->editorTabs->addTab(new QWidget(), item->text(0));
+  ui->editorTabs->setCurrentIndex(index);
+}
+
+void MainWindow::on_editorTabs_tabCloseRequested(int index) {
+  // If unsaved changes, show a dialog?
+  ui->editorTabs->removeTab(index);
 }
