@@ -1,8 +1,6 @@
 TEMPLATE = app
-CONFIG += console c++11
-CONFIG -= app_bundle
-CONFIG += qt
-CONFIG += static
+CONFIG += c++11 qt static gui
+CONFIG -= app_bundle console
 
 INCLUDEPATH += $$PWD/../../include include external
 DEPENDPATH += $$PWD/../../include include external
@@ -74,8 +72,7 @@ external/luasrc/lcode.c \
 external/luasrc/lstrlib.c \
 external/luasrc/ldump.c \
 external/luasrc/loslib.c \
-external/luasrc/ltable.c \
-external/luasrc/wmain.c
+external/luasrc/ltable.c
 
 HEADERS += \
     external/pugixml.hpp \
