@@ -14,6 +14,10 @@ public:
     asset_map.insert(std::pair<std::string, T>(name, asset));
   }
 
+  size_t size() {
+    return asset_map.size();
+  }
+
   bool asset_exists(std::string name) {
     return asset_map.count(name) > 0;
   }

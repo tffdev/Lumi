@@ -19,6 +19,4 @@ public:
 
 private slots:
   void show_item_right_click_context_menu(const QPoint &pos);
-  template <typename T>
-  std::string new_asset_request(Database<T>& db, std::string prefix);
 };

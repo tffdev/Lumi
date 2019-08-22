@@ -23,24 +23,30 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 CONFIG += c++11
+RC_ICONS = Lumi.ico
 
 SOURCES += \
         assettree.cpp \
         main.cpp \
+        maindatamanager.cpp \
         mainwindow.cpp \
         external/pugixml.cpp \
+        objecteditor.cpp \
         projectdata.cpp
 
 HEADERS += \
         asset_types.h \
         assettree.h \
         generic_database.h \
+        maindatamanager.h \
         mainwindow.h \
         external/pugixml.hpp \
+        objecteditor.h \
         projectdata.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+        objecteditor.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

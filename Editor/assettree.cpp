@@ -1,7 +1,10 @@
 #include "assettree.h"
 #include <QDrag>
 #include <QMenu>
+#include <QApplication>
 #include <mainwindow.h>
+#include <ui_mainwindow.h>
+#include <maindatamanager.h>
 
 AssetTree::AssetTree(QWidget* parent) : QTreeWidget(parent) {
   setMouseTracking(true);
@@ -49,21 +52,6 @@ void AssetTree::dropEvent(QDropEvent* event) {
   }
 }
 
-template <typename T>
-std::string AssetTree::new_asset_request(Database<T>& db, std::string prefix) {
-  printf("inserting new %s!\n", prefix.c_str());
-  std::string name;
-  size_t i = 0;
-  do {
-      name = prefix + "_" + std::to_string(i);
-      i++;
-  } while(ProjectData::db().asset_name_exists(name));
-  T asset;
-  asset.name = name;
-  db.insert_asset(name, asset);
-  return name;
-}
-
 void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
   // if TLI, have custom behaviour
   QTreeWidgetItem* item = itemAt(pos);
@@ -77,16 +65,12 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
   if(!item->parent()) {
     QMenu context_menu("Context menu", this);
 
-    if(item->text(0) == "Objects") add_action("New Object", context_menu, [this](){
-      std::string name = new_asset_request(ProjectData::db().get_objects(), "object");
-      topLevelItem(0)->setExpanded(true);
-      QTreeWidgetItem* child = add_child_to_tli(0, name);
-      topLevelItem(0)->setSelected(false);
-      child->setSelected(true);
+    if(indexAt(pos).row() == 0) add_action("New Object", context_menu, [](){
+      MainDataManager::fetch().new_asset_request(ProjectData::db().get_objects(), "object", 0);
     });
 
-    if(item->text(0) == "Sprites") add_action("New Sprite", context_menu, [this](){
-      new_asset_request(ProjectData::db().get_sprites(), "sprite");
+    if(indexAt(pos).row() == 1) add_action("New Sprite", context_menu, []{
+      MainDataManager::fetch().new_asset_request(ProjectData::db().get_sprites(), "sprite", 1);
     });
 
     context_menu.exec(mapToGlobal(pos));

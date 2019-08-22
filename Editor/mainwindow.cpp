@@ -1,19 +1,25 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <maindatamanager.h>
 #include <string>
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTextStream>
 #include <QApplication>
 
-MainWindow::MainWindow(QWidget *parent)
-: QMainWindow(parent), ui(new Ui::MainWindow) {
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
+  MainDataManager::fetch().pass_ui(ui);
   ui->setupUi(this);
   style_main_window();
 }
 
 MainWindow::~MainWindow() {
   delete ui;
+}
+
+Ui::MainWindow* MainWindow::get_ui() {
+  return ui;
 }
 
 void MainWindow::style_main_window() {

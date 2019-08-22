@@ -13,6 +13,7 @@ class MainWindow : public QMainWindow {
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
+  Ui::MainWindow* get_ui();
 
 private slots:
   void on_editorTabs_tabCloseRequested(int index);
@@ -28,3 +29,6 @@ private:
   Configuration config;
   QString last_open_filename;
 };
+
+
+#define GET_MAIN_WINDOW() qobject_cast<MainWindow*>(QApplication::topLevelWidgets().at(0))

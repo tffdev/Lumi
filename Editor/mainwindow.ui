@@ -15,7 +15,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normalon>:/rc/icons/lumilogo.png</normalon>
+    <normalon>:/rc/icons/Lumi.png</normalon>
    </iconset>
   </property>
   <property name="styleSheet">
@@ -258,7 +258,12 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>Ob</string>
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/objects.svg</normalon>
+                   </iconset>
                   </property>
                   <property name="checkable">
                    <bool>false</bool>
@@ -298,44 +303,12 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>Sp</string>
+                   <string/>
                   </property>
-                  <property name="autoDefault">
-                   <bool>false</bool>
-                  </property>
-                  <property name="default">
-                   <bool>false</bool>
-                  </property>
-                  <property name="flat">
-                   <bool>false</bool>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="newSound">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="minimumSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>40</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                  <property name="cursor">
-                   <cursorShape>PointingHandCursor</cursorShape>
-                  </property>
-                  <property name="text">
-                   <string>Sn</string>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/sprites.svg</normalon>
+                   </iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -372,7 +345,54 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>Bg</string>
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/backgrounds.svg</normalon>
+                   </iconset>
+                  </property>
+                  <property name="autoDefault">
+                   <bool>false</bool>
+                  </property>
+                  <property name="default">
+                   <bool>false</bool>
+                  </property>
+                  <property name="flat">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="newSound">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>40</width>
+                    <height>40</height>
+                   </size>
+                  </property>
+                  <property name="cursor">
+                   <cursorShape>PointingHandCursor</cursorShape>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/sounds.svg</normalon>
+                   </iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -403,7 +423,12 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>Ts</string>
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/tilesets.svg</normalon>
+                   </iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -434,7 +459,12 @@
                    <cursorShape>PointingHandCursor</cursorShape>
                   </property>
                   <property name="text">
-                   <string>Rm</string>
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normalon>:/rc/icons/rooms.svg</normalon>
+                   </iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -524,30 +554,60 @@
                 <property name="text">
                  <string>Objects</string>
                 </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/objects_folder.svg</normalon>
+                 </iconset>
+                </property>
                </item>
                <item>
                 <property name="text">
                  <string>Sprites</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/sprites_folder.svg</normalon>
+                 </iconset>
                 </property>
                </item>
                <item>
                 <property name="text">
                  <string>Backgrounds</string>
                 </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/backgrounds_folder.svg</normalon>
+                 </iconset>
+                </property>
                </item>
                <item>
                 <property name="text">
                  <string>Sounds</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/sound_folder.svg</normalon>
+                 </iconset>
                 </property>
                </item>
                <item>
                 <property name="text">
                  <string>Tilesets</string>
                 </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/tilesets_folder.svg</normalon>
+                 </iconset>
+                </property>
                </item>
                <item>
                 <property name="text">
                  <string>Rooms</string>
+                </property>
+                <property name="icon">
+                 <iconset>
+                  <normalon>:/rc/icons/rooms_folder.svg</normalon>
+                 </iconset>
                 </property>
                </item>
               </widget>

@@ -2,3 +2,5 @@ buildCore
 *.pro.user
 
 build-Editor-Desktop_Qt_5_12_4_MinGW_64_bit-Debug/
+
+build-Editor-Desktop_Qt_5_12_4_MinGW_64_bit-Release/
