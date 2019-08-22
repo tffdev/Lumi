@@ -1,3 +1,6 @@
+* {
+  box-sizing: border-box;
+}
 body {
   margin: 0;
   padding: 0;
@@ -7,23 +10,60 @@ body {
   color: #3a3a3a;
   text-align: center;
 }
-.central-box {
-  height: 220px;
-  width: 400px;
+a {
+  text-decoration: none;
+}
+.title-box {
+  max-width: 500px;
+  width: 100%;
   margin: auto;
-  position: absolute;
+  position: relative;
   left: 0;
   right: 0;
-  top: 0;
-  bottom: 0;
+  margin-top: 100px;
+  padding: 20px;
+  box-sizing: border-box;
 }
 .subtitle {
   font-size: 1.4em;
-  color: #6c4396;
 }
 .small-subtitle {
-  color: #9779b5;
+  margin-bottom: 20px;
+  opacity: 0.7;
 }
 .small-subtitle a {
-  color: #9779b5;
+  color: inherit;
+  text-decoration: underline;
+}
+
+.info-box {
+  max-width: 1400px;
+  width: 100%;
+  height: auto;
+  position: relative;
+  margin: auto;
+  display: block;
+}
+.info-box img {
+  max-width: 100%;
+  padding: 15px;
+}
+.button {
+  background-color: white;
+  padding: 10px;
+  box-sizing: border-box;
+  border-radius: 1000px;
+  color: white;
+  max-width: 200px;
+  margin: auto;
+}
+#lumi-logo-canvas {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+}
+.footer {
+  margin: 50px auto;
+  font-size: 0.9em;
+  color: #999;
 }
