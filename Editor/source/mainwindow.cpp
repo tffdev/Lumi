@@ -32,6 +32,9 @@ void MainWindow::style_main_window() {
   file.close();
 }
 
+/*****************************************
+ * PROJECT LOADING AND SAVING
+ *****************************************/
 void MainWindow::load_project() {
   // Ask the user to load a .lumi file
   QString qfilename = QFileDialog::getOpenFileName(this, "Load Lumi Project", QString(), "Lumi File (*.lumi)");
@@ -47,8 +50,7 @@ void MainWindow::load_project() {
   } else {
     ui->statusBar->showMessage("Loaded project successfully!");
     // load into tree
-    for(std::pair<int, AssetEntry*> kv : *ProjectData::fetch().get_db())
-      ui->assetTree->add_asset_to_tree(kv.second);
+    ui->assetTree->load_database_into_tree();
   }
 }
 
@@ -61,17 +63,4 @@ void MainWindow::on_loadButton_clicked() {
 
 void MainWindow::on_actionLoad_triggered() {
   load_project();
-}
-
-void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem* item, int i) {
-  ui->assetTree->item_double_click(item, i);
-}
-
-void MainWindow::on_editorTabs_tabCloseRequested(int index) {
-  // If unsaved changes, show a dialog?
-  ui->editorTabs->close_tab(index);
-}
-
-void MainWindow::on_pushButton_clicked() {
-    ProjectManager::fetch().open_project_configuration_tab();
 }

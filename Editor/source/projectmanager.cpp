@@ -18,22 +18,3 @@ void ProjectManager::show_error_message(QString text) {
   mb.setIcon(QMessageBox::Critical);
   mb.exec();
 }
-
-void ProjectManager::open_asset_in_tab(AssetEntry* asset) {
-    ui->editorTabs->open_asset_in_tab(asset);
-}
-
-void ProjectManager::open_project_configuration_tab() {
-  // if tab is already open
-//  for(int i = 0; i < ui->editorTabs->count(); ++i) {
-//    QString text = ui->editorTabs->tabText(i);
-//    if(asset->name.compare(text.toStdString()) == 0) {
-//      ui->editorTabs->setCurrentIndex(i);
-//      return;
-//    }
-//  }
-
-  // open new tab
-  int index = ui->editorTabs->addTab(new ConfigurationEditor(), "Configuration");
-  ui->editorTabs->setCurrentIndex(index);
-}

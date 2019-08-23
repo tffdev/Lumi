@@ -9,8 +9,8 @@
 AssetTree::AssetTree(QWidget* parent) : QTreeWidget(parent) {
   setMouseTracking(true);
   this->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(this, &AssetTree::customContextMenuRequested,
-          this, &AssetTree::show_item_right_click_context_menu);
+  connect(this, &AssetTree::customContextMenuRequested, this, &AssetTree::show_item_right_click_context_menu);
+  connect(this, &AssetTree::itemDoubleClicked, this, &AssetTree::tree_item_double_click);
 }
 
 void AssetTree::showEvent(QShowEvent*) {
@@ -69,8 +69,8 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
   context_menu.exec(mapToGlobal(pos));
 }
 
-void AssetTree::load_database_into_tree(std::unordered_map<int, AssetEntry *> db) {
-  for(std::pair<int, AssetEntry*> kv : db)
+void AssetTree::load_database_into_tree() {
+  for(std::pair<int, AssetEntry*> kv : *ProjectData::fetch().get_db())
     add_asset_to_tree(kv.second);
 }
 
@@ -99,13 +99,14 @@ void AssetTree::clear_tree_children() {
   }
 }
 
-void AssetTree::item_double_click(QTreeWidgetItem *item, int) {
+void AssetTree::tree_item_double_click(QTreeWidgetItem *item, int) {
   // if top level item
   if(!item->parent()) return;
 
   if(name_to_asset_id_map.count(item->text(0).toStdString()) <= 0)
     throw "Trying to fetch nonexistant item on double click";
+
   int id = name_to_asset_id_map.at(item->text(0).toStdString());
 
-  ProjectManager::fetch().open_asset_in_tab(ProjectData::fetch().get_asset(id));
+  GET_UI()->editorTabs->open_asset_in_tab(ProjectData::fetch().get_asset(id));
 }

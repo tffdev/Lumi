@@ -26,10 +26,9 @@ public:
   void pass_ui(Ui::MainWindow* ui);
   void show_error_message(QString text);
 
-  void open_asset_in_tab(AssetEntry* asset);
-  void open_project_configuration_tab();
-
 private:
   Ui::MainWindow* ui;
 };
 
+
+#define GET_UI() ProjectManager::fetch().get_ui()

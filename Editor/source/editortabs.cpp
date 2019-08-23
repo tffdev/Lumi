@@ -2,10 +2,12 @@
 #include <objecteditor.h>
 
 EditorTabs::EditorTabs(QWidget* parent) : QTabWidget(parent) {
+  connect(this, &EditorTabs::tabCloseRequested, this, &EditorTabs::close_tab);
 }
 
 void EditorTabs::close_tab(int index) {
   QWidget* w = widget(index);
+
   int id = map_asset_tab_to_id.at(w);
 
   // remove from both maps
@@ -13,10 +15,10 @@ void EditorTabs::close_tab(int index) {
   map_asset_id_to_tab.erase(id);
 
   removeTab(index);
+  delete w;
 }
 
 void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
-
   // If asset is already open
   if(map_asset_id_to_tab.count(asset->id) > 0) {
     setCurrentWidget(map_asset_id_to_tab.at(asset->id));
@@ -33,8 +35,10 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
     default: widget = new QWidget();
   }
 
+  // insert into two-way map
   map_asset_id_to_tab.insert({asset->id, widget});
   map_asset_tab_to_id.insert({widget, asset->id});
+
   addTab(widget, asset->name.c_str());
 
   // switch to that tab
