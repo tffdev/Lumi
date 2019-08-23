@@ -200,9 +200,9 @@
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_3">
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
              <property name="spacing">
-              <number>0</number>
+              <number>6</number>
              </property>
              <property name="leftMargin">
               <number>0</number>
@@ -216,9 +216,9 @@
              <property name="bottomMargin">
               <number>0</number>
              </property>
-             <item>
+             <item alignment="Qt::AlignTop">
               <widget class="QWidget" name="newAssetButtons" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
+               <layout class="QVBoxLayout" name="verticalLayout_3">
                 <property name="spacing">
                  <number>0</number>
                 </property>
