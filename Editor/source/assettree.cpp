@@ -4,14 +4,13 @@
 #include <QApplication>
 #include <mainwindow.h>
 #include <ui_mainwindow.h>
-#include <maindatamanager.h>
+#include <projectmanager.h>
 
 AssetTree::AssetTree(QWidget* parent) : QTreeWidget(parent) {
   setMouseTracking(true);
   this->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, &AssetTree::customContextMenuRequested,
           this, &AssetTree::show_item_right_click_context_menu);
-
 }
 
 void AssetTree::showEvent(QShowEvent*) {
@@ -62,35 +61,22 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
     context_menu.addAction(new_action);
   };
 
-  if(!item->parent()) {
-    QMenu context_menu("Context menu", this);
-
-    if(indexAt(pos).row() == 0) add_action("New Object", context_menu, [](){
-      MainDataManager::fetch().new_asset_request(ProjectData::db().get_objects(), "object", 0);
-    });
-
-    if(indexAt(pos).row() == 1) add_action("New Sprite", context_menu, []{
-      MainDataManager::fetch().new_asset_request(ProjectData::db().get_sprites(), "sprite", 1);
-    });
-
-    context_menu.exec(mapToGlobal(pos));
-    for(QAction* action : context_menu.actions()) delete action;
-    return;
-  };
-
   // item right click
   QMenu context_menu("Context menu", this);
-  QAction action_delete("Delete Asset", this);
-
-  context_menu.addAction(&action_delete);
+  add_action("Right click menu", context_menu, [item](){
+    printf("You clicked a button on the context menu for %s!\n", item->text(0).toUtf8().data());
+  });
   context_menu.exec(mapToGlobal(pos));
 }
 
-template <typename T>
-void AssetTree::insert_tree_items_from_database(int itemnum, Database<T>* db) {
-  for(T asset : db->get_all_assets()) {
-    add_child_to_tli(itemnum, asset.name);
-  }
+void AssetTree::load_database_into_tree(std::unordered_map<int, AssetEntry *> db) {
+  for(std::pair<int, AssetEntry*> kv : db)
+    add_asset_to_tree(kv.second);
+}
+
+void AssetTree::add_asset_to_tree(AssetEntry *entry) {
+  add_child_to_tli(entry->type, entry->name);
+  name_to_asset_id_map.insert({ entry->name, entry->id });
 }
 
 QTreeWidgetItem* AssetTree::add_child_to_tli(int tli_index, std::string name) {
@@ -113,17 +99,13 @@ void AssetTree::clear_tree_children() {
   }
 }
 
-void AssetTree::load_database_into_tree() {
-  clear_tree_children();
-  insert_tree_items_from_database(0, &ProjectData::db().get_objects());
-  insert_tree_items_from_database(1, &ProjectData::db().get_sprites());
-  insert_tree_items_from_database(2, &ProjectData::db().get_backgrounds());
-  insert_tree_items_from_database(3, &ProjectData::db().get_sounds());
-  insert_tree_items_from_database(4, &ProjectData::db().get_tilesets());
-  insert_tree_items_from_database(5, &ProjectData::db().get_rooms());
+void AssetTree::item_double_click(QTreeWidgetItem *item, int) {
+  // if top level item
+  if(!item->parent()) return;
 
-  // sort items
-  for(int i=0; i < topLevelItemCount(); i++){
-    topLevelItem(i)->sortChildren(0, Qt::SortOrder::AscendingOrder);
-  }
+  if(name_to_asset_id_map.count(item->text(0).toStdString()) <= 0)
+    throw "Trying to fetch nonexistant item on double click";
+  int id = name_to_asset_id_map.at(item->text(0).toStdString());
+
+  ProjectManager::fetch().open_asset_in_tab(ProjectData::fetch().get_asset(id));
 }

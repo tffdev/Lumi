@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <maindatamanager.h>
+#include <projectmanager.h>
 #include <string>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -9,7 +9,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
-  MainDataManager::fetch().pass_ui(ui);
+  ProjectManager::fetch().pass_ui(ui);
   ui->setupUi(this);
   style_main_window();
 }
@@ -42,15 +42,13 @@ void MainWindow::load_project() {
 
   /* If the .lumi file is invalid,
    * throw a message box displaying the error. */
-  if(!ProjectData::db().load_project_file_into_databases(filename)) {
-    QMessageBox mb;
-    mb.setWindowTitle("Error Loading Project");
-    mb.setText("Error parsing project file " + qfilename.split("/").last());
-    mb.setIcon(QMessageBox::Critical);
-    mb.exec();
+  if(!ProjectData::fetch().load_project_file_into_database(filename)) {
+    ProjectManager::fetch().show_error_message("Error parsing project file " + qfilename.split("/").last());
   } else {
     ui->statusBar->showMessage("Loaded project successfully!");
-    ui->assetTree->load_database_into_tree();
+    // load into tree
+    for(std::pair<int, AssetEntry*> kv : *ProjectData::fetch().get_db())
+      ui->assetTree->add_asset_to_tree(kv.second);
   }
 }
 
@@ -65,24 +63,15 @@ void MainWindow::on_actionLoad_triggered() {
   load_project();
 }
 
-void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem* item, int) {
-  // if top level item
-  if(!item->parent()) return;
-
-  // if tab is already open
-  for(int i = 0; i < ui->editorTabs->count(); ++i) {
-    QString text = ui->editorTabs->tabText(i);
-    if(item->text(0) == text) {
-      ui->editorTabs->setCurrentIndex(i);
-      return;
-    }
-  }
-  // open new tab
-  int index = ui->editorTabs->addTab(new QWidget(), item->text(0));
-  ui->editorTabs->setCurrentIndex(index);
+void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem* item, int i) {
+  ui->assetTree->item_double_click(item, i);
 }
 
 void MainWindow::on_editorTabs_tabCloseRequested(int index) {
   // If unsaved changes, show a dialog?
-  ui->editorTabs->removeTab(index);
+  ui->editorTabs->close_tab(index);
+}
+
+void MainWindow::on_pushButton_clicked() {
+    ProjectManager::fetch().open_project_configuration_tab();
 }

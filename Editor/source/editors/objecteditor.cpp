@@ -3,12 +3,10 @@
 
 ObjectEditor::ObjectEditor(QWidget *parent) :
   QWidget(parent),
-  ui(new Ui::ObjectEditor)
-{
+  ui(new Ui::ObjectEditor) {
   ui->setupUi(this);
 }
 
-ObjectEditor::~ObjectEditor()
-{
+ObjectEditor::~ObjectEditor() {
   delete ui;
 }

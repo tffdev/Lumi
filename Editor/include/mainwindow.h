@@ -1,7 +1,8 @@
 #pragma once
 #include <QMainWindow>
 #include <QTreeWidgetItem>
-#include <projectdata.h>
+#include <ui_mainwindow.h>
+#include <asset_types.h>
 
 namespace Ui {
   class MainWindow;
@@ -20,6 +21,8 @@ private slots:
   void on_loadButton_clicked();
   void on_actionLoad_triggered();
   void on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
+  void on_pushButton_clicked();
 
 private:
   void load_project();

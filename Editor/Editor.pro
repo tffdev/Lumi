@@ -26,27 +26,33 @@ CONFIG += c++11
 RC_ICONS = Lumi.ico
 
 SOURCES += \
-        assettree.cpp \
-        main.cpp \
-        maindatamanager.cpp \
-        mainwindow.cpp \
         external/pugixml.cpp \
-        objecteditor.cpp \
-        projectdata.cpp
+        source/assettree.cpp \
+        source/editors/configurationeditor.cpp \
+        source/editors/objecteditor.cpp \
+        source/editortabs.cpp \
+        source/main.cpp \
+        source/mainwindow.cpp \
+        source/projectdata.cpp \
+        source/projectmanager.cpp
 
 HEADERS += \
-        asset_types.h \
-        assettree.h \
-        generic_database.h \
-        maindatamanager.h \
-        mainwindow.h \
         external/pugixml.hpp \
-        objecteditor.h \
-        projectdata.h
+        include/asset_types.h \
+        include/assettree.h \
+        include/configurationeditor.h \
+        include/editortabs.h \
+        include/mainwindow.h \
+        include/objecteditor.h \
+        include/projectdata.h \
+        include/projectmanager.h
 
 FORMS += \
-        mainwindow.ui \
-        objecteditor.ui
+        forms/configurationeditor.ui \
+        forms/mainwindow.ui \
+        forms/objecteditor.ui
+
+INCLUDEPATH += include
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

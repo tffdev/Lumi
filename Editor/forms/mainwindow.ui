@@ -616,7 +616,7 @@
            </widget>
           </item>
           <item>
-           <widget class="QTabWidget" name="editorTabs">
+           <widget class="EditorTabs" name="editorTabs">
             <property name="documentMode">
              <bool>false</bool>
             </property>
@@ -702,6 +702,12 @@
    <class>AssetTree</class>
    <extends>QTreeWidget</extends>
    <header>assettree.h</header>
+  </customwidget>
+  <customwidget>
+   <class>EditorTabs</class>
+   <extends>QTabWidget</extends>
+   <header>editortabs.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
