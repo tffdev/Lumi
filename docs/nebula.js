@@ -10,7 +10,8 @@ var stars_img = new Image();
 stars_img.src = "stars.png";
 
 var lumi_logo = new Image();
-lumi_logo.src = "lumi_logo.svg";
+lumi_logo.src = "lumi_logo.png";
+
 var scrollx = 0;
 var scrolly = 0;
 var draw_iteration = 0;
@@ -28,18 +29,6 @@ function draw() {
   ctx.drawImage(stars_img, (scrollx*0.5)%stars_img.width, (scrolly*0.5)%stars_img.height + stars_img.height);
   ctx.drawImage(stars_img, (scrollx*0.5)%stars_img.width - stars_img.width, (scrolly*0.5)%stars_img.height);
   ctx.drawImage(stars_img, (scrollx*0.5)%stars_img.width - stars_img.width, (scrolly*0.5)%stars_img.height + stars_img.height);
-
-  if(draw_iteration%10 == 0) {
-    var rgb = avg_col(ctx.getImageData(0,0,canvas.width,canvas.height))
-
-    for (var i = buttons.length - 1; i >= 0; i--) {
-      buttons[i].style.backgroundImage = 
-      `linear-gradient(to top, rgb(${rgb.r},${rgb.g},${rgb.b}), rgb(${rgb.r},${rgb.g/1.3},${rgb.b/1.3}))`;
-    }
-
-    titlebox.style.color = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-  }
-  draw_iteration++;
 
   ctx.globalCompositeOperation = "destination-in";
   ctx.drawImage(lumi_logo, 0, 0, canvas.width, lumi_logo.height * (canvas.width/lumi_logo.width));
