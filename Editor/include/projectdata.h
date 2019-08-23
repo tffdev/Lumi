@@ -29,6 +29,8 @@ public:
   bool load_project_file_into_database(std::string path);
   int generate_new_unique_id();
 
+  void rename_asset(std::string old_name, std::string new_name);
+
 private:
   // singleton stuff
   ProjectData() {}

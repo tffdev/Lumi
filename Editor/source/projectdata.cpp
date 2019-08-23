@@ -5,6 +5,12 @@ bool ProjectData::asset_name_exists(std::string name) {
   return name_to_asset_map.count(name) > 0;
 }
 
+void ProjectData::rename_asset(std::string old_name, std::string new_name) {
+  AssetEntry* entry = name_to_asset_map.at(old_name);
+  name_to_asset_map.erase(old_name);
+  name_to_asset_map.insert({new_name, entry});
+}
+
 bool ProjectData::asset_id_exists(int id) {
   return asset_db.count(id) > 0;
 }

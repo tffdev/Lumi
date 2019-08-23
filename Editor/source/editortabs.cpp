@@ -18,6 +18,11 @@ void EditorTabs::close_tab(int index) {
   delete w;
 }
 
+void EditorTabs::rename_tab(int asset_id, std::string new_name) {
+  QWidget* w = map_asset_id_to_tab.at(asset_id);
+  setTabText(indexOf(w), new_name.c_str());
+}
+
 void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
   // If asset is already open
   if(map_asset_id_to_tab.count(asset->id) > 0) {

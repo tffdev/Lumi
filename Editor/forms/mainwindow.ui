@@ -676,7 +676,7 @@
     </iconset>
    </property>
    <property name="text">
-    <string>Load</string>
+    <string>Load Project</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
@@ -689,10 +689,10 @@
     </iconset>
    </property>
    <property name="text">
-    <string>Save</string>
+    <string>Save Project</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+S</string>
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>

@@ -19,8 +19,11 @@ public:
 
   void tree_item_double_click(QTreeWidgetItem* item, int);
 
+  void rename_tree_item(int asset_id, std::string new_name);
+
 private slots:
   void show_item_right_click_context_menu(const QPoint &pos);
 
-  std::unordered_map<std::string, int> name_to_asset_id_map;
+  std::unordered_map<QTreeWidgetItem*, int> widget_to_asset_id_map;
+  std::unordered_map<int, QTreeWidgetItem*> asset_id_to_widget_map;
 };

@@ -75,8 +75,14 @@ void AssetTree::load_database_into_tree() {
 }
 
 void AssetTree::add_asset_to_tree(AssetEntry *entry) {
-  add_child_to_tli(entry->type, entry->name);
-  name_to_asset_id_map.insert({ entry->name, entry->id });
+  QTreeWidgetItem* item_reference = add_child_to_tli(entry->type, entry->name);
+  widget_to_asset_id_map.insert({ item_reference, entry->id });
+  asset_id_to_widget_map.insert({ entry->id, item_reference });
+}
+
+void AssetTree::rename_tree_item(int asset_id, std::string new_name) {
+  QTreeWidgetItem* item_reference = asset_id_to_widget_map.at(asset_id);
+  item_reference->setText(0, QString(new_name.c_str()));
 }
 
 QTreeWidgetItem* AssetTree::add_child_to_tli(int tli_index, std::string name) {
@@ -103,10 +109,10 @@ void AssetTree::tree_item_double_click(QTreeWidgetItem *item, int) {
   // if top level item
   if(!item->parent()) return;
 
-  if(name_to_asset_id_map.count(item->text(0).toStdString()) <= 0)
+  if(widget_to_asset_id_map.count(item) <= 0)
     throw "Trying to fetch nonexistant item on double click";
 
-  int id = name_to_asset_id_map.at(item->text(0).toStdString());
+  int id = widget_to_asset_id_map.at(item);
 
   GET_UI()->editorTabs->open_asset_in_tab(ProjectData::fetch().get_asset(id));
 }
