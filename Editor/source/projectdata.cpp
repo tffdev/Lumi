@@ -24,10 +24,10 @@ void ProjectData::clear_database() {
 }
 
 void ProjectData::load_entries_into_db(pugi::xml_node &root, std::string subset_name, ASSET_TYPE type) {
-  for(pugi::xml_node node : root.child(subset_name.c_str()).children()){
+  for(pugi::xml_node& node : root.child(subset_name.c_str()).children()){
       AssetEntry* asset = new AssetEntry;
       asset->id = generate_new_unique_id();
-      asset->node = &node;
+      asset->node = node;
       asset->type = type;
       asset->name = asset->name = node.attribute("name").as_string();
       asset_db.insert({asset->id, asset});

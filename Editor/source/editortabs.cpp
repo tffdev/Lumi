@@ -30,7 +30,7 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
 
   // Depending on the asset's type, create a different kind of editor widget.
   switch(asset->type) {
-    case ASSET_TYPE::OBJECT: widget = new ObjectEditor(); break;
+    case ASSET_TYPE::OBJECT: widget = new ObjectEditor(asset); break;
     // add more cases here
     default: widget = new QWidget();
   }

@@ -7,7 +7,7 @@
     <background name="backgroundTest" path="images/bg1.png"/>
   </backgrounds>
   <objects>
-    <object name="objTest" sprite="" persistent="0">
+    <object name="objTest" sprite="" persistent="1">
     animation_index = 0
     
     function update()

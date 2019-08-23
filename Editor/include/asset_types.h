@@ -17,7 +17,7 @@ struct AssetEntry {
   int id;
   ASSET_TYPE type;
   std::string name;
-  pugi::xml_node* node;
+  pugi::xml_node node;
 };
 
 // Basic math stuff
