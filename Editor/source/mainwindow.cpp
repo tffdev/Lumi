@@ -48,7 +48,11 @@ void MainWindow::load_project() {
   if(!ProjectData::fetch().load_project_file_into_database(filename)) {
     ProjectManager::fetch().show_error_message("Error parsing project file " + qfilename.split("/").last());
   } else {
-    ui->statusBar->showMessage("Loaded project successfully!");
+    ProjectManager::fetch().set_statusbar_message("Loaded project successfully!");
+
+    // clear all open tabs, if any
+    ui->editorTabs->close_all_tabs();
+
     // load into tree
     ui->assetTree->load_database_into_tree();
   }
@@ -63,4 +67,9 @@ void MainWindow::on_loadButton_clicked() {
 
 void MainWindow::on_actionLoad_triggered() {
   load_project();
+}
+
+
+void MainWindow::on_openGameSettings_clicked() {
+  ui->editorTabs->open_config_tab();
 }

@@ -70,6 +70,8 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
 }
 
 void AssetTree::load_database_into_tree() {
+  // clear tree then insert all assets from the object database
+  clear_tree_children();
   for(std::pair<int, AssetEntry*> kv : *ProjectData::fetch().get_db())
     add_asset_to_tree(kv.second);
 }

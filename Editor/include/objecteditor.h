@@ -13,6 +13,7 @@ class ObjectEditor : public QWidget
 public:
   explicit ObjectEditor(AssetEntry* asset, QWidget *parent = nullptr);
   ~ObjectEditor();
+
 public slots:
   void save_asset();
 

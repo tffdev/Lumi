@@ -18,3 +18,7 @@ void ProjectManager::show_error_message(QString text) {
   mb.setIcon(QMessageBox::Critical);
   mb.exec();
 }
+
+void ProjectManager::set_statusbar_message(QString text) {
+  ui->statusBar->showMessage(text, 5000);
+}

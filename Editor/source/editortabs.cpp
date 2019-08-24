@@ -1,8 +1,16 @@
 #include "include/editortabs.h"
 #include <objecteditor.h>
+#include <configurationeditor.h>
 
 EditorTabs::EditorTabs(QWidget* parent) : QTabWidget(parent) {
   connect(this, &EditorTabs::tabCloseRequested, this, &EditorTabs::close_tab);
+}
+
+
+void EditorTabs::close_all_tabs() {
+  clear();
+  map_asset_id_to_tab.clear();
+  map_asset_tab_to_id.clear();
 }
 
 void EditorTabs::close_tab(int index) {
@@ -48,4 +56,21 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
 
   // switch to that tab
   setCurrentWidget(widget);
+}
+
+void EditorTabs::open_config_tab() {
+  // if it's already open
+  if(map_asset_id_to_tab.count(-1) > 0) {
+    setCurrentWidget(map_asset_id_to_tab.at(-1));
+    return;
+  }
+
+  // not open, make new config editor
+  pugi::xml_node* conf_node = ProjectData::fetch().get_config_node();
+  QWidget* w = new ConfigurationEditor(conf_node);
+  addTab(w, "Project Settings");
+  setCurrentWidget(w);
+
+  map_asset_id_to_tab.insert({-1, w});
+  map_asset_tab_to_id.insert({w, -1});
 }

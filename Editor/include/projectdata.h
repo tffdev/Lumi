@@ -25,6 +25,7 @@ public:
 
   AssetEntry* get_asset(int id);
   std::unordered_map<int, AssetEntry*>* get_db();
+  pugi::xml_node* get_config_node();
 
   bool load_project_file_into_database(std::string path);
   int generate_new_unique_id();
@@ -39,10 +40,13 @@ private:
   void clear_database();
   void load_entries_into_db(pugi::xml_node &root, std::string rootname, ASSET_TYPE type);
 
+  void load_entry_into_db(pugi::xml_node& node, ASSET_TYPE type);
+
   std::string game_name;
 
   std::unordered_map<int, AssetEntry*> asset_db;
   std::unordered_map<std::string, AssetEntry*> name_to_asset_map;
+
   pugi::xml_node config_node;
 
   pugi::xml_document doc;

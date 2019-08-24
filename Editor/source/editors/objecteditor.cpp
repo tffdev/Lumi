@@ -40,6 +40,8 @@ void ObjectEditor::save_asset() {
   // change held node data
   held_asset->node.attribute("persistent").set_value((ui->objectPersistent->checkState() == Qt::CheckState::Checked) ? "1" : "0");
   held_asset->node.text().set(ui->objectCodeEditor->document()->toPlainText().toUtf8().data());
+
+  ProjectManager::fetch().set_statusbar_message("Saved " + QString(held_asset->name.c_str()) + "!");
 }
 
 ObjectEditor::~ObjectEditor() {

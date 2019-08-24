@@ -25,6 +25,7 @@ public:
   Ui::MainWindow* get_ui();
   void pass_ui(Ui::MainWindow* ui);
   void show_error_message(QString text);
+  void set_statusbar_message(QString text);
 
 private:
   Ui::MainWindow* ui;

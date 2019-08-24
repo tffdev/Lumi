@@ -20,6 +20,8 @@ private slots:
   void on_loadButton_clicked();
   void on_actionLoad_triggered();
 
+  void on_openGameSettings_clicked();
+
 private:
   void load_project();
   void style_main_window();

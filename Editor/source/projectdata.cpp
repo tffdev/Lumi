@@ -27,26 +27,31 @@ void ProjectData::clear_database() {
   // clear maps
   asset_db.clear();
   name_to_asset_map.clear();
+
+  // clear held project config node
+  config_node = pugi::xml_node();
 }
 
 void ProjectData::load_entries_into_db(pugi::xml_node &root, std::string subset_name, ASSET_TYPE type) {
   for(pugi::xml_node& node : root.child(subset_name.c_str()).children()){
-      AssetEntry* asset = new AssetEntry;
-      asset->id = generate_new_unique_id();
-      asset->node = node;
-      asset->type = type;
-      asset->name = asset->name = node.attribute("name").as_string();
-      asset_db.insert({asset->id, asset});
-      name_to_asset_map.insert({asset->name, asset});
+      load_entry_into_db(node, type);
   }
+}
+
+void ProjectData::load_entry_into_db(pugi::xml_node &node, ASSET_TYPE type) {
+  AssetEntry* asset = new AssetEntry;
+  asset->id = generate_new_unique_id();
+  asset->node = node;
+  asset->type = type;
+  asset->name = asset->name = node.attribute("name").as_string();
+  asset_db.insert({asset->id, asset});
+  name_to_asset_map.insert({asset->name, asset});
 }
 
 // get new ID
 int ProjectData::generate_new_unique_id() {
   int id = static_cast<int>(asset_db.size());
-  do {
-    id++;
-  } while (asset_db.count(id) > 0);
+  do id++; while (asset_db.count(id) > 0);
   return id;
 }
 
@@ -74,7 +79,7 @@ bool ProjectData::load_project_file_into_database(std::string path) {
   load_entries_into_db(root_node, "backgrounds", ASSET_TYPE::BACKGROUND);
   load_entries_into_db(root_node, "rooms",       ASSET_TYPE::ROOM);
 
-  printf("Loaded database. Size: %i\n", asset_db.size());
+  printf("Loaded database. Size: %lld\n", asset_db.size());
 
   // load config
   config_node = root_node.child("window");
@@ -84,4 +89,8 @@ bool ProjectData::load_project_file_into_database(std::string path) {
 
 std::unordered_map<int, AssetEntry*>* ProjectData::get_db() {
   return &asset_db;
+}
+
+pugi::xml_node* ProjectData::get_config_node() {
+  return &config_node;
 }
