@@ -10,7 +10,12 @@ TextureAsset::TextureAsset(std::string path): path(path) {
   std::string str = FileSystem::read_file(path, true);
 
   SDL_RWops* rw = SDL_RWFromMem(&str[0], static_cast<int>(str.size()*sizeof(char)));
+  if(rw == nullptr)
+    throw "RWOPS " + path + " can't be created";
+
   SDL_Surface* surface = IMG_Load_RW(rw, false);
+  if(surface == nullptr)
+    throw "Texture " + path + " can't be created";
 
   size.x = static_cast<unsigned int>(surface->w);
   size.y = static_cast<unsigned int>(surface->h);

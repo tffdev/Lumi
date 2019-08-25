@@ -1,6 +1,6 @@
 TEMPLATE = app
-CONFIG += c++11 qt static gui
-CONFIG -= app_bundle console
+CONFIG += c++11 qt static console
+CONFIG -= app_bundle
 
 INCLUDEPATH += $$PWD/../../include include external
 DEPENDPATH += $$PWD/../../include include external
@@ -101,7 +101,7 @@ HEADERS += \
     include/windowmanager.h
 
 # Run as test config
-CONFIG -= test
+CONFIG += test
 
 test {
     SOURCES -= source/main.cpp

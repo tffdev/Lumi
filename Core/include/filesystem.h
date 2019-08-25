@@ -16,15 +16,7 @@
 
 #define DATA_PATH "../data/"
 
-#define OBJECT_PATH "objects.xml"
-#define SPRITE_PATH "sprites.xml"
-#define CONFIG_PATH "windowconfig.xml"
-#define AUDIO_PATH "sounds.xml"
-#define BACKGROUND_PATH "backgrounds.xml"
-#define TILESET_PATH "tilesets.xml"
-#define ROOMS_PATH "rooms.xml"
-
-#define DEBUG_BITMAP_FONT_LOCATION "lumi/debug_bitmap_font.png"
+#define GAME_FILE_PATH "game.lumi"
 
 /**
  * FileSystem currently reads directly from the OS's regular file system.
@@ -45,4 +37,9 @@ namespace FileSystem {
     unsigned int hex_string_to_uint(std::string str);
     bool file_exists(std::string filename);
     std::string read_file(std::string filename, bool binary = false);
+
+    pugi::xml_document& get_game_xml_file();
+    void load_game_xml_file();
+
+    static pugi::xml_document doc;
 }

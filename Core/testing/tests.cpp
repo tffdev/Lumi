@@ -1,6 +1,26 @@
-#define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
+#define DOCTEST_CONFIG_IMPLEMENT
 #include <doctest.h>
 #include <engine.h>
+#include <QStandardPaths>
+
+
+int main(int, char**) {
+    QString destination = QString(
+          QStandardPaths::writableLocation(QStandardPaths::AppDataLocation))
+        + "/LumiGameEngine";
+
+    SetDllDirectoryA(destination.toUtf8().constData());
+
+    doctest::Context context;
+    int res = context.run();
+
+    if(context.shouldExit())
+        return res;
+
+    int client_stuff_return_code = 0;
+
+    return res + client_stuff_return_code;
+}
 
 TEST_CASE("Sanity Check") {
   CHECK(1 == 1);

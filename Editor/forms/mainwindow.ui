@@ -652,29 +652,32 @@
     <addaction name="actionNew"/>
     <addaction name="actionLoad"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="actionOpen_project_settings"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuAssets">
+    <property name="title">
+     <string>Assets</string>
+    </property>
    </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuAssets"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionNew">
-   <property name="icon">
-    <iconset>
-     <normalon>:/rc/icons/file.svg</normalon>
-    </iconset>
-   </property>
    <property name="text">
     <string>New Project</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>
    </property>
+   <property name="iconVisibleInMenu">
+    <bool>false</bool>
+   </property>
   </action>
   <action name="actionLoad">
-   <property name="icon">
-    <iconset>
-     <normalon>:/rc/icons/folder.svg</normalon>
-    </iconset>
-   </property>
    <property name="text">
     <string>Load Project</string>
    </property>
@@ -683,16 +686,21 @@
    </property>
   </action>
   <action name="actionSave">
-   <property name="icon">
-    <iconset>
-     <normalon>:/rc/icons/checkmark.svg</normalon>
-    </iconset>
-   </property>
    <property name="text">
-    <string>Save Project</string>
+    <string>Save project</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionOpen_project_settings">
+   <property name="text">
+    <string>Open project settings</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
    </property>
   </action>
  </widget>

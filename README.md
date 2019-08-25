@@ -29,13 +29,18 @@ Dependencies:
 * SDL2
 * Lua5.3
 
-Compiling Core
+Core Requirements
 --------------------------------------------------------
 This project is built using the QtCreator IDE and qmake build system!
 
-* Download the `SDL2` and `lua5.3` development libraries.
-* Edit Core/engine.pro so that INCLUDEPATH/DEPENDPATH and LIBS point to your own include/lib directories.
-* Open `Core.pro` in QtCreator with any valid configuration and Build!
-* (Windows) Copy the SDL2.dll and Lua5.3.dll files into the build directory.
-* Run from QtCreator
+Dependencies:
+SDL2 and Lua5.3 MinGW 64-bit libraries.
 
+[Better instructions coming soon!]
+
+Notes on Testing
+--------------------------------------------------------
+The release version of the Lumi core detects if a user has 
+certain shared libraries, and installs them temporarily if not.
+Test cases do not run this code, so make sure the required shared libraries are
+accessible in the test executable environment, otherwise all tests will fail.

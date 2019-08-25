@@ -1,5 +1,13 @@
 #include "filesystem.h"
 
+pugi::xml_document& FileSystem::get_game_xml_file() {
+  if(doc.child("project").empty())
+    doc.load_string(FileSystem::read_file(GAME_FILE_PATH).c_str());
+
+  return doc;
+}
+
+
 /**
  * @brief Check if a file exists within the virutal filesystem given a filepath.
  * @param filename The path of the file.
@@ -22,9 +30,9 @@ bool FileSystem::file_exists(std::string filename) {
  */
 std::string FileSystem::read_file(std::string filename, bool binary) {
   if (!file_exists(DATA_PATH + filename)) throw "File " + filename + " doesn't exist!";
-  std::ifstream stream(DATA_PATH + filename, (binary) ? std::ifstream::binary : std::ifstream:: in );
-  std::string str((std::istreambuf_iterator < char > (stream)),
-    std::istreambuf_iterator < char > ());
+  std::ifstream stream(DATA_PATH + filename, (binary) ? std::ifstream::binary : std::ifstream::in);
+  std::string str((std::istreambuf_iterator<char>(stream)),
+    std::istreambuf_iterator<char>());
   return str;
 }
 
@@ -33,12 +41,11 @@ std::string FileSystem::read_file(std::string filename, bool binary) {
  * @return A vector of ObjectAssets as per the objects.xml file.
  */
 std::vector<ObjectAsset*> FileSystem::load_objects() {
-  pugi::xml_document document;
-  std::vector<ObjectAsset*> object_vector;
-  document.load_string(FileSystem::read_file(OBJECT_PATH).c_str());
+  pugi::xml_node root = get_game_xml_file().child("project");
 
+  std::vector<ObjectAsset*> object_vector;
   int i = 0;
-  for (pugi::xml_node obj_xml: document.child("objects").children("object")) {
+  for (pugi::xml_node obj_xml: root.child("objects").children("object")) {
     object_vector.push_back(new ObjectAsset(i,
       obj_xml.attribute("name").as_string(),
       obj_xml.attribute("sprite").as_string(),
@@ -54,36 +61,36 @@ std::vector<ObjectAsset*> FileSystem::load_objects() {
  * @return A vector of SpriteAssets as per the sprites.xml file.
  */
 std::vector<SpriteAsset*> FileSystem::load_sprites() {
-  pugi::xml_document document;
   std::vector<SpriteAsset*> sprite_vector;
-  document.load_string(FileSystem::read_file(SPRITE_PATH).c_str());
+  pugi::xml_node root = get_game_xml_file().child("project");
 
   int i = 0;
-  for (pugi::xml_node spr_xml: document.child("sprites").children("sprite")) {
+  for (pugi::xml_node spr_xml: root.child("sprites").children("sprite")) {
     // name assignment
-    std::string name(spr_xml.child("name").text().as_string());
+    std::string name(spr_xml.attribute("name").as_string());
 
     // hitbox generation
-    HitboxAsset hitbox(spr_xml.child("hitbox").child("shape").text().as_int(),
-      spr_xml.child("hitbox").child("offset").child("x").text().as_int(),
-      spr_xml.child("hitbox").child("offset").child("y").text().as_int(),
-      spr_xml.child("hitbox").child("size").child("x").text().as_int(),
-      spr_xml.child("hitbox").child("size").child("y").text().as_int());
+    HitboxAsset hitbox(
+      spr_xml.child("hitbox").attribute("shape").as_int(),
+      spr_xml.child("hitbox").attribute("offset_x").as_int(),
+      spr_xml.child("hitbox").attribute("offset_y").as_int(),
+      spr_xml.child("hitbox").attribute("size_x").as_int(),
+      spr_xml.child("hitbox").attribute("size_y").as_int());
 
     // rect generation
     std::vector<SubimageRect*> rects;
     for (pugi::xml_node subimage: spr_xml.child("subimages").children("subimage")) {
       SubimageRect* rect = new SubimageRect(
-        subimage.child("x").text().as_int(),
-        subimage.child("y").text().as_int(),
-        subimage.child("width").text().as_int(),
-        subimage.child("height").text().as_int());
+        subimage.attribute("x").as_int(),
+        subimage.attribute("y").as_int(),
+        subimage.attribute("width").as_int(),
+        subimage.attribute("height").as_int());
       rects.push_back(rect);
     }
 
 
     // texture creation and population of texture_manager
-    std::string texture_path = spr_xml.child("path").text().as_string();
+    std::string texture_path = spr_xml.attribute("path").as_string();
     SpriteAsset* spr = new SpriteAsset(name, texture_path, rects, hitbox);
     sprite_vector.push_back(spr);
     i++;
@@ -109,15 +116,13 @@ unsigned int FileSystem::hex_string_to_uint(std::string str) {
  * @return An instance of ConfigManager.
  */
 WindowConfiguration FileSystem::load_config() {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(CONFIG_PATH).c_str());
-
+  pugi::xml_node root = get_game_xml_file().child("project");
   WindowConfiguration config;
-  config.windowtitle = document.child("window").child("windowtitle").text().as_string();
-  config.size.x = document.child("window").child("windowsize").child("width").text().as_uint();
-  config.size.y = document.child("window").child("windowsize").child("height").text().as_uint();
-  config.clear_color = Color(hex_string_to_uint(std::string(document.child("window").child("windowdrawcolor").text().as_string())));
-  config.scale = document.child("window").child("scale").text().as_double();
+  config.windowtitle = root.child("window").attribute("title").as_string();
+  config.size.x = root.child("window").attribute("width").as_uint();
+  config.size.y = root.child("window").attribute("height").as_uint();
+  config.clear_color = Color(hex_string_to_uint(std::string(root.child("window").attribute("drawcolor").as_string())));
+  config.scale = root.child("window").attribute("scale").as_double();
 
   return config;
 }
@@ -127,13 +132,11 @@ WindowConfiguration FileSystem::load_config() {
  * @return A vectof of AudioAsset pointers.
  */
 std::vector<AudioAsset*> FileSystem::load_sounds() {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(AUDIO_PATH).c_str());
-
+  pugi::xml_node root = get_game_xml_file().child("project");
   std::vector<AudioAsset*> audio_assets;
   unsigned long long i = 0;
-  for(pugi::xml_node node : document.child("sounds").children("sound")) {
-    audio_assets.push_back(new AudioAsset(i, node.child("name").text().as_string(), node.child("path").text().as_string()));
+  for(pugi::xml_node node : root.child("sounds").children("sound")) {
+    audio_assets.push_back(new AudioAsset(i, node.attribute("name").as_string(), node.attribute("path").as_string()));
     i++;
   }
 
@@ -141,12 +144,10 @@ std::vector<AudioAsset*> FileSystem::load_sounds() {
 }
 
 std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(BACKGROUND_PATH).c_str());
-
+  pugi::xml_node root = get_game_xml_file().child("project");
   std::vector<BackgroundAsset*> backgrounds;
   unsigned long long i = 0;
-  for(pugi::xml_node node : document.child("backgrounds").children("background")) {
+  for(pugi::xml_node node : root.child("backgrounds").children("background")) {
     TextureAsset* texture = new TextureAsset(node.attribute("path").as_string());
     backgrounds.push_back(new BackgroundAsset(i, node.attribute("name").as_string(), texture));
     i++;
@@ -156,12 +157,10 @@ std::vector<BackgroundAsset*> FileSystem::load_backgrounds() {
 }
 
 std::vector<TilesetAsset*> FileSystem::load_tilesets() {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(TILESET_PATH).c_str());
-
+  pugi::xml_node root = get_game_xml_file().child("project");
   std::vector<TilesetAsset*> tilesets;
   unsigned int i = 0;
-  for(pugi::xml_node node : document.child("tilesets").children("tileset")) {
+  for(pugi::xml_node node : root.child("tilesets").children("tileset")) {
     tilesets.push_back(new TilesetAsset(i, node.attribute("name").as_string(), node.attribute("path").as_string()));
     i++;
   }
@@ -172,12 +171,11 @@ std::vector<TilesetAsset*> FileSystem::load_tilesets() {
 std::vector<RoomAsset*>
 FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* background_db)
 {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(ROOMS_PATH).c_str());
+  pugi::xml_node root = get_game_xml_file().child("project");
 
   std::vector<RoomAsset*> room_assets;
   unsigned int i = 0;
-  for(pugi::xml_node node : document.child("rooms").children("room")) {
+  for(pugi::xml_node node : root.child("rooms").children("room")) {
 
     // build tile layers
     std::vector<RoomTileLayer> room_tile_layers;
@@ -234,8 +232,5 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
 }
 
 std::string FileSystem::get_default_room_name() {
-  pugi::xml_document document;
-  document.load_string(FileSystem::read_file(ROOMS_PATH).c_str());
-
-  return document.child("rooms").child("defaultroom").text().as_string();
+  return get_game_xml_file().child("project").child("window").attribute("defaultroom").as_string();
 }

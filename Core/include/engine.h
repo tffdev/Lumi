@@ -10,10 +10,10 @@ public:
   void run();
 private:
   WindowManager  window_manager;
-  InputManager   input_manager;
   ObjectDatabase obj_database;
   SpriteDatabase spr_database;
   AudioDatabase  audio_database;
   LuaManager     lmanager;
   RoomManager    room_manager;
+  InputManager   input_manager;
 };
