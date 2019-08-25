@@ -6,6 +6,9 @@ EditorTabs::EditorTabs(QWidget* parent) : QTabWidget(parent) {
   connect(this, &EditorTabs::tabCloseRequested, this, &EditorTabs::close_tab);
 }
 
+void EditorTabs::set_tlm(TopLevelManager *input_tlm) {
+  tlm = input_tlm;
+}
 
 void EditorTabs::close_all_tabs() {
   clear();
@@ -43,7 +46,7 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
 
   // Depending on the asset's type, create a different kind of editor widget.
   switch(asset->type) {
-    case ASSET_TYPE::OBJECT: widget = new ObjectEditor(asset); break;
+    case ASSET_TYPE::OBJECT: widget = new ObjectEditor(tlm, asset); break;
     // add more cases here
     default: widget = new QWidget();
   }
@@ -58,7 +61,7 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
   setCurrentWidget(widget);
 }
 
-void EditorTabs::open_config_tab() {
+void EditorTabs::open_config_tab(pugi::xml_node* conf_node) {
   // if it's already open
   if(map_asset_id_to_tab.count(-1) > 0) {
     setCurrentWidget(map_asset_id_to_tab.at(-1));
@@ -66,8 +69,7 @@ void EditorTabs::open_config_tab() {
   }
 
   // not open, make new config editor
-  pugi::xml_node* conf_node = ProjectData::fetch().get_config_node();
-  QWidget* w = new ConfigurationEditor(conf_node);
+  QWidget* w = new ConfigurationEditor(tlm, conf_node);
   addTab(w, "Project Settings");
   setCurrentWidget(w);
 

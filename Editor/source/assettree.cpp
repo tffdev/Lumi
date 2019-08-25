@@ -2,15 +2,15 @@
 #include <QDrag>
 #include <QMenu>
 #include <QApplication>
-#include <mainwindow.h>
-#include <ui_mainwindow.h>
-#include <projectmanager.h>
 
 AssetTree::AssetTree(QWidget* parent) : QTreeWidget(parent) {
   setMouseTracking(true);
   this->setContextMenuPolicy(Qt::CustomContextMenu);
   connect(this, &AssetTree::customContextMenuRequested, this, &AssetTree::show_item_right_click_context_menu);
-  connect(this, &AssetTree::itemDoubleClicked, this, &AssetTree::tree_item_double_click);
+}
+
+void AssetTree::set_tlm(TopLevelManager *input_tlm) {
+  tlm = input_tlm;
 }
 
 void AssetTree::showEvent(QShowEvent*) {
@@ -69,10 +69,10 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
   context_menu.exec(mapToGlobal(pos));
 }
 
-void AssetTree::load_database_into_tree() {
+void AssetTree::load_database_into_tree(ProjectData* db) {
   // clear tree then insert all assets from the object database
   clear_tree_children();
-  for(std::pair<int, AssetEntry*> kv : *ProjectData::fetch().get_db())
+  for(std::pair<int, AssetEntry*> kv : *(db->get_map()))
     add_asset_to_tree(kv.second);
 }
 
@@ -107,14 +107,10 @@ void AssetTree::clear_tree_children() {
   }
 }
 
-void AssetTree::tree_item_double_click(QTreeWidgetItem *item, int) {
-  // if top level item
-  if(!item->parent()) return;
+int AssetTree::get_item_id_at_widget(QTreeWidgetItem* item) {
+  return widget_to_asset_id_map.at(item);
+}
 
-  if(widget_to_asset_id_map.count(item) <= 0)
-    throw "Trying to fetch nonexistant item on double click";
-
-  int id = widget_to_asset_id_map.at(item);
-
-  GET_UI()->editorTabs->open_asset_in_tab(ProjectData::fetch().get_asset(id));
+QTreeWidgetItem* AssetTree::get_widget_from_item_id(int id) {
+  return asset_id_to_widget_map.at(id);
 }

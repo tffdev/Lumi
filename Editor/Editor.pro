@@ -34,7 +34,7 @@ SOURCES += \
         source/main.cpp \
         source/mainwindow.cpp \
         source/projectdata.cpp \
-        source/projectmanager.cpp
+        source/toplevelmanager.cpp
 
 HEADERS += \
         external/pugixml.hpp \
@@ -45,7 +45,7 @@ HEADERS += \
         include/mainwindow.h \
         include/objecteditor.h \
         include/projectdata.h \
-        include/projectmanager.h
+        include/toplevelmanager.h
 
 FORMS += \
         forms/configurationeditor.ui \

@@ -1,11 +1,11 @@
 #include "configurationeditor.h"
 #include "ui_configurationeditor.h"
-#include <projectmanager.h>
 
-ConfigurationEditor::ConfigurationEditor(pugi::xml_node* conf_node, QWidget *parent) :
+ConfigurationEditor::ConfigurationEditor(TopLevelManager* tlm, pugi::xml_node* conf_node, QWidget *parent) :
   QWidget(parent),
   ui(new Ui::ConfigurationEditor),
-  held_node(conf_node) {
+  held_node(conf_node),
+  tlm(tlm) {
   ui->setupUi(this);
 
   // assign slots
@@ -30,5 +30,5 @@ void ConfigurationEditor::save_configuration() {
   held_node->attribute("width").set_value(ui->entryWidth->value());
   held_node->attribute("height").set_value(ui->entryHeight->value());
   held_node->attribute("title").set_value(ui->entryDefaultTitle->text().toUtf8().data());
-  ProjectManager::fetch().set_statusbar_message("Saved Configuration!");
+  tlm->set_statusbar_message("Saved project configuration!");
 }

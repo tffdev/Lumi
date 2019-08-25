@@ -3,10 +3,7 @@
 #include <QTreeWidgetItem>
 #include <ui_mainwindow.h>
 #include <asset_types.h>
-
-namespace Ui {
-  class MainWindow;
-}
+#include <toplevelmanager.h>
 
 class MainWindow : public QMainWindow {
   Q_OBJECT
@@ -22,13 +19,16 @@ private slots:
 
   void on_openGameSettings_clicked();
 
+  void on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
+
 private:
-  void load_project();
+  void open_load_project_dialog();
   void style_main_window();
 
   Ui::MainWindow *ui;
-  Configuration config;
   QString last_open_filename;
+
+  TopLevelManager* toplevelmanager;
 };
 
 

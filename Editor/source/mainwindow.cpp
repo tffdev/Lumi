@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <projectmanager.h>
+#include <toplevelmanager.h>
 #include <string>
 #include <QFileDialog>
 #include <QMessageBox>
@@ -9,8 +9,12 @@
 
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
-  ProjectManager::fetch().pass_ui(ui);
   ui->setupUi(this);
+
+  toplevelmanager = new TopLevelManager(ui);
+  ui->assetTree->set_tlm(toplevelmanager);
+  ui->editorTabs->set_tlm(toplevelmanager);
+
   style_main_window();
 }
 
@@ -32,44 +36,41 @@ void MainWindow::style_main_window() {
   file.close();
 }
 
-/*****************************************
- * PROJECT LOADING AND SAVING
- *****************************************/
-void MainWindow::load_project() {
+
+void MainWindow::open_load_project_dialog() {
   // Ask the user to load a .lumi file
-  QString qfilename = QFileDialog::getOpenFileName(this, "Load Lumi Project", QString(), "Lumi File (*.lumi)");
-  std::string filename(qfilename.toUtf8().data());
+  QString q_filename = QFileDialog::getOpenFileName(this, "Load Lumi Project", QString(), "Lumi File (*.lumi)");
+  std::string filename(q_filename.toUtf8().data());
 
-  // does nothing if user escapes the file dialog
-  if(filename.compare("") == 0) return;
-
-  /* If the .lumi file is invalid,
-   * throw a message box displaying the error. */
-  if(!ProjectData::fetch().load_project_file_into_database(filename)) {
-    ProjectManager::fetch().show_error_message("Error parsing project file " + qfilename.split("/").last());
-  } else {
-    ProjectManager::fetch().set_statusbar_message("Loaded project successfully!");
-
-    // clear all open tabs, if any
-    ui->editorTabs->close_all_tabs();
-
-    // load into tree
-    ui->assetTree->load_database_into_tree();
-  }
+  // push filename to projectdata utility function
+  toplevelmanager->get_database()->load_project_from_file_into_database(filename);
+  toplevelmanager->get_tab_widget()->close_all_tabs();
+  toplevelmanager->get_tree_widget()->load_database_into_tree(toplevelmanager->get_database());
 }
+
 
 /*****************************************
  * SLOTS
  *****************************************/
 void MainWindow::on_loadButton_clicked() {
-  load_project();
+  open_load_project_dialog();
 }
 
 void MainWindow::on_actionLoad_triggered() {
-  load_project();
+  open_load_project_dialog();
 }
 
 
 void MainWindow::on_openGameSettings_clicked() {
-  ui->editorTabs->open_config_tab();
+  ui->editorTabs->open_config_tab(toplevelmanager->get_database()->get_config_node());
+}
+
+void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+  int item_id = toplevelmanager->get_tree_widget()->get_item_id_at_widget(item);
+  AssetEntry* a = toplevelmanager->get_database()->get_asset(item_id);
+
+  if(a == nullptr) throw "Asset Tree item fetch returned null.";
+
+  toplevelmanager->get_tab_widget()->open_asset_in_tab(a);
 }
