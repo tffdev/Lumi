@@ -21,6 +21,7 @@ public:
   // Project loading and saving
   bool load_project_from_file_into_database(std::string& filename);
   bool save_current_project();
+  void create_new_project();
 
   // Asset manipulation
   AssetEntry* get_asset(int id);

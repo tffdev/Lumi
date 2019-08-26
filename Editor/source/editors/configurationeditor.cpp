@@ -8,10 +8,12 @@ ConfigurationEditor::ConfigurationEditor(TopLevelManager* tlm, pugi::xml_node* c
   tlm(tlm) {
   ui->setupUi(this);
 
+  held_node = tlm->get_database()->get_config_node();
+
   // assign slots
   connect(ui->buttonSave, &QPushButton::pressed, this, &ConfigurationEditor::save_configuration);
 
-  if(!held_node->empty()) {
+  if(!held_node->empty() and !held_node->attribute("title").empty()) {
     ui->entryColor->setText(held_node->attribute("drawcolor").as_string());
     ui->entryScale->setValue(held_node->attribute("scale").as_double());
     ui->entryWidth->setValue(held_node->attribute("width").as_int());
