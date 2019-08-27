@@ -25,6 +25,7 @@ public:
   bool load_project_file_into_database(QString path);
   void create_new_project();
   pugi::xml_document& get_project_xml_document();
+  std::string get_project_xml_as_string();
 
   // Asset manipulation
   AssetEntry* get_asset(int id);
@@ -42,6 +43,7 @@ public:
   void clear_database();
   void load_entries_into_db(pugi::xml_node &root, QString rootname, ASSET_TYPE type);
   void load_entry_into_db(pugi::xml_node& node, ASSET_TYPE type);
+
 
 private:
   // Data perterning to the current loaded project

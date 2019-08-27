@@ -153,10 +153,7 @@ bool ProjectData::load_project_file_into_database(QString path) {
 bool ProjectData::save_current_project_to_file(QString& directory, QString& filename) {
   const QString file_full_path(directory + "/" + filename + ".lumi");
 
-  // save file to stringstream
-  std::stringstream ss;
-  project_xml_document.save(ss, " ");
-  std::string xml_file_data = ss.str();
+  std::string xml_file_data = get_project_xml_as_string();
 
   // Create directory
   QDir directory_creator;
@@ -176,6 +173,13 @@ bool ProjectData::save_current_project_to_file(QString& directory, QString& file
   current_loaded_file_directory = directory;
 
   return true;
+}
+
+std::string ProjectData::get_project_xml_as_string() {
+  // save file to stringstream
+  std::stringstream ss;
+  project_xml_document.save(ss, " ");
+  return ss.str();
 }
 
 QString ProjectData::get_current_project_file_directory() {

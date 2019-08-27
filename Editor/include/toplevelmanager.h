@@ -25,10 +25,18 @@ public:
   ProjectData* get_database();
   bool create_new_asset(ASSET_TYPE type);
 
+  void set_modified_since_last_save(bool);
+  bool has_been_modified_since_last_save();
+
+  bool run_current_project();
+
 private:
   Ui::MainWindow* ui;
   EditorTabs* editor_tabs_widget;
   AssetTree* asset_tree_widget;
   ProjectData* database;
+
+  // Store whether the project has been modified since the last save
+  bool modified_since_last_save;
 };
 

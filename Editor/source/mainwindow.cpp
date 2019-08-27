@@ -25,8 +25,15 @@ MainWindow::~MainWindow() {
 }
 
 void MainWindow::style_main_window() {
+  setStyleSheet("");
   this->setWindowTitle("Lumi Game Creator");
+
+  /* Check for stylesheet in this order:
+   * - root directory
+   * - ../editor directory
+   * - embedded default stylesheet in resources */
   QFile file(":/rc/style.css");
+
   if(!file.open(QIODevice::ReadOnly)) {
       QMessageBox::information(nullptr, "error", file.errorString());
   }
@@ -105,6 +112,7 @@ bool MainWindow::project_save_as() {
 
   if(toplevelmanager->get_database()->save_current_project_to_file(directory_url, dir_name)) {
     toplevelmanager->show_statusbar_message("Project saved successfully");
+    reload_window_title();
     return true;
   } else {
     toplevelmanager->show_statusbar_message("Project could not be saved due to an internal error.");
@@ -130,15 +138,32 @@ void MainWindow::on_openGameSettings_clicked() {
 
 void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int) {
   if(item->parent() == nullptr) return;
-
   int item_id = toplevelmanager->get_tree_widget()->get_item_id_at_widget(item);
   AssetEntry* a = toplevelmanager->get_database()->get_asset(item_id);
-
   if(a == nullptr) throw "Asset Tree item fetch returned null.";
-
   toplevelmanager->get_tab_widget()->open_asset_in_tab(a);
 }
 
 void MainWindow::on_saveButton_clicked() {
     request_project_save();
+}
+
+void MainWindow::on_actionOpenProjectSettings_triggered() {
+  toplevelmanager->get_tab_widget()->open_config_tab(toplevelmanager->get_database()->get_config_node());
+}
+
+void MainWindow::on_actionSave_triggered() {
+     request_project_save();
+}
+
+void MainWindow::on_actionSave_Project_As_triggered() {
+    project_save_as();
+}
+
+void MainWindow::on_actionReload_Stylesheet_triggered() {
+    style_main_window();
+}
+
+void MainWindow::on_runButton_clicked() {
+  toplevelmanager->run_current_project();
 }
