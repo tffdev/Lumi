@@ -17,7 +17,7 @@ public:
   void showEvent(QShowEvent* event);
 
   void load_database_into_tree(ProjectData* db);
-  void clear_tree_children();
+  void clear_asset_tree();
   void add_asset_to_tree(AssetEntry* entry);
   QTreeWidgetItem* add_child_to_tli(int tli_index, std::string name);
 

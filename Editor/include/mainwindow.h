@@ -11,7 +11,6 @@ class MainWindow : public QMainWindow {
 public:
   explicit MainWindow(QWidget *parent = nullptr);
   ~MainWindow();
-  Ui::MainWindow* get_ui();
 
 private slots:
   void on_loadButton_clicked();
@@ -19,17 +18,19 @@ private slots:
 
   void on_openGameSettings_clicked();
 
-  void on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int column);
+  void on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int);
+
+  void on_saveButton_clicked();
 
 private:
   void open_load_project_dialog();
+  void request_project_save();
+  bool project_save_as();
+
   void style_main_window();
 
-  Ui::MainWindow *ui;
-  QString last_open_filename;
+  void reload_window_title();
 
+  Ui::MainWindow *ui;
   TopLevelManager* toplevelmanager;
 };
-
-
-#define GET_MAIN_WINDOW() qobject_cast<MainWindow*>(QApplication::topLevelWidgets().at(0))

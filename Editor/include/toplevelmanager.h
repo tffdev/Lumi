@@ -19,10 +19,11 @@ public:
   ~TopLevelManager();
 
   void show_error_message(QString text);
-  void set_statusbar_message(QString text);
+  void show_statusbar_message(QString text);
   EditorTabs* get_tab_widget();
   AssetTree* get_tree_widget();
   ProjectData* get_database();
+  bool create_new_asset(ASSET_TYPE type);
 
 private:
   Ui::MainWindow* ui;

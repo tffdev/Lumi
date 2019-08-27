@@ -71,7 +71,7 @@ void AssetTree::show_item_right_click_context_menu(const QPoint &pos) {
 
 void AssetTree::load_database_into_tree(ProjectData* db) {
   // clear tree then insert all assets from the object database
-  clear_tree_children();
+  clear_asset_tree();
   for(std::pair<int, AssetEntry*> kv : *(db->get_map()))
     add_asset_to_tree(kv.second);
 }
@@ -96,7 +96,9 @@ QTreeWidgetItem* AssetTree::add_child_to_tli(int tli_index, std::string name) {
   return child;
 }
 
-void AssetTree::clear_tree_children() {
+void AssetTree::clear_asset_tree() {
+  widget_to_asset_id_map.clear();
+  asset_id_to_widget_map.clear();
   for(int i = 0; i < topLevelItemCount(); ++i) {
     int child_count = topLevelItem(i)->childCount();
     for(int j = 0; j < child_count; ++j) {

@@ -32,5 +32,5 @@ void ConfigurationEditor::save_configuration() {
   held_node->attribute("width").set_value(ui->entryWidth->value());
   held_node->attribute("height").set_value(ui->entryHeight->value());
   held_node->attribute("title").set_value(ui->entryDefaultTitle->text().toUtf8().data());
-  tlm->set_statusbar_message("Saved project configuration!");
+  tlm->show_statusbar_message("Saved project configuration!");
 }

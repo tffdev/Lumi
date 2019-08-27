@@ -19,9 +19,12 @@ public:
   ~ProjectData();
 
   // Project loading and saving
-  bool load_project_from_file_into_database(std::string& filename);
-  bool save_current_project();
+  QString get_current_project_file_directory();
+  QString get_current_project_file_name();
+  bool save_current_project_to_file(QString& directory, QString& filename);
+  bool load_project_file_into_database(QString path);
   void create_new_project();
+  pugi::xml_document& get_project_xml_document();
 
   // Asset manipulation
   AssetEntry* get_asset(int id);
@@ -31,24 +34,24 @@ public:
 
   // Database stuff
   std::unordered_map<int, AssetEntry*>* get_map();
-  bool load_project_file_into_database(std::string path);
 
   // Utility
   pugi::xml_node* get_config_node();
   int generate_new_unique_id();
 
   void clear_database();
-  void load_entries_into_db(pugi::xml_node &root, std::string rootname, ASSET_TYPE type);
+  void load_entries_into_db(pugi::xml_node &root, QString rootname, ASSET_TYPE type);
   void load_entry_into_db(pugi::xml_node& node, ASSET_TYPE type);
 
 private:
   // Data perterning to the current loaded project
   pugi::xml_document project_xml_document;
   pugi::xml_node config_node;
-  std::string game_name;
   std::unordered_map<int, AssetEntry*> asset_db;
   std::unordered_map<std::string, AssetEntry*> name_to_asset_map;
 
   // Current loaded project metadata (file location etc)
-  std::string current_loaded_file_path;
+  QString game_name;
+  QString current_loaded_file_directory;
+  QString current_loaded_file_name;
 };
