@@ -17,6 +17,23 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
   ui->editorTabs->set_tlm(toplevelmanager);
 
   style_main_window();
+
+  // SLOT CONNECTIONS
+  // Buttons
+  connect(ui->saveButton, &QPushButton::clicked, this, &MainWindow::request_project_save);
+  connect(ui->loadButton, &QPushButton::clicked, this, &MainWindow::open_load_project_dialog);
+  connect(ui->runButton, &QPushButton::clicked, this->toplevelmanager, &TopLevelManager::run_current_project);
+  connect(ui->openGameSettings, &QPushButton::clicked, this->toplevelmanager, &TopLevelManager::open_config_tab);
+
+  // Actions
+  connect(ui->actionSave, &QAction::triggered, this, &MainWindow::request_project_save);
+  connect(ui->actionLoad, &QAction::triggered, this, &MainWindow::open_load_project_dialog);
+  connect(ui->actionSave_Project_As, &QAction::triggered, this, &MainWindow::project_save_as);
+  connect(ui->actionReload_Stylesheet, &QAction::triggered, this, &MainWindow::style_main_window);
+  connect(ui->actionOpenProjectSettings, &QAction::triggered, toplevelmanager, &TopLevelManager::open_config_tab);
+
+  // Misc
+  connect(ui->assetTree, &QTreeWidget::itemDoubleClicked, toplevelmanager, &TopLevelManager::open_asset_at_tree_item);
 }
 
 MainWindow::~MainWindow() {
@@ -64,6 +81,8 @@ void MainWindow::open_load_project_dialog() {
   reload_window_title();
 }
 
+
+// Should these be moved into the top level manager?
 void MainWindow::request_project_save() {
   QDir qdir;
 
@@ -71,7 +90,7 @@ void MainWindow::request_project_save() {
     // Save directly to current project
     QString directory_url = toplevelmanager->get_database()->get_current_project_file_directory();
     QString dir_name = toplevelmanager->get_database()->get_current_project_file_name();
-    if(toplevelmanager->get_database()->save_current_project_to_file(directory_url, dir_name)) {
+    if(toplevelmanager->get_database()->save_current_project_to_file(directory_url + "/" + dir_name)) {
       toplevelmanager->show_statusbar_message("Project saved successfully");
     } else {
       toplevelmanager->show_statusbar_message("Project could not be saved due to an internal error.");
@@ -110,7 +129,11 @@ bool MainWindow::project_save_as() {
   // How to defer project name?
   printf("saving project %s to %s\n", dir_name.toUtf8().data(), directory_url.toUtf8().data());
 
-  if(toplevelmanager->get_database()->save_current_project_to_file(directory_url, dir_name)) {
+  // Make the directory
+  QDir dir;
+  dir.mkdir(directory_url);
+
+  if(toplevelmanager->get_database()->save_current_project_to_file(directory_url + "/" + dir_name + ".lumi")) {
     toplevelmanager->show_statusbar_message("Project saved successfully");
     reload_window_title();
     return true;
@@ -118,52 +141,4 @@ bool MainWindow::project_save_as() {
     toplevelmanager->show_statusbar_message("Project could not be saved due to an internal error.");
     return false;
   }
-}
-
-
-/*****************************************
- * SLOTS
- *****************************************/
-void MainWindow::on_loadButton_clicked() {
-  open_load_project_dialog();
-}
-
-void MainWindow::on_actionLoad_triggered() {
-  open_load_project_dialog();
-}
-
-void MainWindow::on_openGameSettings_clicked() {
-  ui->editorTabs->open_config_tab(toplevelmanager->get_database()->get_config_node());
-}
-
-void MainWindow::on_assetTree_itemDoubleClicked(QTreeWidgetItem *item, int) {
-  if(item->parent() == nullptr) return;
-  int item_id = toplevelmanager->get_tree_widget()->get_item_id_at_widget(item);
-  AssetEntry* a = toplevelmanager->get_database()->get_asset(item_id);
-  if(a == nullptr) throw "Asset Tree item fetch returned null.";
-  toplevelmanager->get_tab_widget()->open_asset_in_tab(a);
-}
-
-void MainWindow::on_saveButton_clicked() {
-    request_project_save();
-}
-
-void MainWindow::on_actionOpenProjectSettings_triggered() {
-  toplevelmanager->get_tab_widget()->open_config_tab(toplevelmanager->get_database()->get_config_node());
-}
-
-void MainWindow::on_actionSave_triggered() {
-     request_project_save();
-}
-
-void MainWindow::on_actionSave_Project_As_triggered() {
-    project_save_as();
-}
-
-void MainWindow::on_actionReload_Stylesheet_triggered() {
-    style_main_window();
-}
-
-void MainWindow::on_runButton_clicked() {
-  toplevelmanager->run_current_project();
 }

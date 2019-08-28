@@ -134,9 +134,7 @@ bool ProjectData::load_project_file_into_database(QString path) {
   // load config
   config_node = root_node.child("window");
 
-  current_loaded_file_name = path.split('/').last();
-  current_loaded_file_directory = path.replace(current_loaded_file_name, "");
-  current_loaded_file_name = current_loaded_file_name.replace(".lumi", "");
+  set_name_and_dir_from_path(path);
 
   return true;
 }
@@ -150,17 +148,13 @@ bool ProjectData::load_project_file_into_database(QString path) {
  * if not:
  * - show dialog asking for a new save location
  */
-bool ProjectData::save_current_project_to_file(QString& directory, QString& filename) {
-  const QString file_full_path(directory + "/" + filename + ".lumi");
+bool ProjectData::save_current_project_to_file(QString path) {
 
   std::string xml_file_data = get_project_xml_as_string();
 
-  // Create directory
-  QDir directory_creator;
-  directory_creator.mkdir(directory);
 
   // Write .lumi XML file
-  QFile file(file_full_path);
+  QFile file(path);
   file.open(QIODevice::ReadWrite);
   if(file.write(xml_file_data.c_str()) == -1) return false;
   file.close();
@@ -169,10 +163,14 @@ bool ProjectData::save_current_project_to_file(QString& directory, QString& file
 
 
   // Set current project data to given
-  current_loaded_file_name = filename;
-  current_loaded_file_directory = directory;
+  set_name_and_dir_from_path(path);
 
   return true;
+}
+
+void ProjectData::set_name_and_dir_from_path(QString path) {
+  current_loaded_file_name = path.split('/').last();
+  current_loaded_file_directory = path.replace(current_loaded_file_name, "");
 }
 
 std::string ProjectData::get_project_xml_as_string() {

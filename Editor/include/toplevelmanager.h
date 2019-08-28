@@ -12,11 +12,12 @@ namespace Ui {
 }
 
 
-class TopLevelManager
+class TopLevelManager : public QObject
 {
+
 public:
   TopLevelManager(Ui::MainWindow* ui_pointer);
-  ~TopLevelManager();
+  virtual ~TopLevelManager();
 
   void show_error_message(QString text);
   void show_statusbar_message(QString text);
@@ -27,8 +28,9 @@ public:
 
   void set_modified_since_last_save(bool);
   bool has_been_modified_since_last_save();
-
   bool run_current_project();
+  void open_config_tab();
+  void open_asset_at_tree_item(QTreeWidgetItem* item, int);
 
 private:
   Ui::MainWindow* ui;
