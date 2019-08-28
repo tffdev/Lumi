@@ -2,7 +2,7 @@
 
 pugi::xml_document& FileSystem::get_game_xml_file() {
   if(doc.child("project").empty())
-    doc.load_string(FileSystem::read_file(GAME_FILE_PATH).c_str());
+    doc.load_string(FileSystem::read_file(game_file_name).c_str());
 
   return doc;
 }
@@ -237,4 +237,8 @@ std::string FileSystem::get_default_room_name() {
 
 void FileSystem::set_data_path(std::string path) {
   data_path = path;
+}
+
+void FileSystem::set_game_file_name(std::string path) {
+  game_file_name = path;
 }

@@ -48,14 +48,23 @@ void engine_main() {
   }
 }
 
+
+// Execute syntax:
+// Core.exe ../data/ game.lumi
+// This will be used primarily internally, as distributed games will be self-executing
 int main(int argc, char* argv[]) {
-  printf("argc %i, argv %s", argc, argv[1]);
   if(argc > 1) {
     // custom filesystem path
     FileSystem::set_data_path(argv[1]);
   } else {
     // Standard path (in release, will replace this with current_directory/data)
     FileSystem::set_data_path("../data/");
+  }
+
+  if(argc > 2) {
+    FileSystem::set_game_file_name(argv[2]);
+  } else {
+    FileSystem::set_game_file_name("game.lumi");
   }
 
   // Load DLLs
