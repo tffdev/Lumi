@@ -65,10 +65,13 @@ void TopLevelManager::open_asset_at_tree_item(QTreeWidgetItem *item, int) {
  * than a temp folder.
  */
 bool TopLevelManager::run_current_project() {
-  ProjectRunner project_process(this, get_database()->get_current_project_file_directory());
-  switch(project_process.execute()){
-    case PROJECT_RUNNER_STATUS::NO_ROOMS: show_error_message("Your game needs at least 1 room to run."); break;
-    case PROJECT_RUNNER_STATUS::NO_CORE: show_error_message("Core.exe is not in the editor's root directory."); break;
-    case PROJECT_RUNNER_STATUS::OK: show_statusbar_message("Project ran successfully.");
+  ProjectRunner project_process(get_database()->get_current_project_file_name(), get_database()->get_current_project_file_directory());
+  int return_code = project_process.execute();
+  switch(return_code){
+    case PROJECT_RUNNER_STATUS::NO_ROOMS: show_error_message("Your game needs at least 1 room to run."); return false;
+    case PROJECT_RUNNER_STATUS::NO_CORE: show_error_message("Core.exe is not in the editor's root directory."); return false;
+    case PROJECT_RUNNER_STATUS::OK: show_statusbar_message("Project ran successfully."); return true;
   }
+  // Assumed return code is project_runner_status::other
+  return false;
 }

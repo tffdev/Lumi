@@ -11,10 +11,10 @@ enum PROJECT_RUNNER_STATUS {
 class ProjectRunner
 {
 public:
-  ProjectRunner(TopLevelManager* tlm, QString directory);
+  ProjectRunner(QString lumi_filename, QString directory);
   int execute();
 private:
-  TopLevelManager* tlm;
+  QString lumi_filename;
   QString directory;
 };
 
