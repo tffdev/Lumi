@@ -48,7 +48,15 @@ void engine_main() {
   }
 }
 
-int main() {
+int main(int argc, char* argv[]) {
+  printf("argc %i, argv %s", argc, argv[1]);
+  if(argc > 1) {
+    // custom filesystem path
+    FileSystem::set_data_path(argv[1]);
+  } else {
+    // Standard path (in release, will replace this with current_directory/data)
+    FileSystem::set_data_path("../data/");
+  }
 
   // Load DLLs
   QString destination = QString(

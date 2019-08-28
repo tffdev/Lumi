@@ -14,8 +14,6 @@
 #include <backgrounddatabase.h>
 #include <windowmanager.h>
 
-#define DATA_PATH "../data/"
-
 #define GAME_FILE_PATH "game.lumi"
 
 /**
@@ -41,5 +39,9 @@ namespace FileSystem {
     pugi::xml_document& get_game_xml_file();
     void load_game_xml_file();
 
+    void set_data_path(std::string);
+
     static pugi::xml_document doc;
+
+    static std::string data_path;
 }
