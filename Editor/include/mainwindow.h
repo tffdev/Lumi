@@ -13,11 +13,14 @@ public:
   ~MainWindow();
 
 private:
-  void open_load_project_dialog();
-  void request_project_save();
-  bool project_save_as();
+  // Main window meta
   void style_main_window();
   void reload_window_title();
+
+  // Loading/saving
+  void open_load_project_dialog();
+  void request_project_save();
+  void request_project_save_as();
 
   Ui::MainWindow *ui;
   TopLevelManager* toplevelmanager;

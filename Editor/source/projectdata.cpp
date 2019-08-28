@@ -5,14 +5,14 @@
 #include <filesystem.h>
 
 ProjectData::ProjectData() {
-  create_new_project();
+  clean_project_data();
 }
 
 ProjectData::~ProjectData() {
   clear_database();
 }
 
-void ProjectData::create_new_project() {
+void ProjectData::clean_project_data() {
   // Create a new, clean project document.
   project_xml_document.reset();
 
@@ -135,30 +135,6 @@ bool ProjectData::load_project_file_into_database(QString path) {
   // load config
   config_node = root_node.child("window");
 
-  set_name_and_dir_from_path(path);
-
-  return true;
-}
-
-/*
- * Saving:
- * - check if projectdata's save file location string is not empty
- * - check if projectdata's save file location exists on disk
- * if yes:
- * - overwrite the save file's location with new document (moves all temp files into save directory)
- * if not:
- * - show dialog asking for a new save location
- */
-bool ProjectData::save_current_project_to_file(QString path) {
-
-  QString xml_file_data = QString(get_project_xml_as_string().c_str());
-
-  // Write .lumi XML file
-  FileSystem::write_to_file(xml_file_data, path);
-
-  // TODO: Copy all temp assets to the given directory
-
-  // Set current project data to given
   set_name_and_dir_from_path(path);
 
   return true;

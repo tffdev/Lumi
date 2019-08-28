@@ -21,9 +21,8 @@ public:
   // Project loading and saving
   QString get_current_project_file_directory();
   QString get_current_project_file_name();
-  bool save_current_project_to_file(QString path);
   bool load_project_file_into_database(QString path);
-  void create_new_project();
+  void clean_project_data();
   pugi::xml_document& get_project_xml_document();
   std::string get_project_xml_as_string();
 

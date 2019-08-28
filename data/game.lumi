@@ -116,5 +116,5 @@ end
   <tileset name="tilesetForest" path="images/tileset.png" size_x="16" size_y="16" />
   <tileset name="tilesetForest2" path="images/tileset.png" size_x="16" size_y="16" />
  </tilesets>
- <window width="320" height="240" scale="2" drawcolor="d4efef" title="Hello World :))" fps="60" defaultroom="room0" />
+ <window width="320" height="240" scale="2" drawcolor="d4efef" title="Hello World :)" fps="60" defaultroom="room0" />
 </project>
