@@ -30,6 +30,7 @@ SOURCES += \
         source/assettree.cpp \
         source/editors/configurationeditor.cpp \
         source/editors/objecteditor.cpp \
+        source/editors/spriteeditor.cpp \
         source/editortabs.cpp \
         source/filesystem.cpp \
         source/main.cpp \
@@ -44,11 +45,12 @@ HEADERS += \
         external/pugixml.hpp \
         include/asset_types.h \
         include/assettree.h \
-        include/configurationeditor.h \
+        include/editors/configurationeditor.h \
+        include/editors/spriteeditor.h \
+        include/editors/objecteditor.h \
         include/editortabs.h \
         include/filesystem.h \
         include/mainwindow.h \
-        include/objecteditor.h \
         include/projectdata.h \
         include/projectloader.h \
         include/projectrunner.h \
@@ -58,7 +60,8 @@ HEADERS += \
 FORMS += \
         forms/configurationeditor.ui \
         forms/mainwindow.ui \
-        forms/objecteditor.ui
+        forms/objecteditor.ui \
+        forms/spriteeditor.ui
 
 INCLUDEPATH += include
 

@@ -1,6 +1,17 @@
-#include "editors/objecteditor.h"
-#include "ui_objecteditor.h"
-#include <toplevelmanager.h>
+#include "include/editors/spriteeditor.h"
+#include "ui_spriteeditor.h"
+
+SpriteEditor::SpriteEditor(TopLevelManager* tlm, AssetEntry* asset, QWidget *parent) :
+  QWidget(parent), ui(new Ui::SpriteEditor), held_asset(asset), tlm(tlm) {
+  ui->setupUi(this);
+
+}
+
+SpriteEditor::~SpriteEditor() {
+  delete ui;
+}
+
+/*
 
 ObjectEditor::ObjectEditor(TopLevelManager* tlm, AssetEntry* asset, QWidget *parent) :
   QWidget(parent), ui(new Ui::ObjectEditor), held_asset(asset), tlm(tlm) {
@@ -47,4 +58,4 @@ void ObjectEditor::save_asset() {
 ObjectEditor::~ObjectEditor() {
   delete ui;
 }
-
+*/

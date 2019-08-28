@@ -1,6 +1,7 @@
 #include "include/editortabs.h"
-#include <objecteditor.h>
-#include <configurationeditor.h>
+#include <editors/objecteditor.h>
+#include <editors/configurationeditor.h>
+#include <editors/spriteeditor.h>
 
 EditorTabs::EditorTabs(QWidget* parent) : QTabWidget(parent) {
   connect(this, &EditorTabs::tabCloseRequested, this, &EditorTabs::close_tab);
@@ -47,6 +48,7 @@ void EditorTabs::open_asset_in_tab(AssetEntry *asset) {
   // Depending on the asset's type, create a different kind of editor widget.
   switch(asset->type) {
     case ASSET_TYPE::OBJECT: widget = new ObjectEditor(tlm, asset); break;
+    case ASSET_TYPE::SPRITE: widget = new SpriteEditor(tlm, asset); break;
     // add more cases here
     default: widget = new QWidget();
   }

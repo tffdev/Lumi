@@ -1,4 +1,4 @@
-#include "configurationeditor.h"
+#include "editors/configurationeditor.h"
 #include "ui_configurationeditor.h"
 
 ConfigurationEditor::ConfigurationEditor(TopLevelManager* tlm, pugi::xml_node* conf_node, QWidget *parent) :
