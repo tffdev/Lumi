@@ -8,6 +8,7 @@
 #include <QTextStream>
 #include <QApplication>
 #include <projectsaver.h>
+#include <projectloader.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
@@ -70,20 +71,7 @@ void MainWindow::reload_window_title() {
 
 
 void MainWindow::open_load_project_dialog() {
-  // Ask the user to load a .lumi file
-  QString q_filename = QFileDialog::getOpenFileName(this, "Load Lumi Project", QString(), "Lumi File (*.lumi)");
-
-  if(q_filename.compare("") == 0)
-    return toplevelmanager->show_statusbar_message("Project load cancelled.");
-
-  // push filename to projectdata utility function
-  if(!toplevelmanager->get_database()->load_project_file_into_database(q_filename))
-    toplevelmanager->show_error_message("Error loading project " + q_filename);
-
-  toplevelmanager->get_tab_widget()->close_all_tabs();
-
-  toplevelmanager->get_tree_widget()->load_database_into_tree(toplevelmanager->get_database());
-
+  ProjectLoader::open_load_dialog(toplevelmanager);
   reload_window_title();
 }
 
