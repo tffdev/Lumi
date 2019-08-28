@@ -3,6 +3,7 @@
 #include <ui_mainwindow.h>
 #include <QFileDialog>
 #include <QProcess>
+#include <filesystem.h>
 
 TopLevelManager::TopLevelManager(Ui::MainWindow* ui_pointer) : ui(ui_pointer) {
   database = new ProjectData;
@@ -59,11 +60,14 @@ void TopLevelManager::open_asset_at_tree_item(QTreeWidgetItem *item, int) {
 }
 
 /*
- * In future, this will run the project in-place of the save directory, rather
- * than a temp folder. This requires the Core to be able to accept
- * the path to a game as a command line argument.
+ * This runs the project in-place of the save directory, rather
+ * than a temp folder.
  */
 bool TopLevelManager::run_current_project() {
+
+  // REQUEST PROJECT SAVE HERE
+  // CURRENTLY ASSUMES THE GAME IS SAVED
+
   // Checks to see if the project is viable
   bool has_room = false;
   for(std::pair<int, AssetEntry*> kv : *get_database()->get_map()) {
@@ -77,8 +81,6 @@ bool TopLevelManager::run_current_project() {
     return false;
   }
 
-  // Show a "load" dialog for compilation of the game
-
   // - check for lumi engine executable
   show_statusbar_message("Attempting to run game...");
   if(!QFile::exists("./Core.exe")) {
@@ -86,32 +88,9 @@ bool TopLevelManager::run_current_project() {
     return false;
   }
 
-  // - build executable into temp directory / engine
-  // Remove previously existing lumi_game folder
-  QDir dir;
-  if(dir.exists(QDir::temp().path() + "/lumi_game")){
-    dir.cd(QDir::temp().path() + "/lumi_game");
-    dir.removeRecursively();
-  }
-
-  QDir temp_dir = QDir::temp();
-  temp_dir.mkdir("lumi_game");
-  temp_dir.cd("lumi_game");
-  temp_dir.mkdir("engine");
-  temp_dir.mkdir("data");
-  if(QFile::exists(temp_dir.path() + "/engine/Core.exe")) QFile::remove(temp_dir.path() + "/engine/Core.exe");
-
-  QFile::copy("./Core.exe", temp_dir.path() + "/engine/Core.exe");
-  printf("%s\n", temp_dir.path().toUtf8().data());
-
-  // - copy game data into temp directory / data
-  get_database()->save_current_project_to_file(temp_dir.path() + "/data/game.lumi");
-
-  // - execute
+  // - execute inside temp directory
   show_statusbar_message("Running game!");
-  QProcess::execute(temp_dir.path() + "/engine/Core.exe");
-
-  // - clear temp dir
+  QProcess::execute("./Core.exe", { get_database()->get_current_project_file_directory() });
 
   return true;
 }

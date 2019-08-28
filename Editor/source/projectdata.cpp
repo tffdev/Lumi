@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QDir>
 #include <sstream>
+#include <filesystem.h>
 
 ProjectData::ProjectData() {
   create_new_project();
@@ -150,17 +151,12 @@ bool ProjectData::load_project_file_into_database(QString path) {
  */
 bool ProjectData::save_current_project_to_file(QString path) {
 
-  std::string xml_file_data = get_project_xml_as_string();
-
+  QString xml_file_data = QString(get_project_xml_as_string().c_str());
 
   // Write .lumi XML file
-  QFile file(path);
-  file.open(QIODevice::ReadWrite);
-  if(file.write(xml_file_data.c_str()) == -1) return false;
-  file.close();
+  FileSystem::write_to_file(xml_file_data, path);
 
   // TODO: Copy all temp assets to the given directory
-
 
   // Set current project data to given
   set_name_and_dir_from_path(path);
