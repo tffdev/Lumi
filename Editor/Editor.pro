@@ -35,6 +35,7 @@ SOURCES += \
         source/main.cpp \
         source/mainwindow.cpp \
         source/projectdata.cpp \
+        source/projectrunner.cpp \
         source/toplevelmanager.cpp
 
 HEADERS += \
@@ -47,6 +48,7 @@ HEADERS += \
         include/mainwindow.h \
         include/objecteditor.h \
         include/projectdata.h \
+        include/projectrunner.h \
         include/toplevelmanager.h
 
 FORMS += \
