@@ -31,9 +31,11 @@ SOURCES += \
         source/editors/configurationeditor.cpp \
         source/editors/objecteditor.cpp \
         source/editortabs.cpp \
+        source/filesystem.cpp \
         source/main.cpp \
         source/mainwindow.cpp \
         source/projectdata.cpp \
+        source/projectrunner.cpp \
         source/toplevelmanager.cpp
 
 HEADERS += \
@@ -42,9 +44,11 @@ HEADERS += \
         include/assettree.h \
         include/configurationeditor.h \
         include/editortabs.h \
+        include/filesystem.h \
         include/mainwindow.h \
         include/objecteditor.h \
         include/projectdata.h \
+        include/projectrunner.h \
         include/toplevelmanager.h
 
 FORMS += \

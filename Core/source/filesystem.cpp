@@ -2,7 +2,7 @@
 
 pugi::xml_document& FileSystem::get_game_xml_file() {
   if(doc.child("project").empty())
-    doc.load_string(FileSystem::read_file(GAME_FILE_PATH).c_str());
+    doc.load_string(FileSystem::read_file(game_file_name).c_str());
 
   return doc;
 }
@@ -14,7 +14,7 @@ pugi::xml_document& FileSystem::get_game_xml_file() {
  * @return True if the file exists, false if not.
  */
 bool FileSystem::file_exists(std::string filename) {
-  if (FILE * file = fopen((DATA_PATH + filename).c_str(), "r")) {
+  if (FILE * file = fopen((data_path + filename).c_str(), "r")) {
     fclose(file);
     return true;
   } else {
@@ -29,8 +29,8 @@ bool FileSystem::file_exists(std::string filename) {
  * @return The file's contents as a string.
  */
 std::string FileSystem::read_file(std::string filename, bool binary) {
-  if (!file_exists(DATA_PATH + filename)) throw "File " + filename + " doesn't exist!";
-  std::ifstream stream(DATA_PATH + filename, (binary) ? std::ifstream::binary : std::ifstream::in);
+  if (!file_exists(data_path + filename)) throw "File " + filename + " doesn't exist!";
+  std::ifstream stream(data_path + filename, (binary) ? std::ifstream::binary : std::ifstream::in);
   std::string str((std::istreambuf_iterator<char>(stream)),
     std::istreambuf_iterator<char>());
   return str;
@@ -233,4 +233,12 @@ FileSystem::load_rooms(TilesetDatabase* tileset_db, BackgroundDatabase* backgrou
 
 std::string FileSystem::get_default_room_name() {
   return get_game_xml_file().child("project").child("window").attribute("defaultroom").as_string();
+}
+
+void FileSystem::set_data_path(std::string path) {
+  data_path = path;
+}
+
+void FileSystem::set_game_file_name(std::string path) {
+  game_file_name = path;
 }

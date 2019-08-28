@@ -21,10 +21,11 @@ public:
   // Project loading and saving
   QString get_current_project_file_directory();
   QString get_current_project_file_name();
-  bool save_current_project_to_file(QString& directory, QString& filename);
+  bool save_current_project_to_file(QString path);
   bool load_project_file_into_database(QString path);
   void create_new_project();
   pugi::xml_document& get_project_xml_document();
+  std::string get_project_xml_as_string();
 
   // Asset manipulation
   AssetEntry* get_asset(int id);
@@ -42,6 +43,8 @@ public:
   void clear_database();
   void load_entries_into_db(pugi::xml_node &root, QString rootname, ASSET_TYPE type);
   void load_entry_into_db(pugi::xml_node& node, ASSET_TYPE type);
+
+  void set_name_and_dir_from_path(QString path);
 
 private:
   // Data perterning to the current loaded project

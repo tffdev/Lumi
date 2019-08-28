@@ -14,10 +14,6 @@
 #include <backgrounddatabase.h>
 #include <windowmanager.h>
 
-#define DATA_PATH "../data/"
-
-#define GAME_FILE_PATH "game.lumi"
-
 /**
  * FileSystem currently reads directly from the OS's regular file system.
  * In future, this will be an intemediary layer that accesses a compressed
@@ -41,5 +37,11 @@ namespace FileSystem {
     pugi::xml_document& get_game_xml_file();
     void load_game_xml_file();
 
+    void set_data_path(std::string);
+    void set_game_file_name(std::string);
+
     static pugi::xml_document doc;
+
+    static std::string data_path;
+    static std::string game_file_name;
 }
