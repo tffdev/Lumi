@@ -1,8 +1,6 @@
-<p align="center"><img src="https://github.com/tfcat/LumiGameCreator/blob/master/promotional/Lumi_textonly.png?raw=true"></p>
-
 Lumi Game Creator - version 0.0.1
 --------------------------------------------------------
-Lumi Game Creator will a fast, cross-platform
+Lumi Game Creator aims to be a fast, cross-platform
 open-source solution for making 2D game prototypes.
 
 Feel free to report bugs or ideas in issues!
@@ -35,8 +33,6 @@ This project is built using the QtCreator IDE and qmake build system!
 
 Dependencies:
 SDL2 and Lua5.3 MinGW 64-bit libraries.
-
-[Better instructions coming soon!]
 
 Notes on Testing
 --------------------------------------------------------
